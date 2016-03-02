@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} Milestone List {% endblock breadcrumb-page %}
+
+{% block title %}
+<h1>Milestone</h1>
+{% endblock %} {% block content %}
+<table class="table">
+    <tr>
+    <th>Name</th>
+    <th>Key</th>
+    <th>Project</th>
+  {% if 'uks.change_milestone' in user.get_all_permissions %}
+    <th>Update</th>
+     {% endif %}
+    {% if 'uks.delete_milestone' in user.get_all_permissions %}
+    <th>Delete</th>
+     {% endif %}
+    </tr>
+
+    {% for milestone in object_list %}
+   <tr>
+    <td>{{ milestone.name }}</td>
+    <td>{{ milestone.key }}</td>
+    <td>{{ milestone.project }}</td>
+      {% if 'uks.change_milestone' in user.get_all_permissions %}
+ <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:milestone_edit' milestone.id %}">Update</a> </td>
+    {% endif %}
+
+    {% if 'uks.delete_milestone' in user.get_all_permissions %}
+ <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:milestone_delete' milestone.id %}">Delete</a> </td>
+    {% endif %}
+
+    </tr>
+ <tr>  
+
+    
+    {% endfor %}
+
+{% if 'uks.add_milestone' in user.get_all_permissions %}
+<td> <a class="lsf-icon" title="add" href="{% url 'uks:milestone_new' %}">New</a> </td>
+{% endif %} </tr> </table>
+{% endblock %}

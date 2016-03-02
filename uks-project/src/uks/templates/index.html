@@ -1,0 +1,69 @@
+
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+<h3>Classes</h3>
+<table class="table">
+<tr>
+    {% if 'uks.view_issuetype' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/issuetype_list">IssueType</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_priority' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/priority_list">Priority</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_status' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/status_list">Status</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_project' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/project_list">Project</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_milestone' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/milestone_list">Milestone</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_issue' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/issue_list">Issue</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_comment' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/comment_list">Comment</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
+    {% if 'uks.view_commit' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/commit_list">Commit</a>
+    </td>
+    {% endif %}
+</tr>
+
+
+{% endblock %}
+

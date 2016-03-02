@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} Priority List {% endblock breadcrumb-page %}
+
+{% block title %}
+<h1>Priority</h1>
+{% endblock %} {% block content %}
+<table class="table">
+    <tr>
+    <th>Name</th>
+    <th>Key</th>
+  {% if 'uks.change_priority' in user.get_all_permissions %}
+    <th>Update</th>
+     {% endif %}
+    {% if 'uks.delete_priority' in user.get_all_permissions %}
+    <th>Delete</th>
+     {% endif %}
+    </tr>
+
+    {% for priority in object_list %}
+   <tr>
+    <td>{{ priority.name }}</td>
+    <td>{{ priority.key }}</td>
+      {% if 'uks.change_priority' in user.get_all_permissions %}
+ <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:priority_edit' priority.id %}">Update</a> </td>
+    {% endif %}
+
+    {% if 'uks.delete_priority' in user.get_all_permissions %}
+ <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:priority_delete' priority.id %}">Delete</a> </td>
+    {% endif %}
+
+    </tr>
+ <tr>  
+
+    
+    {% endfor %}
+
+{% if 'uks.add_priority' in user.get_all_permissions %}
+<td> <a class="lsf-icon" title="add" href="{% url 'uks:priority_new' %}">New</a> </td>
+{% endif %} </tr> </table>
+{% endblock %}

@@ -1,0 +1,47 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} Comment List {% endblock breadcrumb-page %}
+
+{% block title %}
+<h1>Comment</h1>
+{% endblock %} {% block content %}
+<table class="table">
+    <tr>
+    <th>Message</th>
+    <th>Datetime</th>
+    <th>Author</th>
+    <th>Issue</th>
+  {% if 'uks.change_comment' in user.get_all_permissions %}
+    <th>Update</th>
+     {% endif %}
+    {% if 'uks.delete_comment' in user.get_all_permissions %}
+    <th>Delete</th>
+     {% endif %}
+    </tr>
+
+    {% for comment in object_list %}
+   <tr>
+    <td>{{ comment.message }}</td>
+    <td>{{ comment.dateTime }}</td>
+    <td>{{ comment.author }}</td>
+    <td>{{ comment.issue }}</td>
+      {% if 'uks.change_comment' in user.get_all_permissions %}
+ <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:comment_edit' comment.id %}">Update</a> </td>
+    {% endif %}
+
+    {% if 'uks.delete_comment' in user.get_all_permissions %}
+ <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:comment_delete' comment.id %}">Delete</a> </td>
+    {% endif %}
+
+    </tr>
+ <tr>  
+
+    
+    {% endfor %}
+
+{% if 'uks.add_comment' in user.get_all_permissions %}
+<td> <a class="lsf-icon" title="add" href="{% url 'uks:comment_new' %}">New</a> </td>
+{% endif %} </tr> </table>
+{% endblock %}

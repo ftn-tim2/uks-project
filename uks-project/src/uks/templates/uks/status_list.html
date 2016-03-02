@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} Status List {% endblock breadcrumb-page %}
+
+{% block title %}
+<h1>Status</h1>
+{% endblock %} {% block content %}
+<table class="table">
+    <tr>
+    <th>Name</th>
+    <th>Key</th>
+  {% if 'uks.change_status' in user.get_all_permissions %}
+    <th>Update</th>
+     {% endif %}
+    {% if 'uks.delete_status' in user.get_all_permissions %}
+    <th>Delete</th>
+     {% endif %}
+    </tr>
+
+    {% for status in object_list %}
+   <tr>
+    <td>{{ status.name }}</td>
+    <td>{{ status.key }}</td>
+      {% if 'uks.change_status' in user.get_all_permissions %}
+ <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:status_edit' status.id %}">Update</a> </td>
+    {% endif %}
+
+    {% if 'uks.delete_status' in user.get_all_permissions %}
+ <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:status_delete' status.id %}">Delete</a> </td>
+    {% endif %}
+
+    </tr>
+ <tr>  
+
+    
+    {% endfor %}
+
+{% if 'uks.add_status' in user.get_all_permissions %}
+<td> <a class="lsf-icon" title="add" href="{% url 'uks:status_new' %}">New</a> </td>
+{% endif %} </tr> </table>
+{% endblock %}

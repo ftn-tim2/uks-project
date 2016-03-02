@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} Commit List {% endblock breadcrumb-page %}
+
+{% block title %}
+<h1>Commit</h1>
+{% endblock %} {% block content %}
+<table class="table">
+    <tr>
+    <th>Hashcode</th>
+    <th>Message</th>
+    <th>Description</th>
+    <th>Project</th>
+    <th>Issue</th>
+  {% if 'uks.change_commit' in user.get_all_permissions %}
+    <th>Update</th>
+     {% endif %}
+    {% if 'uks.delete_commit' in user.get_all_permissions %}
+    <th>Delete</th>
+     {% endif %}
+    </tr>
+
+    {% for commit in object_list %}
+   <tr>
+    <td>{{ commit.hashcode }}</td>
+    <td>{{ commit.message }}</td>
+    <td>{{ commit.description }}</td>
+    <td>{{ commit.project }}</td>
+    <td>{{ commit.issue }}</td>
+      {% if 'uks.change_commit' in user.get_all_permissions %}
+ <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:commit_edit' commit.id %}">Update</a> </td>
+    {% endif %}
+
+    {% if 'uks.delete_commit' in user.get_all_permissions %}
+ <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:commit_delete' commit.id %}">Delete</a> </td>
+    {% endif %}
+
+    </tr>
+ <tr>  
+
+    
+    {% endfor %}
+
+{% if 'uks.add_commit' in user.get_all_permissions %}
+<td> <a class="lsf-icon" title="add" href="{% url 'uks:commit_new' %}">New</a> </td>
+{% endif %} </tr> </table>
+{% endblock %}

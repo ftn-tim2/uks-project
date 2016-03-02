@@ -1,0 +1,79 @@
+
+
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block bootstrap3_content %}
+
+<div class="container">
+<!--
+{% block breadcrumbs %}
+<ul class="nav pull-left">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    {% block breadcrumb-page %}{% endblock breadcrumb-page %}
+</ul>
+{% endblock breadcrumbs %}
+-->
+    <!-- navigation -->
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">uks</a>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                 {% if 'uks.view_issuetype' in user.get_all_permissions %}
+                    <li><a href="/uks/issuetype_list">IssueType</a></li>
+                 {% endif %}
+                 {% if 'uks.view_priority' in user.get_all_permissions %}
+                    <li><a href="/uks/priority_list">Priority</a></li>
+                 {% endif %}
+                 {% if 'uks.view_status' in user.get_all_permissions %}
+                    <li><a href="/uks/status_list">Status</a></li>
+                 {% endif %}
+                 {% if 'uks.view_project' in user.get_all_permissions %}
+                    <li><a href="/uks/project_list">Project</a></li>
+                 {% endif %}
+                 {% if 'uks.view_milestone' in user.get_all_permissions %}
+                    <li><a href="/uks/milestone_list">Milestone</a></li>
+                 {% endif %}
+                 {% if 'uks.view_issue' in user.get_all_permissions %}
+                    <li><a href="/uks/issue_list">Issue</a></li>
+                 {% endif %}
+                 {% if 'uks.view_comment' in user.get_all_permissions %}
+                    <li><a href="/uks/comment_list">Comment</a></li>
+                 {% endif %}
+                 {% if 'uks.view_commit' in user.get_all_permissions %}
+                    <li><a href="/uks/commit_list">Commit</a></li>
+                 {% endif %}
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            {% if not user.is_anonymous %}
+                <li>
+                    <a class="lsf-icon" title="user" href="{% url 'auth_password_change' %}">{{ user }}</a>
+                </li>
+            {% endif %}
+            {% if not user.is_authenticated %}
+                <li><a href="{% url 'django.contrib.auth.views.login' %}">{% bootstrap_icon "login" %} Login</a></li>
+                <li><a href="{% url 'registration_register' %}">{% bootstrap_icon "register" %} Register</a></li>
+                {% else %}
+                <li><a href="{% url 'django.contrib.auth.views.logout' %}?next=/">{% bootstrap_icon "logout" %} Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row">
+        <h1>{% block title %}{% endblock %}</h1>
+
+        {% bootstrap_messages %}
+
+        <div class="span12 box">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </div>
+</div>
+{% endblock %}

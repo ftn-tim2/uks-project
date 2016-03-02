@@ -1,0 +1,1 @@
+CREATE DATABASE  IF NOT EXISTS `jsd_app_name_db` DEFAULT CHARSET=utf8;

@@ -1,0 +1,5 @@
+unipath
+Django==1.8.7
+django-registration
+django-bootstrap3
+django-finalware

@@ -1,0 +1,59 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} Issue List {% endblock breadcrumb-page %}
+
+{% block title %}
+<h1>Issue</h1>
+{% endblock %} {% block content %}
+<table class="table">
+    <tr>
+    <th>Project</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Attribute</th>
+    <th>Reporter</th>
+    <th>Assigned_To</th>
+    <th>Status</th>
+    <th>Milestone</th>
+    <th>Issuetype</th>
+    <th>Priority</th>
+  {% if 'uks.change_issue' in user.get_all_permissions %}
+    <th>Update</th>
+     {% endif %}
+    {% if 'uks.delete_issue' in user.get_all_permissions %}
+    <th>Delete</th>
+     {% endif %}
+    </tr>
+
+    {% for issue in object_list %}
+   <tr>
+    <td>{{ issue.project }}</td>
+    <td>{{ issue.title }}</td>
+    <td>{{ issue.description }}</td>
+    <td>{{ issue.attribute }}</td>
+    <td>{{ issue.reporter }}</td>
+    <td>{{ issue.assigned_to }}</td>
+    <td>{{ issue.status }}</td>
+    <td>{{ issue.milestone }}</td>
+    <td>{{ issue.issueType }}</td>
+    <td>{{ issue.priority }}</td>
+      {% if 'uks.change_issue' in user.get_all_permissions %}
+ <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:issue_edit' issue.id %}">Update</a> </td>
+    {% endif %}
+
+    {% if 'uks.delete_issue' in user.get_all_permissions %}
+ <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:issue_delete' issue.id %}">Delete</a> </td>
+    {% endif %}
+
+    </tr>
+ <tr>  
+
+    
+    {% endfor %}
+
+{% if 'uks.add_issue' in user.get_all_permissions %}
+<td> <a class="lsf-icon" title="add" href="{% url 'uks:issue_new' %}">New</a> </td>
+{% endif %} </tr> </table>
+{% endblock %}
