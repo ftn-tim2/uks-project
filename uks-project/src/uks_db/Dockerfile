@@ -20,7 +20,7 @@ ADD ./database.sql /var/db/database.sql
 ENV user admin
 ENV password admin
 ENV url file:/var/db/database.sql
-ENV right READ
+ENV right WRITE
 
 # Install starting script
 ADD ./start-database.sh /usr/local/bin/start-database.sh
