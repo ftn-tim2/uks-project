@@ -219,3 +219,5 @@ local.properties
 
 # Cusomt ignore files
 output/
+
+*.db
