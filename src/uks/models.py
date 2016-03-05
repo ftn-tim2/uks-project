@@ -54,9 +54,9 @@ class Status(models.Model):
 class Project(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, primary_key=True, max_length=10)
-    status = models.ForeignKey(Status, True)
-    issueType = models.ForeignKey(IssueType, True)
-    priority = models.ForeignKey(Priority, False)
+    status = models.ForeignKey(Status)
+    issueType = models.ForeignKey(IssueType)
+    priority = models.ForeignKey(Priority)
 
     class Meta:
         permissions = (
@@ -73,7 +73,7 @@ class Project(models.Model):
 class Milestone(models.Model):
     name = models.TextField()
     key = models.CharField(primary_key=True, unique=True, max_length=10)
-    project = models.ForeignKey(Project, False)
+    project = models.ForeignKey(Project)
 
     class Meta:
         permissions = (
@@ -87,17 +87,30 @@ class Milestone(models.Model):
         return reverse('uks:milestone_edit', kwargs={'pk': self.pk})
 
 
+# class PortalUser(User):
+#     class Meta:
+#         permissions = (
+#             ("view_portaluser", "Can view the PortalUser"),
+#         )
+
+#     def __unicode__(self):
+#         return self.name
+
+#     def get_absolute_url(self):
+#         return reverse('uks:portaluser_edit', kwargs={'pk': self.pk})
+
+
 class Issue(models.Model):
-    project = models.ForeignKey(Project, False)
+    project = models.ForeignKey(Project)
     title = models.TextField()
     description = models.TextField()
     attribute = models.ImageField()
-    reporter = models.ForeignKey(User, False)
-    assigned_to = models.ForeignKey(User, True)
-    status = models.ForeignKey(Status, True)
-    milestone = models.ForeignKey(Milestone, True)
-    issueType = models.ForeignKey(IssueType, False)
-    priority = models.ForeignKey(Priority, False)
+    reporter = models.ForeignKey(User, related_name="reporter")
+    assigned_to = models.ForeignKey(User)
+    status = models.ForeignKey(Status)
+    milestone = models.ForeignKey(Milestone)
+    issueType = models.ForeignKey(IssueType)
+    priority = models.ForeignKey(Priority)
 
     class Meta:
         permissions = (
@@ -114,8 +127,8 @@ class Issue(models.Model):
 class Comment(models.Model):
     message = models.TextField()
     dateTime = models.DateTimeField()
-    author = models.ForeignKey(User, False)
-    issue = models.ForeignKey(Issue, False)
+    author = models.ForeignKey(User)
+    issue = models.ForeignKey(Issue)
 
     class Meta:
         permissions = (
@@ -133,7 +146,7 @@ class Commit(models.Model):
     hashcode = models.TextField(unique=True)
     message = models.TextField()
     description = models.TextField()
-    project = models.ForeignKey(Project, False)
+    project = models.ForeignKey(Project)
     issue = models.ManyToManyField(Issue, True)
 
     class Meta:

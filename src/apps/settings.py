@@ -88,11 +88,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': '10.0.2.15', #docker machine ip
+        'HOST': '192.168.99.100', #docker machine ip
         'PORT': '3306',
         'OPTIONS': {
           'autocommit': True,
-        },
+        }
     }
 }
 
@@ -146,7 +146,7 @@ BOOTSTRAP3 = {
     'base_url': '//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/',
 
     # The complete URL to the Bootstrap CSS file (None means derive it from base_url)
-    'css_url': 'http://bootswatch.com/lumen/cerulean.min.css',
+    'css_url': '',
 
     # The complete URL to the Bootstrap CSS file (None means no theme)
     'theme_url': None,
