@@ -143,7 +143,7 @@ class Comment(models.Model):
 
 
 class Commit(models.Model):
-    hashcode = models.TextField(unique=True, max_length=10)
+    hashcode = models.CharField(unique=True, max_length=10)
     message = models.TextField()
     description = models.TextField()
     project = models.ForeignKey(Project)
