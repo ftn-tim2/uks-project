@@ -23,7 +23,7 @@ class IssueType(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
     color = models.TextField()
-    project = models.ManyToManyField(to=Project, null=True)
+    project = models.ManyToManyField(to=Project, null=True, blank=True)
 
     class Meta:
         permissions = (
@@ -40,7 +40,7 @@ class IssueType(models.Model):
 class Priority(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    project = models.ManyToManyField(to=Project, null=True)
+    project = models.ManyToManyField(to=Project, null=True, blank=True)
 
     class Meta:
         permissions = (
@@ -57,7 +57,7 @@ class Priority(models.Model):
 class Status(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    project = models.ManyToManyField(to=Project, null=True)
+    project = models.ManyToManyField(to=Project, null=True, blank=True)
 
     class Meta:
         permissions = (
@@ -74,7 +74,7 @@ class Status(models.Model):
 class Milestone(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    project = models.ManyToManyField(to=Project, null=True)
+    project = models.ManyToManyField(to=Project, null=True, blank=True)
 
     class Meta:
         permissions = (
@@ -94,11 +94,11 @@ class Issue(models.Model):
     attribute = models.ImageField()
     project = models.ForeignKey(to=Project, null=False)
     reporter = models.ForeignKey(to=User, null=False, related_name='reporter')
-    assigned_to = models.ForeignKey(to=User, null=True)
+    assigned_to = models.ForeignKey(to=User, null=True, blank=True)
     status = models.ForeignKey(to=Status, null=False)
-    milestone = models.ForeignKey(to=Milestone, null=True)
+    milestone = models.ForeignKey(to=Milestone, null=True, blank=True)
     issueType = models.ForeignKey(to=IssueType, null=False)
-    priority = models.ForeignKey(to=Priority, null=True)
+    priority = models.ForeignKey(to=Priority, null=True, blank=True)
 
     class Meta:
         permissions = (
@@ -135,7 +135,7 @@ class Commit(models.Model):
     message = models.TextField()
     description = models.TextField()
     project = models.ForeignKey(to=Project, null=False)
-    issue = models.ManyToManyField(to=Issue, null=True)
+    issue = models.ManyToManyField(to=Issue, null=True, blank=True)
 
     class Meta:
         permissions = (

@@ -9,26 +9,26 @@ css="http://bootswatch.com/lumen/bootstrap.min.css"
 	text "name"
 	char "key" (unique=true,max_length=10)
 	text "color"
-	manyToMany "project" (to="Project", null=true)
+	manyToMany "project" (to="Project", null=true,blank=true)
 }
 
 "Priority" {
 	text "name"
 	char "key" (unique=true,max_length=10)
-	manyToMany "project" (to="Project", null=true)
+	manyToMany "project" (to="Project", null=true,blank=true)
 }
 
 "Status" {
 	text "name"
 	char "key" (unique=true,max_length=10)
-	manyToMany "project" (to="Project", null=true)
-} 
+	manyToMany "project" (to="Project", null=true,blank=true)
+}
 
 "Milestone" {
 	text "name"
 	char "key" (unique=true,max_length=10)
-	manyToMany "project" (to="Project",null=true)
-} 
+	manyToMany "project" (to="Project",null=true,blank=true)
+}
 
 "Issue" {
 	text "title"
@@ -36,11 +36,11 @@ css="http://bootswatch.com/lumen/bootstrap.min.css"
 	image "attribute"
     foreignKey "project" (to="Project",null=false)
 	foreignKey "reporter" (to="User",null=false,related_name="'reporter'")
-	foreignKey "assigned_to" (to="User",null=true)
+	foreignKey "assigned_to" (to="User",null=true,blank=true)
 	foreignKey "status" (to="Status",null=false)
-	foreignKey "milestone" (to="Milestone",null=true)
+	foreignKey "milestone" (to="Milestone",null=true,blank=true)
 	foreignKey "issueType" (to="IssueType",null=false)
-	foreignKey "priority" (to="Priority",null=true)
+	foreignKey "priority" (to="Priority",null=true,blank=true)
 }
 
 "Comment" {
@@ -55,6 +55,6 @@ css="http://bootswatch.com/lumen/bootstrap.min.css"
 	text "message"
 	text "description"
 	foreignKey "project" (to="Project",null=false)
-	manyToMany "issue" (to="Issue",null=true)
+	manyToMany "issue" (to="Issue",null=true,blank=true)
 }
 
