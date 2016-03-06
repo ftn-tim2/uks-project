@@ -9,10 +9,10 @@
 {% endblock %} {% block content %}
 <table class="table">
     <tr>
-    <th>Project</th>
     <th>Title</th>
     <th>Description</th>
     <th>Attribute</th>
+    <th>Project</th>
     <th>Reporter</th>
     <th>Assigned_To</th>
     <th>Status</th>
@@ -29,10 +29,10 @@
 
     {% for issue in object_list %}
    <tr>
-    <td>{{ issue.project }}</td>
     <td>{{ issue.title }}</td>
     <td>{{ issue.description }}</td>
     <td>{{ issue.attribute }}</td>
+    <td>{{ issue.project }}</td>
     <td>{{ issue.reporter }}</td>
     <td>{{ issue.assigned_to }}</td>
     <td>{{ issue.status }}</td>

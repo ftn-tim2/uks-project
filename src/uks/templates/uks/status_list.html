@@ -11,6 +11,7 @@
     <tr>
     <th>Name</th>
     <th>Key</th>
+    <th>Project</th>
   {% if 'uks.change_status' in user.get_all_permissions %}
     <th>Update</th>
      {% endif %}
@@ -23,6 +24,7 @@
    <tr>
     <td>{{ status.name }}</td>
     <td>{{ status.key }}</td>
+    <td>{{ status.project }}</td>
       {% if 'uks.change_status' in user.get_all_permissions %}
  <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:status_edit' status.id %}">Update</a> </td>
     {% endif %}

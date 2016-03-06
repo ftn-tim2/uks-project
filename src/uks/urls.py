@@ -3,6 +3,11 @@ from django.conf.urls import patterns, url
 from uks import views
 
 urlpatterns = patterns('',
+                       url(r'^project_list$', views.project_list, name='project_list'),
+                       url(r'^project_create$', views.project_create, name='project_new'),
+                       url(r'^project_update/(?P<pk>\d+)$', views.project_update, name='project_edit'),
+                       url(r'^project_delete/(?P<pk>\d+)$', views.project_delete, name='project_delete'),
+						
                        url(r'^issuetype_list$', views.issuetype_list, name='issuetype_list'),
                        url(r'^issuetype_create$', views.issuetype_create, name='issuetype_new'),
                        url(r'^issuetype_update/(?P<pk>\d+)$', views.issuetype_update, name='issuetype_edit'),
@@ -17,11 +22,6 @@ urlpatterns = patterns('',
                        url(r'^status_create$', views.status_create, name='status_new'),
                        url(r'^status_update/(?P<pk>\d+)$', views.status_update, name='status_edit'),
                        url(r'^status_delete/(?P<pk>\d+)$', views.status_delete, name='status_delete'),
-						
-                       url(r'^project_list$', views.project_list, name='project_list'),
-                       url(r'^project_create$', views.project_create, name='project_new'),
-                       url(r'^project_update/(?P<pk>\d+)$', views.project_update, name='project_edit'),
-                       url(r'^project_delete/(?P<pk>\d+)$', views.project_delete, name='project_delete'),
 						
                        url(r'^milestone_list$', views.milestone_list, name='milestone_list'),
                        url(r'^milestone_create$', views.milestone_create, name='milestone_new'),

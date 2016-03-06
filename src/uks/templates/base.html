@@ -23,6 +23,9 @@
         </div>
          <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                 {% if 'uks.view_project' in user.get_all_permissions %}
+                    <li><a href="/uks/project_list">Project</a></li>
+                 {% endif %}
                  {% if 'uks.view_issuetype' in user.get_all_permissions %}
                     <li><a href="/uks/issuetype_list">IssueType</a></li>
                  {% endif %}
@@ -31,9 +34,6 @@
                  {% endif %}
                  {% if 'uks.view_status' in user.get_all_permissions %}
                     <li><a href="/uks/status_list">Status</a></li>
-                 {% endif %}
-                 {% if 'uks.view_project' in user.get_all_permissions %}
-                    <li><a href="/uks/project_list">Project</a></li>
                  {% endif %}
                  {% if 'uks.view_milestone' in user.get_all_permissions %}
                     <li><a href="/uks/milestone_list">Milestone</a></li>

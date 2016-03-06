@@ -8,6 +8,13 @@
 <h3>Classes</h3>
 <table class="table">
 <tr>
+    {% if 'uks.view_project' in user.get_all_permissions %}
+    <td>
+        <a href="/uks/project_list">Project</a>
+    </td>
+    {% endif %}
+</tr>
+<tr>
     {% if 'uks.view_issuetype' in user.get_all_permissions %}
     <td>
         <a href="/uks/issuetype_list">IssueType</a>
@@ -25,13 +32,6 @@
     {% if 'uks.view_status' in user.get_all_permissions %}
     <td>
         <a href="/uks/status_list">Status</a>
-    </td>
-    {% endif %}
-</tr>
-<tr>
-    {% if 'uks.view_project' in user.get_all_permissions %}
-    <td>
-        <a href="/uks/project_list">Project</a>
     </td>
     {% endif %}
 </tr>

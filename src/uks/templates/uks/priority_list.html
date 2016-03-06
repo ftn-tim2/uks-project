@@ -11,6 +11,7 @@
     <tr>
     <th>Name</th>
     <th>Key</th>
+    <th>Project</th>
   {% if 'uks.change_priority' in user.get_all_permissions %}
     <th>Update</th>
      {% endif %}
@@ -23,6 +24,7 @@
    <tr>
     <td>{{ priority.name }}</td>
     <td>{{ priority.key }}</td>
+    <td>{{ priority.project }}</td>
       {% if 'uks.change_priority' in user.get_all_permissions %}
  <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:priority_edit' priority.id %}">Update</a> </td>
     {% endif %}

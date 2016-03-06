@@ -12,6 +12,7 @@
     <th>Name</th>
     <th>Key</th>
     <th>Color</th>
+    <th>Project</th>
   {% if 'uks.change_issuetype' in user.get_all_permissions %}
     <th>Update</th>
      {% endif %}
@@ -25,6 +26,7 @@
     <td>{{ issuetype.name }}</td>
     <td>{{ issuetype.key }}</td>
     <td>{{ issuetype.color }}</td>
+    <td>{{ issuetype.project }}</td>
       {% if 'uks.change_issuetype' in user.get_all_permissions %}
  <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:issuetype_edit' issuetype.id %}">Update</a> </td>
     {% endif %}

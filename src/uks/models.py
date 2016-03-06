@@ -2,17 +2,35 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
+
+class Project(models.Model):
+    name = models.TextField()
+    key = models.CharField(unique=True, max_length=10)
+
+    class Meta:
+        permissions = (
+            ("view_project", "Can view the Project"),
+        )
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('uks:project_edit', kwargs={'pk': self.pk})
+
+
 class IssueType(models.Model):
     name = models.TextField()
-    key = models.CharField(primary_key=True, unique=True, max_length=10)
+    key = models.CharField(unique=True, max_length=10)
     color = models.TextField()
+    project = models.ManyToManyField(to=Project, null=True)
 
     class Meta:
         permissions = (
             ("view_issuetype", "Can view the IssueType"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -21,14 +39,15 @@ class IssueType(models.Model):
 
 class Priority(models.Model):
     name = models.TextField()
-    key = models.CharField(primary_key=True, unique=True, max_length=10)
+    key = models.CharField(unique=True, max_length=10)
+    project = models.ManyToManyField(to=Project, null=True)
 
     class Meta:
         permissions = (
             ("view_priority", "Can view the Priority"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -37,88 +56,57 @@ class Priority(models.Model):
 
 class Status(models.Model):
     name = models.TextField()
-    key = models.CharField(unique=True, primary_key=True, max_length=10)
+    key = models.CharField(unique=True, max_length=10)
+    project = models.ManyToManyField(to=Project, null=True)
 
     class Meta:
         permissions = (
             ("view_status", "Can view the Status"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('uks:status_edit', kwargs={'pk': self.pk})
 
 
-class Project(models.Model):
-    name = models.TextField()
-    key = models.CharField(unique=True, primary_key=True, max_length=10)
-    status = models.ForeignKey(Status)
-    issueType = models.ForeignKey(IssueType)
-    priority = models.ForeignKey(Priority)
-
-    class Meta:
-        permissions = (
-            ("view_project", "Can view the Project"),
-        )
-
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('uks:project_edit', kwargs={'pk': self.pk})
-
-
 class Milestone(models.Model):
     name = models.TextField()
-    key = models.CharField(primary_key=True, unique=True, max_length=10)
-    project = models.ForeignKey(Project)
+    key = models.CharField(unique=True, max_length=10)
+    project = models.ManyToManyField(to=Project, null=True)
 
     class Meta:
         permissions = (
             ("view_milestone", "Can view the Milestone"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('uks:milestone_edit', kwargs={'pk': self.pk})
 
 
-# class PortalUser(User):
-#     class Meta:
-#         permissions = (
-#             ("view_portaluser", "Can view the PortalUser"),
-#         )
-
-#     def __unicode__(self):
-#         return self.name
-
-#     def get_absolute_url(self):
-#         return reverse('uks:portaluser_edit', kwargs={'pk': self.pk})
-
-
 class Issue(models.Model):
-    project = models.ForeignKey(Project)
     title = models.TextField()
     description = models.TextField()
     attribute = models.ImageField()
-    reporter = models.ForeignKey(User, related_name="reporter")
-    assigned_to = models.ForeignKey(User)
-    status = models.ForeignKey(Status)
-    milestone = models.ForeignKey(Milestone)
-    issueType = models.ForeignKey(IssueType)
-    priority = models.ForeignKey(Priority)
+    project = models.ForeignKey(to=Project, null=False)
+    reporter = models.ForeignKey(to=User, null=False, related_name='reporter')
+    assigned_to = models.ForeignKey(to=User, null=True)
+    status = models.ForeignKey(to=Status, null=False)
+    milestone = models.ForeignKey(to=Milestone, null=True)
+    issueType = models.ForeignKey(to=IssueType, null=False)
+    priority = models.ForeignKey(to=Priority, null=True)
 
     class Meta:
         permissions = (
             ("view_issue", "Can view the Issue"),
         )
 
-    def __unicode__(self):
-        return self.project
+    def __str__(self):
+        return self.title
 
     def get_absolute_url(self):
         return reverse('uks:issue_edit', kwargs={'pk': self.pk})
@@ -127,15 +115,15 @@ class Issue(models.Model):
 class Comment(models.Model):
     message = models.TextField()
     dateTime = models.DateTimeField()
-    author = models.ForeignKey(User)
-    issue = models.ForeignKey(Issue)
+    author = models.ForeignKey(to=User, null=False)
+    issue = models.ForeignKey(to=Issue, null=False)
 
     class Meta:
         permissions = (
             ("view_comment", "Can view the Comment"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.message
 
     def get_absolute_url(self):
@@ -143,18 +131,18 @@ class Comment(models.Model):
 
 
 class Commit(models.Model):
-    hashcode = models.CharField(unique=True, max_length=10)
+    hashcode = models.CharField(unique=True, max_length=64)
     message = models.TextField()
     description = models.TextField()
-    project = models.ForeignKey(Project)
-    issue = models.ManyToManyField(Issue)
+    project = models.ForeignKey(to=Project, null=False)
+    issue = models.ManyToManyField(to=Issue, null=True)
 
     class Meta:
         permissions = (
             ("view_commit", "Can view the Commit"),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.hashcode
 
     def get_absolute_url(self):

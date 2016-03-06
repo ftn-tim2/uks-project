@@ -1,7 +1,7 @@
+from uks.models import Project
 from uks.models import IssueType
 from uks.models import Priority
 from uks.models import Status
-from uks.models import Project
 from uks.models import Milestone
 from uks.models import Issue
 from uks.models import Comment
@@ -12,10 +12,57 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 
 
+class ProjectForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = ['name', 'key']
+
+
+@permission_required('uks.view_project')
+@login_required
+def project_list(request, template_name='uks/project_list.html'):
+    project = Project.objects.all()
+    data = {'object_list': project}
+    return render(request, template_name, data)
+
+
+@permission_required('uks.add_project')
+@login_required
+def project_create(request, template_name='uks/project_form.html'):
+    form = ProjectForm(request.POST or None)
+    if form.is_valid():
+        project = form.save(commit=False)
+        project.user = request.user
+        project.save()
+        return redirect('uks:project_list')
+    return render(request, template_name, {'form': form, 'form_type': 'Create'})
+
+
+@permission_required('uks.change_project')
+@login_required
+def project_update(request, pk, template_name='uks/project_form.html'):
+    project = get_object_or_404(Project, pk=pk)
+    form = ProjectForm(request.POST or None, instance=project)
+    if form.is_valid():
+        form.save()
+        return redirect('uks:project_list')
+    return render(request, template_name, {'form': form, 'form_type': 'Update'})
+
+
+@permission_required('uks.delete_project')
+@login_required
+def project_delete(request, pk, template_name='uks/project_confirm_delete.html'):
+    project = get_object_or_404(Project, pk=pk)
+    if request.method == 'POST':
+        project.delete()
+        return redirect('uks:project_list')
+    return render(request, template_name, {'object': project, 'form_type': 'Delete'})
+
+
 class IssueTypeForm(ModelForm):
     class Meta:
         model = IssueType
-        fields = ['name', 'key', 'color']
+        fields = ['name', 'key', 'color', 'project']
 
 
 @permission_required('uks.view_issuetype')
@@ -62,7 +109,7 @@ def issuetype_delete(request, pk, template_name='uks/issuetype_confirm_delete.ht
 class PriorityForm(ModelForm):
     class Meta:
         model = Priority
-        fields = ['name', 'key']
+        fields = ['name', 'key', 'project']
 
 
 @permission_required('uks.view_priority')
@@ -109,7 +156,7 @@ def priority_delete(request, pk, template_name='uks/priority_confirm_delete.html
 class StatusForm(ModelForm):
     class Meta:
         model = Status
-        fields = ['name', 'key']
+        fields = ['name', 'key', 'project']
 
 
 @permission_required('uks.view_status')
@@ -151,53 +198,6 @@ def status_delete(request, pk, template_name='uks/status_confirm_delete.html'):
         status.delete()
         return redirect('uks:status_list')
     return render(request, template_name, {'object': status, 'form_type': 'Delete'})
-
-
-class ProjectForm(ModelForm):
-    class Meta:
-        model = Project
-        fields = ['name', 'key', 'status', 'issueType', 'priority']
-
-
-@permission_required('uks.view_project')
-@login_required
-def project_list(request, template_name='uks/project_list.html'):
-    project = Project.objects.all()
-    data = {'object_list': project}
-    return render(request, template_name, data)
-
-
-@permission_required('uks.add_project')
-@login_required
-def project_create(request, template_name='uks/project_form.html'):
-    form = ProjectForm(request.POST or None)
-    if form.is_valid():
-        project = form.save(commit=False)
-        project.user = request.user
-        project.save()
-        return redirect('uks:project_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Create'})
-
-
-@permission_required('uks.change_project')
-@login_required
-def project_update(request, pk, template_name='uks/project_form.html'):
-    project = get_object_or_404(Project, pk=pk)
-    form = ProjectForm(request.POST or None, instance=project)
-    if form.is_valid():
-        form.save()
-        return redirect('uks:project_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Update'})
-
-
-@permission_required('uks.delete_project')
-@login_required
-def project_delete(request, pk, template_name='uks/project_confirm_delete.html'):
-    project = get_object_or_404(Project, pk=pk)
-    if request.method == 'POST':
-        project.delete()
-        return redirect('uks:project_list')
-    return render(request, template_name, {'object': project, 'form_type': 'Delete'})
 
 
 class MilestoneForm(ModelForm):
@@ -250,7 +250,7 @@ def milestone_delete(request, pk, template_name='uks/milestone_confirm_delete.ht
 class IssueForm(ModelForm):
     class Meta:
         model = Issue
-        fields = ['project', 'title', 'description', 'attribute', 'reporter', 'assigned_to', 'status', 'milestone', 'issueType', 'priority']
+        fields = ['title', 'description', 'attribute', 'project', 'reporter', 'assigned_to', 'status', 'milestone', 'issueType', 'priority']
 
 
 @permission_required('uks.view_issue')
