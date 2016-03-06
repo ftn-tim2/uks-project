@@ -1,0 +1,60 @@
+"uks"
+css="http://bootswatch.com/lumen/bootstrap.min.css"
+"IssueType" {
+	text "name"
+	char "key" (unique=true,max_length=10)
+	text "color"
+	manyToMany "project" (key="Project", null=true)
+}
+
+"Priority" {
+	text "name"
+	char "key" (unique=true,max_length=10)
+	manyToMany "project" (key="Project", null=true)
+}
+
+"Status" {
+	text "name"
+	char "key" (unique=true,max_length=10)
+	manyToMany "project" (key="Project", null=true)
+} 
+
+"Project" {
+	text "name"
+	char "key" (unique=true,max_length=10)
+}
+
+"Milestone" {
+	text "name"
+	char "key" (unique=true,max_length=10)
+	manyToMany "project" (key="Project",null=true)
+} 
+
+"Issue" {
+	foreignKey "project" (key="Project",null=false)
+	text "title"
+	text "description"
+	image "attribute"
+	foreignKey "reporter" (key="User",null=false)
+	foreignKey "assigned_to" (key="User",null=true)
+	foreignKey "status" (key="Status",null=false)
+	foreignKey "milestone" (key="Milestone",null=true)
+	foreignKey "issueType" (key="IssueType",null=false)
+	foreignKey "priority" (key="Priority",null=true)
+}
+
+"Comment" {
+	text "message"
+	dateTime "dateTime"
+	foreignKey "author" (key="User",null=false)
+	foreignKey "issue" (key="Issue",null=false)
+}
+
+"Commit" {
+	char "hashcode" (unique=true)
+	text "message"
+	text "description"
+	foreignKey "project" (key="Project",null=false)
+	manyToMany "issue" (key="Issue",null=true)
+}
+
