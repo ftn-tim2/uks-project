@@ -88,7 +88,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': '10.0.2.15', #docker machine ip
+        'HOST': '192.168.0.249', #FTN docker machine ip
+        # 'HOST': '192.168.99.100', #szberko docker machine ip
         'PORT': '3306',
         'OPTIONS': {
           'autocommit': True,
