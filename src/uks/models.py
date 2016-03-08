@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Project(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
+    git = models.TextField()
 
     class Meta:
         permissions = (
@@ -23,7 +24,7 @@ class IssueType(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
     color = models.TextField()
-    project = models.ManyToManyField(to=Project, null=True, blank=True)
+    project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
         permissions = (
@@ -40,7 +41,7 @@ class IssueType(models.Model):
 class Priority(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    project = models.ManyToManyField(to=Project, null=True, blank=True)
+    project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
         permissions = (
@@ -57,7 +58,7 @@ class Priority(models.Model):
 class Status(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    project = models.ManyToManyField(to=Project, null=True, blank=True)
+    project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
         permissions = (
@@ -74,7 +75,7 @@ class Status(models.Model):
 class Milestone(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    project = models.ManyToManyField(to=Project, null=True, blank=True)
+    project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
         permissions = (
@@ -134,8 +135,9 @@ class Commit(models.Model):
     hashcode = models.CharField(unique=True, max_length=64)
     message = models.TextField()
     description = models.TextField()
+    dateTime = models.DateTimeField()
     project = models.ForeignKey(to=Project, null=False)
-    issue = models.ManyToManyField(to=Issue, null=True, blank=True)
+    issue = models.ManyToManyField(to=Issue, blank=True)
 
     class Meta:
         permissions = (

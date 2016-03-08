@@ -55,9 +55,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SITE_SUPERUSER_USERNAME = ''
+SITE_SUPERUSER_USERNAME = 'admin'
 SITE_SUPERUSER_EMAIL = ''
-SITE_SUPERUSER_PASSWORD  = ''
+SITE_SUPERUSER_PASSWORD  = 'admin'
 
 ROOT_URLCONF = 'apps.urls'
 
