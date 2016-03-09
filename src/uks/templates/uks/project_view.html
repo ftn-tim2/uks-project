@@ -1,0 +1,8 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block breadcrumb-page %} <li><a href="{% url 'uks:project_list' %}">{{project.name}} </a> <span class="divider">/</span></li> {% endblock breadcrumb-page %}
+{% block content %}
+{{content}}
+{% endblock %}
