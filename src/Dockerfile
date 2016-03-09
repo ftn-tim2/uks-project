@@ -12,4 +12,4 @@ RUN pip install -r /opt/apps/djdocker/requirements.txt
 RUN (cd /opt/apps/djdocker && python manage.py makemigrations --noinput)
 RUN (cd /opt/apps/djdocker && python manage.py migrate --noinput)
 RUN (cd /opt/apps/djdocker && python manage.py collectstatic --noinput)
-CMD ["python", "/opt/apps/djdocker/manage.py","runserver", "0.0.0.0:8000"]
+CMD ["python", "/opt/apps/djdocker/manage.py","runserver"]
