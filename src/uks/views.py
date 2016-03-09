@@ -10,12 +10,14 @@ from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
+import os
+import json
 
 
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'key']
+        fields = ['name', 'key', 'git']
 
 
 @permission_required('uks.view_project')
@@ -24,6 +26,42 @@ def project_list(request, template_name='uks/project_list.html'):
     project = Project.objects.all()
     data = {'object_list': project}
     return render(request, template_name, data)
+
+@permission_required('uks.view_project')
+@login_required
+def project_view(request, pk, template_name='uks/project_view.html'):
+    project = get_object_or_404(Project, pk=pk)
+    src = os.path.dirname(__file__)
+    path = os.path.abspath(os.path.join(src, os.pardir))
+    spath = os.path.abspath(os.path.join(path, os.pardir))
+    dpath = os.path.abspath(os.path.join(spath, os.pardir))
+
+#    os.mkdir(base+"\\"+project.key)
+#    os.chdir(base+"\\"+project.key)
+    os.chdir(dpath)
+    git = project.git
+    reversed = git[::-1]
+    index = reversed.find('/')
+    r1 = reversed[4:index]
+    src_path = os.path.join(dpath,r1[::-1])
+    if not os.path.exists(src_path):
+        os.system('git clone '+project.git)
+        os.chdir(src_path)
+    else:
+        os.chdir(src_path)
+        os.system('git pull')
+
+    os.system('git --no-pager log > log.json')
+    commits = open('log.json')
+    data = '{"commit": "hashcode", "Author": "name and email", "Date": "some date", "    " :"message"}'
+    
+    for d in commits:
+        commit = json.dumps(d)
+    
+    for c in json.loads(commit):
+        print(c)
+    
+    return render(request, template_name, {'project': project, 'content':content})
 
 
 @permission_required('uks.add_project')
@@ -344,7 +382,7 @@ def comment_delete(request, pk, template_name='uks/comment_confirm_delete.html')
 class CommitForm(ModelForm):
     class Meta:
         model = Commit
-        fields = ['hashcode', 'message', 'description', 'project', 'issue']
+        fields = ['hashcode', 'message', 'user', 'project', 'issue']
 
 
 @permission_required('uks.view_commit')

@@ -7,6 +7,7 @@ urlpatterns = patterns('',
                        url(r'^project_create$', views.project_create, name='project_new'),
                        url(r'^project_update/(?P<pk>\d+)$', views.project_update, name='project_edit'),
                        url(r'^project_delete/(?P<pk>\d+)$', views.project_delete, name='project_delete'),
+                       url(r'^project_view/(?P<pk>\d+)$', views.project_view, name='project_view'),
 						
                        url(r'^issuetype_list$', views.issuetype_list, name='issuetype_list'),
                        url(r'^issuetype_create$', views.issuetype_create, name='issuetype_new'),
