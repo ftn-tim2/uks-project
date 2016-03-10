@@ -6,18 +6,22 @@ from uks.models import Milestone
 from uks.models import Issue
 from uks.models import Comment
 from uks.models import Commit
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 import os
 import json
+from collections import namedtuple
+import datetime
+
 
 
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'key', 'git']
+        fields = ['name', 'key', 'git','user']
 
 
 @permission_required('uks.view_project')
@@ -38,12 +42,15 @@ def project_view(request, pk, template_name='uks/project_view.html'):
 
 #    os.mkdir(base+"\\"+project.key)
 #    os.chdir(base+"\\"+project.key)
+        
+
     os.chdir(dpath)
     git = project.git
     reversed = git[::-1]
     index = reversed.find('/')
     r1 = reversed[4:index]
     src_path = os.path.join(dpath,r1[::-1])
+
     if not os.path.exists(src_path):
         os.system('git clone '+project.git)
         os.chdir(src_path)
@@ -51,17 +58,34 @@ def project_view(request, pk, template_name='uks/project_view.html'):
         os.chdir(src_path)
         os.system('git pull')
 
-    os.system('git --no-pager log > log.json')
-    commits = open('log.json')
-    data = '{"commit": "hashcode", "Author": "name and email", "Date": "some date", "    " :"message"}'
+  
+    os.system(src+'\git-log2json.pyw')
     
-    for d in commits:
-        commit = json.dumps(d)
+    def _json_object_hook(d): 
+       return namedtuple('X', d.keys())(*d.values())
+    def json2obj(data): 
+       return json.loads(data, object_hook=_json_object_hook)
+
     
-    for c in json.loads(commit):
-        print(c)
+    commits= []
     
-    return render(request, template_name, {'project': project, 'content':content})
+    with open('log.json') as data_file:
+        for line in data_file:    
+            data = x = json2obj(line)
+            commit = Commit()                
+            commit.hashcode = data.commit
+            commit.user = data.author
+            commit.dateTime = datetime.datetime.strptime(data.date, '%Y-%m-%d %H:%M:%S')
+            commit.project = project
+            commit.message = data.message
+            if not Commit.objects.filter(hashcode=data.commit).exists():
+                commit.save()    
+            commits.append(commit)
+    
+    
+    os.chdir(path)
+
+    return render(request, template_name, {'project': project, 'commits':commits})
 
 
 @permission_required('uks.add_project')
@@ -70,7 +94,6 @@ def project_create(request, template_name='uks/project_form.html'):
     form = ProjectForm(request.POST or None)
     if form.is_valid():
         project = form.save(commit=False)
-        project.user = request.user
         project.save()
         return redirect('uks:project_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})

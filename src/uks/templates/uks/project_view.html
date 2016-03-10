@@ -4,5 +4,11 @@
 
 {% block breadcrumb-page %} <li><a href="{% url 'uks:project_list' %}">{{project.name}} </a> <span class="divider">/</span></li> {% endblock breadcrumb-page %}
 {% block content %}
-{{content}}
+<h3>Commits</h3>
+<table class="table">
+{% for commit in commits %}
+<tr> <td> {{commit.hashcode}}	<b>{{commit.user}}</b> 	{{commit.dateTime}}
+{{commit.message}} </td> </tr>
+{% endfor %}
+</table>
 {% endblock %}

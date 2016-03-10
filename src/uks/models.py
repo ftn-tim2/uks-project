@@ -134,12 +134,12 @@ class Comment(models.Model):
 
 
 class Commit(models.Model):
-    hashcode = models.CharField(unique=True, max_length=64)
+    hashcode = models.CharField(max_length=64,primary_key=True)
     message = models.TextField()
     dateTime = models.DateTimeField()
     project = models.ForeignKey(to=Project, null=False)
     issue = models.ManyToManyField(to=Issue, blank=True)
-    user = models.ForeignKey(to=User,null=False)
+    user = models.TextField(null=False)
     
     class Meta:
         permissions = (
