@@ -11,6 +11,7 @@
     <tr>
     <th>Name</th>
     <th>Key</th>
+    <th>Git</th>
   {% if 'uks.change_project' in user.get_all_permissions %}
     <th>Update</th>
      {% endif %}
@@ -21,8 +22,9 @@
 
     {% for project in object_list %}
    <tr>
-    <td>{{ project.name }}</td>
+    <td><a href="{% url 'uks:project_view' project.id %}">{{ project.name }}</a></td>
     <td>{{ project.key }}</td>
+    <td>{{ project.git }} </td>
       {% if 'uks.change_project' in user.get_all_permissions %}
  <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' project.id %}">Update</a> </td>
     {% endif %}
