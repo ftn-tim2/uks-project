@@ -82,10 +82,16 @@ def project_view(request, pk, template_name='uks/project_view.html'):
                 commit.save()    
             commits.append(commit)
     
+    issuesDB = Issue.objects.all()
+    issues = []
+    
+    for issue in issuesDB:
+        if issue.project == project:
+            issues.append(issue)
     
     os.chdir(path)
 
-    return render(request, template_name, {'project': project, 'commits':commits})
+    return render(request, template_name, {'project': project, 'commits':commits, 'issues':issues})
 
 
 @permission_required('uks.add_project')

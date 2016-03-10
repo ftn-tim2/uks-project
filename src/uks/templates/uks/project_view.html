@@ -1,14 +1,65 @@
+{% extends "base.html" %} {% load bootstrap3 %} 
+{% block breadcrumb-page %}
+<li><a href="{% url 'uks:project_list' %}">{{project.name}} </a> <span
+	class="divider">/</span></li>
+{% endblock breadcrumb-page %} {% block content %}
+<script>
+	function showCommits() {
+		if (document.getElementById("hidecommits").style.display == 'none') {
+			document.getElementById("hidecommits").style.display = '';
+		} else {
+			document.getElementById("hidecommits").style.display = 'none';
+		}
+	}
+	function showIssues() {
+		if (document.getElementById("hideissues").style.display == 'none') {
+			document.getElementById("hideissues").style.display = '';
+		} else {
+			document.getElementById("hideissues").style.display = 'none';
+		}
+	}
+</script>
+<div class="row">
+	<h1>{{project.name}}</h1>
+	<div class="col-sm-6">
+		<h3>Commits</h3>
+		<table class="table" border='1'>
+			{% for commit in commits %} {% if forloop.counter = 1 %}
+			<tbody>{% elif forloop.counter = 10 %}
+			</tbody>
+			<tbody id="hidecommits" style="display: none;">
+				{% endif %}
+				<tr>
+					<td>{{commit.hashcode}} <b>{{commit.user}}</b>
+						{{commit.dateTime}} {{commit.message}}
+					</td>
+				</tr>
 
-{% extends "base.html" %}
-{% load bootstrap3 %}
+				{% endfor %}
+			</tbody>
+		</table>
+		<input type='button' value='Show All/Hide' onclick="showCommits();">
+	</div>
+	<div class="col-sm-6">
+		<h3>Issues</h3>
+		<table class="table" border='1'>
+			{% for issue in issues%} {% if forloop.counter = 1 %}
+			<tbody>
+			{% elif forloop.counter = 10 %}
+			</tbody>
+			<tbody id="hideissues" style="display: none;">
+				{% endif %}
+				<tr>
+					<td>{{issue.title}} <b>{{issue.reporter}}</b>
+						{{issue.issueType}} {{issue.milestone}} {{issue.priority}} {{issue.status}}
+					</td>
+				</tr>
 
-{% block breadcrumb-page %} <li><a href="{% url 'uks:project_list' %}">{{project.name}} </a> <span class="divider">/</span></li> {% endblock breadcrumb-page %}
-{% block content %}
-<h3>Commits</h3>
-<table class="table">
-{% for commit in commits %}
-<tr> <td> {{commit.hashcode}}	<b>{{commit.user}}</b> 	{{commit.dateTime}}
-{{commit.message}} </td> </tr>
-{% endfor %}
-</table>
+				{% endfor %}
+			</tbody>
+		</table>
+		<input type='button' value='Show All/Hide' onclick="showIssues();">
+
+	</div>
+	</div>
 {% endblock %}
