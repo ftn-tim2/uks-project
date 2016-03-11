@@ -59,7 +59,8 @@ def project_view(request, pk, template_name='uks/project_view.html'):
         os.system('git pull')
 
   
-    os.system(src+'\git-log2json.pyw')
+    os.system(os.path.join(src,'git-log2json.sh'))
+
     
     def _json_object_hook(d): 
        return namedtuple('X', d.keys())(*d.values())
