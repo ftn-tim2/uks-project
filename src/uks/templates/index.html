@@ -12,7 +12,7 @@
             <div class="panel-body">
                 {% for proj in projects %}
                 <div class="list-group">
-                    <a href="#" class="list-group-item active">
+                    <a href="/uks/project_view/{{proj.id}}" class="list-group-item active">
                         <h4 class="list-group-item-heading">{{ proj.name }}</h4>
                         <p class="list-group-item-text">{{ proj.description }}</p>
                     </a>
