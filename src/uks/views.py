@@ -22,7 +22,7 @@ import subprocess
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'key', 'git','user']
+        fields = ['name', 'key', 'git', 'user', 'description']
 
 
 @permission_required('uks.view_project')
