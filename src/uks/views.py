@@ -15,6 +15,7 @@ import os
 import json
 from collections import namedtuple
 import datetime
+import subprocess
 
 
 
@@ -54,13 +55,14 @@ def project_view(request, pk, template_name='uks/project_view.html'):
     if not os.path.exists(src_path):
         os.system('git clone '+project.git)
         os.chdir(src_path)
+
     else:
         os.chdir(src_path)
         os.system('git pull')
 
-  
-    os.system(src+'\git-log2json.pyw')
-    
+
+    os.system(os.path.join(src,'git-log2json.sh'))
+
     def _json_object_hook(d): 
        return namedtuple('X', d.keys())(*d.values())
     def json2obj(data): 
@@ -95,6 +97,7 @@ def project_create(request, template_name='uks/project_form.html'):
     if form.is_valid():
         project = form.save(commit=False)
         project.save()
+        form.save_m2m()
         return redirect('uks:project_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
