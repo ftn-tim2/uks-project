@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 import json
 
 class Project(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=100)
     key = models.CharField(unique=True, max_length=10)
-    git = models.TextField()
+    git = models.CharField(max_length=100)
     user = models.ManyToManyField(to=User,null=False)
+    description = models.TextField()
 
     class Meta:
         permissions = (
