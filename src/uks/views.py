@@ -97,6 +97,7 @@ def project_create(request, template_name='uks/project_form.html'):
     if form.is_valid():
         project = form.save(commit=False)
         project.save()
+        form.save_m2m()
         return redirect('uks:project_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
