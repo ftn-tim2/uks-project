@@ -24,7 +24,9 @@
    <tr>
     <td>{{ status.name }}</td>
     <td>{{ status.key }}</td>
-    <td>{{ status.project }}</td>
+   <td>{% for proj in status.project.all %}
+           <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' proj.id %}">{{ proj }}</a><br>
+           {% endfor %}</td>
       {% if 'uks.change_status' in user.get_all_permissions %}
  <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:status_edit' status.id %}">Update</a> </td>
     {% endif %}
