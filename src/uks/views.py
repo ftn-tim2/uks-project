@@ -126,7 +126,7 @@ def project_delete(request, pk, template_name='uks/project_confirm_delete.html')
 class IssueTypeForm(ModelForm):
     class Meta:
         model = IssueType
-        fields = ['name', 'key', 'color', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_issuetype')
@@ -173,7 +173,7 @@ def issuetype_delete(request, pk, template_name='uks/issuetype_confirm_delete.ht
 class PriorityForm(ModelForm):
     class Meta:
         model = Priority
-        fields = ['name', 'key', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_priority')
@@ -220,7 +220,7 @@ def priority_delete(request, pk, template_name='uks/priority_confirm_delete.html
 class StatusForm(ModelForm):
     class Meta:
         model = Status
-        fields = ['name', 'key', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_status')
@@ -267,7 +267,7 @@ def status_delete(request, pk, template_name='uks/status_confirm_delete.html'):
 class MilestoneForm(ModelForm):
     class Meta:
         model = Milestone
-        fields = ['name', 'key', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_milestone')
