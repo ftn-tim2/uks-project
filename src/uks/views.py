@@ -80,7 +80,8 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             commit.project = project
             commit.message = data.message
             if not Commit.objects.filter(hashcode=data.commit).exists():
-                commit.save()    
+                commit.save()
+            commit.hashcode = commit.hashcode[:10]    
             commits.append(commit)
     
     issuesDB = Issue.objects.all()

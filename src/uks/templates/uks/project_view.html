@@ -20,54 +20,61 @@
 		}
 	}
 </script>
-{% if 'uks.change_project' in user.get_all_permissions %}
-<a class="lsf-icon" title="edit"
-	href="{% url 'uks:project_edit' project.id %}">Edit project</a>
-{% endif %}
+<div class="page-header">
+	<h1>{{project.name}}<small>{% if 'uks.change_project' in user.get_all_permissions %}
+<a class="lsf-icon-sm" title="edit"
+	href="{% url 'uks:project_edit' project.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit project</a>
+{% endif %}</small></h1> 
+</div>
 <div class="row">
-	<h1>{{project.name}}</h1>
 	<div class="col-sm-6">
-		<h3>Commits</h3>
-		<table class="table" border='1'>
-			{% for commit in commits %} {% if forloop.counter = 1 %}
-			<tbody>{% elif forloop.counter = 10 %}
-			</tbody>
-			<tbody id="hidecommits" style="display: none;">
-				{% endif %}
-				<tr>
-					<td>{{commit.hashcode}} <b>{{commit.user}}</b>
-						{{commit.dateTime}} {{commit.message}}
-					</td>
-				</tr>
+	<div class="panel panel-info"">
+	 <div class="panel-heading">Commits <button class="btn btn-info pull-right btn-sm" type="button" onclick="showCommits();">Show All/Hide</button></div>
+	  <div class="panel-body">
+	  <ul class="list-group">
+			{% for commit in commits %} 
+			{% if forloop.counter = 1 %}
+			<div>
+			{% elif forloop.counter = 10 %}
+			</div><div id='hidecommits' style="display:none;">
+			{% endif %}
+				<li class="list-group-item">
+					<h4 class="list-group-item-heading"> <p class='text-left'><code>{{commit.hashcode}}</code> <small>{{commit.dateTime}}</small></p> </h4>
+					<p class="list-group-item-text"> <blockquote class="blockquote-reverse"><p class='text-info'> {{commit.message}} </p> <footer> {{commit.user}} </footer></blockquote>
+				</li>
 				{% endfor %}
-			</tbody>
-		</table>
-		<input type='button' value='Show All/Hide' onclick="showCommits();">
+			</div>
+	</ul>
+	</div>
+	</div>
 	</div>
 	<div class="col-sm-6">
-		<h3>Issues</h3>
-		<table class="table" border='1'>
-			{% for issue in issues%} {% if forloop.counter = 1 %}
-			<tbody>{% elif forloop.counter = 10 %}
-			</tbody>
-			<tbody id="hideissues" style="display: none;">
+	<div class="panel panel-warning"">
+	 <div class="panel-heading">Issues <button class="btn btn-info pull-right btn-sm" type="button" onclick="showIssues();">Show All/Hide</button>
+
+		{% if 'uks.add_issue' in user.get_all_permissions %} 
+		<a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:issue_new' %}"> New issue </a>{% endif %}
+		</div>
+	  <div class="panel-body">
+	  {% for issue in issues%} {% if forloop.counter = 1 %}
+			 <div class="list-group">{% elif forloop.counter = 10 %}
+			</div><div class='list-group' id='hideissues' style="display:none;">
 				{% endif %}
-				<tr>
-					<td>{{issue.title}} <b>{{issue.reporter}}</b>
-						{{issue.issueType}} {{issue.milestone}} {{issue.priority}}
-						{{issue.status}}
-					</td> {% if 'uks.change_issue' in user.get_all_permissions %}
-					<td><a class="lsf-icon" title="edit" href="{% url 'uks:issue_edit' issue.id %}">Edit</a></td> {% endif %} 
-						{% if 'uks.change_issue' in user.get_all_permissions %}
-					<td><a class="lsf-icon" title="edit" href="{% url 'uks:issue_edit' issue.id %}">View</a></td> {% endif %}
-				</tr>
+				<a href="{% url 'uks:issue_edit' issue.id %}" class="list-group-item">
+					<h4 class="list-group-item-heading"><p class='text-left text-primary'>{{issue.title}}</p><p class='text-right'> {{issue.reporter}} </p></h4>
+					<p class="list-group-item-text">
+					<span class="label label-{% issue.issueType.marker %}">{{issue.issueType}} </span>
+					<span class="label label-{% issue.milestone.marker %}">{{issue.milestone}}</span>
+					<span class="label label-{% issue.priority.marker %}">{{issue.priority}} </span>
+					<span class="label label-{% issue.status.marker %}">{{issue.status}} </span>
+					</p>
+				</a>				
 				{% endfor %}
-			</tbody>
-		</table>
-		<input type='button' value='Show All/Hide' onclick="showIssues();">
-		{% if 'uks.add_issue' in user.get_all_permissions %} <input
-			type='button' title="add" value='New issue'
-			href="{% url 'uks:issue_new' %}">{% endif %}
+				
+				</div>
+		</div>
+	</div>
+	</div>
 	</div>
 </div>
 {% endblock %}
