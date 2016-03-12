@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
-{% block breadcrumb-page %}
-<li><a href="{% url 'uks:project_list' %}">Project List </a> <span class="divider">/</span>
-</li> {{form_type}}{% endblock breadcrumb-page %}
 {% block content %}
 <form method="post">
     {% csrf_token %}
