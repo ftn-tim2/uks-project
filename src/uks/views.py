@@ -79,7 +79,8 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             data = x = json2obj(line)
             commit = Commit()                
             commit.hashcode = data.commit
-            commit.user = data.author
+            commit.user = data.author.replace("<"," ")
+            commit.user = commit.user.replace(">"," ")
             date = datetime.datetime.strptime(data.date, '%Y-%m-%d %H:%M:%S')
             commit.dateTime = timezone.make_aware(date, timezone.get_current_timezone())
             commit.project = project
