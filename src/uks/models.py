@@ -94,7 +94,7 @@ class Milestone(models.Model):
 class Issue(models.Model):
     title = models.TextField()
     description = models.TextField()
-    attribute = models.ImageField()
+    attribute = models.ImageField(blank=True, null=True)
     date = models.DateField()
     project = models.ForeignKey(to=Project, null=False)
     reporter = models.ForeignKey(to=User, null=False, related_name='reporter')
