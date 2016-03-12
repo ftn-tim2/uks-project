@@ -1,0 +1,137 @@
+[
+  {
+    "model": "uks.milestone",
+    "pk": 1,
+    "fields": {
+      "name": "set up base",
+      "key": "sub",
+      "marker": "warning"
+    }
+  },
+  {
+    "model": "uks.milestone",
+    "pk": 2,
+    "fields": {
+      "name": "release",
+      "key": "rel",
+      "marker": "success"
+    }
+  },
+  {
+    "model": "uks.milestone",
+    "pk": 3,
+    "fields": {
+      "name": "deploy",
+      "key": "dep",
+      "marker": "primary"
+    }
+  },
+  {
+    "model": "uks.issuetype",
+    "pk": 1,
+    "fields": {
+      "name": "bug",
+      "key": "bug",
+      "marker": "danger"
+    }
+  },
+  {
+    "model": "uks.issuetype",
+    "pk": 2,
+    "fields": {
+      "name": "improvement",
+      "key": "imp",
+      "marker": "success"
+    }
+  },
+  {
+    "model": "uks.issuetype",
+    "pk": 3,
+    "fields": {
+      "name": "invalid",
+      "key": "inv",
+      "marker": "info"
+    }
+  },
+  {
+    "model": "uks.issuetype",
+    "pk": 4,
+    "fields": {
+      "name": "duplicate",
+      "key": "dup",
+      "marker": "primary"
+    }
+  },
+  {
+    "model": "uks.issuetype",
+    "pk": 5,
+    "fields": {
+      "name": "wontfix",
+      "key": "wfix",
+      "marker": "warning"
+    }
+  },
+  {
+    "model": "uks.status",
+    "pk": 1,
+    "fields": {
+      "name": "selected for development",
+      "key": "sfd",
+      "marker": "warning"
+    }
+  },
+  {
+    "model": "uks.status",
+    "pk": 2,
+    "fields": {
+      "name": "in progress",
+      "key": "inp",
+      "marker": "primary"
+    }
+  },
+  {
+    "model": "uks.status",
+    "pk": 3,
+    "fields": {
+      "name": "done",
+      "key": "don",
+      "marker": "success"
+    }
+  },
+  {
+    "model": "uks.status",
+    "pk": 4,
+    "fields": {
+      "name": "new",
+      "key": "new",
+      "marker": "info"
+    }
+  },
+  {
+    "model": "uks.priority",
+    "pk": 1,
+    "fields": {
+      "name": "minor",
+      "key": "min",
+      "marker": "warning"
+    }
+  },
+  {
+    "model": "uks.priority",
+    "pk": 2,
+    "fields": {
+      "name": "major",
+      "key": "maj",
+      "marker": "success"
+    }
+  },
+  {
+    "model": "uks.priority",
+    "pk": 3,
+    "fields": {
+      "name": "as soon as possible",
+      "key": "asap",
+      "marker": "primary"
+    }
+  }
+]

@@ -150,7 +150,7 @@ BOOTSTRAP3 = {
     'css_url': '',
 
     # The complete URL to the Bootstrap CSS file (None means no theme)
-    'theme_url': None,
+    'theme_url': 'http://bootswatch.com/slate/bootstrap.min.css',
 
     # The complete URL to the Bootstrap JavaScript file (None means derive it from base_url)
     'javascript_url': None,
@@ -159,7 +159,7 @@ BOOTSTRAP3 = {
     'javascript_in_head': False,
 
     # Include jQuery with Bootstrap JavaScript (affects django-bootstrap3 template tags)
-    'include_jquery': False,
+    'include_jquery': True,
 
     # Label class to use in horizontal forms
     'horizontal_label_class': 'col-md-3',
