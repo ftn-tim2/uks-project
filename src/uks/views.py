@@ -130,7 +130,7 @@ def project_delete(request, pk, template_name='uks/project_confirm_delete.html')
     project = get_object_or_404(Project, pk=pk)
     if request.method == 'POST':
         project.delete()
-        return redirect('uks:project_list')
+        return redirect('/')
     return render(request, template_name, {'object': project, 'form_type': 'Delete'})
 
 
