@@ -11,12 +11,21 @@
             </div>
             <div class="panel-body">
                 {% for proj in projects %}
-                <div class="list-group">
-                    <a href="/uks/project_view/{{proj.id}}" class="list-group-item active">
-                        <h4 class="list-group-item-heading">{% bootstrap_icon "cloud" %} {{ proj.name }}</h4>
-                        <h7 class="list-group-item-heading">{{ proj.git }}</h7>
-                        <p class="list-group-item-text">{{ proj.description }}</p>
-                    </a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="/uks/project_view/{{proj.id}}" style="text-decoration:none !important;">
+                            <h3 class="panel-title">{% bootstrap_icon "cloud" %} {{ proj.name }}</h3>
+                            <div>{{ proj.git }}</div>
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        <div>{{ proj.description|slice:":125"|add:"..."}}</div>
+                        <a class="lsf-icon" title="delete" href="{% url 'uks:project_delete' proj.id %}">
+                            <button type="button" class="btn btn-danger pull-right">
+                                Delete
+                            </button>
+                        </a>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
