@@ -3,3 +3,4 @@ git log \
     $@ | \
     perl -pe 'BEGIN{print ""}; END{print "\n"}' | \
     perl -pe 's/},]/}]/'> log.json
+

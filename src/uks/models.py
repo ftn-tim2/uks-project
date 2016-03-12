@@ -3,11 +3,27 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 import json
 
+SILVER = "default"
+BLUE = "primary"
+GREEN = "success"
+LIGHT_BLUE = "info"
+YELLOW = "warning"
+RED = "danger"
+MARKER_CHOICES = (
+    (SILVER, 'silver'),
+    (BLUE, 'blue'),
+    (GREEN, 'green'),
+    (LIGHT_BLUE, 'light blue'),
+    (YELLOW, 'yellow'),
+    (RED, 'red')
+)
+
 class Project(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=100)
     key = models.CharField(unique=True, max_length=10)
-    git = models.TextField()
+    git = models.CharField(max_length=100)
     user = models.ManyToManyField(to=User,null=False)
+    description = models.TextField()
 
     class Meta:
         permissions = (
@@ -24,7 +40,7 @@ class Project(models.Model):
 class IssueType(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
-    color = models.TextField()
+    marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
@@ -42,6 +58,7 @@ class IssueType(models.Model):
 class Priority(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
+    marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
@@ -59,6 +76,7 @@ class Priority(models.Model):
 class Status(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
+    marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
@@ -76,6 +94,7 @@ class Status(models.Model):
 class Milestone(models.Model):
     name = models.TextField()
     key = models.CharField(unique=True, max_length=10)
+    marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
 
     class Meta:
@@ -93,7 +112,7 @@ class Milestone(models.Model):
 class Issue(models.Model):
     title = models.TextField()
     description = models.TextField()
-    attribute = models.ImageField(null=True)
+    attribute = models.ImageField(blank=True, null=True)
     date = models.DateField()
     project = models.ForeignKey(to=Project, null=False)
     reporter = models.ForeignKey(to=User, null=False, related_name='reporter')

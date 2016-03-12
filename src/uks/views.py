@@ -10,18 +10,21 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 import os
 import json
 from collections import namedtuple
 import datetime
+import subprocess
 
 
 
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'key', 'git','user']
+        fields = ['name', 'key', 'git', 'user', 'description']
 
 
 @permission_required('uks.view_project')
@@ -61,7 +64,6 @@ def project_view(request, pk, template_name='uks/project_view.html'):
   
     os.system(os.path.join(src,'git-log2json.sh'))
 
-    
     def _json_object_hook(d): 
        return namedtuple('X', d.keys())(*d.values())
     def json2obj(data): 
@@ -103,7 +105,8 @@ def project_create(request, template_name='uks/project_form.html'):
     if form.is_valid():
         project = form.save(commit=False)
         project.save()
-        return redirect('uks:project_list')
+        form.save_m2m()
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
@@ -131,7 +134,7 @@ def project_delete(request, pk, template_name='uks/project_confirm_delete.html')
 class IssueTypeForm(ModelForm):
     class Meta:
         model = IssueType
-        fields = ['name', 'key', 'color', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_issuetype')
@@ -178,7 +181,7 @@ def issuetype_delete(request, pk, template_name='uks/issuetype_confirm_delete.ht
 class PriorityForm(ModelForm):
     class Meta:
         model = Priority
-        fields = ['name', 'key', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_priority')
@@ -225,7 +228,7 @@ def priority_delete(request, pk, template_name='uks/priority_confirm_delete.html
 class StatusForm(ModelForm):
     class Meta:
         model = Status
-        fields = ['name', 'key', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_status')
@@ -272,7 +275,7 @@ def status_delete(request, pk, template_name='uks/status_confirm_delete.html'):
 class MilestoneForm(ModelForm):
     class Meta:
         model = Milestone
-        fields = ['name', 'key', 'project']
+        fields = ['name', 'key', 'marker', 'project']
 
 
 @permission_required('uks.view_milestone')
@@ -337,6 +340,7 @@ def issue_create(request, template_name='uks/issue_form.html'):
     if form.is_valid():
         issue = form.save(commit=False)
         issue.user = request.user
+        issue.date = datetime.datetime.now()
         issue.save()
         return redirect('uks:issue_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
