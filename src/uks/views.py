@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
 import os
 import json
@@ -98,7 +100,7 @@ def project_create(request, template_name='uks/project_form.html'):
         project = form.save(commit=False)
         project.save()
         form.save_m2m()
-        return redirect('uks:project_list')
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
