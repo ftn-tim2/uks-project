@@ -10,6 +10,14 @@
                 <h3 class="panel-title">{% bootstrap_icon "chevron-right" %}My projects</h3>
             </div>
             <div class="panel-body">
+                {% if projects|length == 0 %}
+                There is no projects. Click on the following button to create one:
+                <a href="/uks/project_create" style="text-decoration:none !important;">
+                    <button type="button" class="btn btn-success center-block">
+                        New Project
+                    </button>
+                </a>
+                {% else %}
                 {% for proj in projects %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -19,7 +27,11 @@
                         </a>
                     </div>
                     <div class="panel-body">
+                        {% if proj.description|length < 125 %}
+                        <div>{{ proj.description }}</div>
+                        {% else %}
                         <div>{{ proj.description|slice:":125"|add:"..."}}</div>
+                        {% endif %}
                         <a class="lsf-icon" title="delete" href="{% url 'uks:project_delete' proj.id %}">
                             <button type="button" class="btn btn-danger pull-right">
                                 Delete
@@ -28,6 +40,7 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -39,6 +52,9 @@
                 </div>
                 <div class="panel-body">
                     <div class="list-group">
+                        {% if issues_assigned_to_me|length == 0 %}
+                        There is no issues assigned to you... Enjoy your day! :)
+                        {% else %}
                         {% for issue in issues_assigned_to_me %}
                         <a href="/uks/issue_view/{{issue.id}}" class="list-group-item active">
                             <h4 class="list-group-item-heading">{% bootstrap_icon "tag" %} {{ issue.title }}</h4>
@@ -51,6 +67,7 @@
                             </p>
                         </a>
                         {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -62,6 +79,14 @@
                 </div>
                 <div class="panel-body">
                     <div class="list-group">
+                        {% if issues_create_by_me|length == 0 %}
+                        There is no issue created by you. Click on the following button to create one:
+                        <a href="/uks/issue_create" style="text-decoration:none !important;">
+                            <button type="button" class="btn btn-info center-block">
+                                New Issue
+                            </button>
+                        </a>
+                        {% else %}
                         {% for issue in issues_create_by_me %}
                         <a href="/uks/issue_view/{{issue.id}}" class="list-group-item active">
                             <h4 class="list-group-item-heading">{% bootstrap_icon "tag" %} {{ issue.title }}</h4>
@@ -74,6 +99,7 @@
                             </p>
                         </a>
                         {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
