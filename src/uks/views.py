@@ -83,7 +83,7 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             date = datetime.datetime.strptime(data.date, '%Y-%m-%d %H:%M:%S')
             commit.dateTime = timezone.make_aware(date, timezone.get_current_timezone())
             commit.project = project
-            commit.message = data.message
+            commit.message = data.message.replace("-"," ")
             if not Commit.objects.filter(hashcode=data.commit).exists():
                 commit.save()
             commit.hashcode = commit.hashcode[:10]    
