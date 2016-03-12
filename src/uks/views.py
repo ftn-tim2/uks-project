@@ -157,6 +157,7 @@ def issuetype_create(request, template_name='uks/issuetype_form.html'):
         issuetype = form.save(commit=False)
         issuetype.user = request.user
         issuetype.save()
+        form.save_m2m()
         return redirect('uks:issuetype_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
@@ -348,7 +349,6 @@ def issue_create(request, template_name='uks/issue_form.html'):
         issue.user = request.user
         issue.date = datetime.datetime.now()
         issue.save()
-        form.save_m2m()
         return redirect('uks:issue_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
