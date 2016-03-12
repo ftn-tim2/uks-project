@@ -204,6 +204,7 @@ def priority_create(request, template_name='uks/priority_form.html'):
         priority = form.save(commit=False)
         priority.user = request.user
         priority.save()
+        form.save_m2m()
         return redirect('uks:priority_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
@@ -214,7 +215,6 @@ def priority_update(request, pk, template_name='uks/priority_form.html'):
     priority = get_object_or_404(Priority, pk=pk)
     form = PriorityForm(request.POST or None, instance=priority)
     if form.is_valid():
-        form.save()
         return redirect('uks:priority_list')
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
@@ -251,6 +251,7 @@ def status_create(request, template_name='uks/status_form.html'):
         status = form.save(commit=False)
         status.user = request.user
         status.save()
+        form.save_m2m()
         return redirect('uks:status_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
@@ -298,6 +299,7 @@ def milestone_create(request, template_name='uks/milestone_form.html'):
         milestone = form.save(commit=False)
         milestone.user = request.user
         milestone.save()
+        form.save_m2m()
         return redirect('uks:milestone_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
@@ -346,6 +348,7 @@ def issue_create(request, template_name='uks/issue_form.html'):
         issue.user = request.user
         issue.date = datetime.datetime.now()
         issue.save()
+        form.save_m2m()
         return redirect('uks:issue_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 

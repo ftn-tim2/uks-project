@@ -26,7 +26,7 @@
     <td>{{ issuetype.name }}</td>
     <td>{{ issuetype.key }}</td>
     <td>{{ issuetype.color }}</td>
-    <td>{{ issuetype.project }}</td>
+    <td>{{ issuetype.project.name}}</td>
       {% if 'uks.change_issuetype' in user.get_all_permissions %}
  <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:issuetype_edit' issuetype.id %}">Update</a> </td>
     {% endif %}
