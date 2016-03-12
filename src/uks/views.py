@@ -323,6 +323,12 @@ def issue_list(request, template_name='uks/issue_list.html'):
     data = {'object_list': issue}
     return render(request, template_name, data)
 
+@permission_required('uks.view_issue')
+@login_required
+def issue_view(request, template_name='uks/issue_view.html'):
+    issue = Issue.objects.all()
+    data = {'object_list': issue}
+    return render(request, template_name, data)
 
 @permission_required('uks.add_issue')
 @login_required
