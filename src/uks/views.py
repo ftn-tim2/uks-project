@@ -18,6 +18,8 @@ import json
 from collections import namedtuple
 import datetime
 import subprocess
+from django.utils import timezone
+
 
 
 
@@ -78,7 +80,8 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             commit = Commit()                
             commit.hashcode = data.commit
             commit.user = data.author
-            commit.dateTime = datetime.datetime.strptime(data.date, '%Y-%m-%d %H:%M:%S')
+            date = datetime.datetime.strptime(data.date, '%Y-%m-%d %H:%M:%S')
+            commit.dateTime = timezone.make_aware(date, timezone.get_current_timezone())
             commit.project = project
             commit.message = data.message
             if not Commit.objects.filter(hashcode=data.commit).exists():
