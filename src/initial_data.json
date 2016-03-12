@@ -4,7 +4,8 @@
     "pk": 1,
     "fields": {
       "name": "set up base",
-      "key": "sub"
+      "key": "sub",
+      "marker": "warning"
     }
   },
   {
@@ -12,7 +13,8 @@
     "pk": 2,
     "fields": {
       "name": "release",
-      "key": "rel"
+      "key": "rel",
+      "marker": "success"
     }
   },
   {
@@ -20,7 +22,8 @@
     "pk": 3,
     "fields": {
       "name": "deploy",
-      "key": "dep"
+      "key": "dep",
+      "marker": "primary"
     }
   },
   {
@@ -29,7 +32,7 @@
     "fields": {
       "name": "bug",
       "key": "bug",
-      "color": "red"
+      "marker": "danger"
     }
   },
   {
@@ -38,7 +41,7 @@
     "fields": {
       "name": "improvement",
       "key": "imp",
-      "color": "green"
+      "marker": "success"
     }
   },
   {
@@ -47,7 +50,7 @@
     "fields": {
       "name": "invalid",
       "key": "inv",
-      "color": "orange"
+      "marker": "info"
     }
   },
   {
@@ -56,7 +59,7 @@
     "fields": {
       "name": "duplicate",
       "key": "dup",
-      "color": "silver"
+      "marker": "primary"
     }
   },
   {
@@ -65,7 +68,7 @@
     "fields": {
       "name": "wontfix",
       "key": "wfix",
-      "color": "yellow"
+      "marker": "warning"
     }
   },
   {
@@ -73,7 +76,8 @@
     "pk": 1,
     "fields": {
       "name": "selected for development",
-      "key": "sfd"
+      "key": "sfd",
+      "marker": "warning"
     }
   },
   {
@@ -81,7 +85,8 @@
     "pk": 2,
     "fields": {
       "name": "in progress",
-      "key": "inp"
+      "key": "inp",
+      "marker": "primary"
     }
   },
   {
@@ -89,7 +94,8 @@
     "pk": 3,
     "fields": {
       "name": "done",
-      "key": "don"
+      "key": "don",
+      "marker": "success"
     }
   },
   {
@@ -97,7 +103,8 @@
     "pk": 4,
     "fields": {
       "name": "new",
-      "key": "new"
+      "key": "new",
+      "marker": "info"
     }
   },
   {
@@ -105,7 +112,8 @@
     "pk": 1,
     "fields": {
       "name": "minor",
-      "key": "min"
+      "key": "min",
+      "marker": "warning"
     }
   },
   {
@@ -113,7 +121,8 @@
     "pk": 2,
     "fields": {
       "name": "major",
-      "key": "maj"
+      "key": "maj",
+      "marker": "success"
     }
   },
   {
@@ -121,7 +130,8 @@
     "pk": 3,
     "fields": {
       "name": "as soon as possible",
-      "key": "asap"
+      "key": "asap",
+      "marker": "primary"
     }
   }
 ]
