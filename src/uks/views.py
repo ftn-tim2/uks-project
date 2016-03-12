@@ -216,6 +216,7 @@ def priority_update(request, pk, template_name='uks/priority_form.html'):
     priority = get_object_or_404(Priority, pk=pk)
     form = PriorityForm(request.POST or None, instance=priority)
     if form.is_valid():
+        form.save()
         return redirect('uks:priority_list')
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
