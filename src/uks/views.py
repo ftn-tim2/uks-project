@@ -332,6 +332,7 @@ def issue_create(request, template_name='uks/issue_form.html'):
     if form.is_valid():
         issue = form.save(commit=False)
         issue.user = request.user
+        issue.date = datetime.datetime.now()
         issue.save()
         return redirect('uks:issue_list')
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
