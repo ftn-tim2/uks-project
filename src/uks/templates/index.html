@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="panel panel-default">
+        <div class="panel panel-success">
             <div class="panel-heading">
                 <h3 class="panel-title">My projects</h3>
             </div>
@@ -13,7 +13,7 @@
                 {% for proj in projects %}
                 <div class="list-group">
                     <a href="/uks/project_view/{{proj.id}}" class="list-group-item active">
-                        <h4 class="list-group-item-heading">{{ proj.name }}</h4>
+                        <h4 class="list-group-item-heading">{% bootstrap_icon "cloud" %} {{ proj.name }}</h4>
                         <p class="list-group-item-text">{{ proj.description }}</p>
                     </a>
                 </div>
@@ -23,87 +23,53 @@
     </div>
     <div class="col-md-6">
         <div class="row">
-            <div class="panel panel-default">
+            <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h3 class="panel-title">Issues assigned to me</h3>
                 </div>
                 <div class="panel-body">
-                    placeholder
+                    <div class="list-group">
+                        {% for issue in issues_assigned_to_me %}
+                        <a href="/uks/issue_view/{{issue.id}}" class="list-group-item active">
+                            <h4 class="list-group-item-heading">{% bootstrap_icon "tag" %} {{ issue.title }}</h4>
+                            <p class="list-group-item-text">{{ issue.description }}</p>
+                            <p class="list-group-item-text">
+                                <span class="label label-{{issue.status.marker}}">{{ issue.status }}</span>
+                                <span class="label label-{{issue.milestone.marker}}">{{ issue.milestone }}</span>
+                                <span class="label label-{{issue.issueType.marker}}">{{ issue.issueType }}</span>
+                                <span class="label label-{{issue.priority.marker}}">{{ issue.priority }}</span>
+                            </p>
+                        </a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="panel panel-default">
+            <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Issues assigned to me</h3>
+                    <h3 class="panel-title">Issues created by me</h3>
                 </div>
                 <div class="panel-body">
-                    placeholder
+                    <div class="list-group">
+                        {% for issue in issues_create_by_me %}
+                        <a href="/uks/issue_view/{{issue.id}}" class="list-group-item active">
+                            <h4 class="list-group-item-heading">{% bootstrap_icon "tag" %} {{ issue.title }}</h4>
+                            <p class="list-group-item-text">{{ issue.description }}</p>
+                            <p class="list-group-item-text">
+                                <span class="label label-{{issue.status.marker}}">{{ issue.status }}</span>
+                                <span class="label label-{{issue.milestone.marker}}">{{ issue.milestone }}</span>
+                                <span class="label label-{{issue.issueType.marker}}">{{ issue.issueType }}</span>
+                                <span class="label label-{{issue.priority.marker}}">{{ issue.priority }}</span>
+                            </p>
+                        </a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!--<h3>Classes</h3>-->
-<!--<table class="table">-->
-<!--<tr>-->
-<!--{% if 'uks.view_project' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/project_list">Project</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_issuetype' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/issuetype_list">IssueType</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_priority' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/priority_list">Priority</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_status' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/status_list">Status</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_milestone' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/milestone_list">Milestone</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_issue' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/issue_list">Issue</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_comment' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/comment_list">Comment</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-<!--<tr>-->
-<!--{% if 'uks.view_commit' in user.get_all_permissions %}-->
-<!--<td>-->
-<!--<a href="/uks/commit_list">Commit</a>-->
-<!--</td>-->
-<!--{% endif %}-->
-<!--</tr>-->
-
 
 {% endblock %}
 
