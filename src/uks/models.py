@@ -110,9 +110,7 @@ class Milestone(models.Model):
 
 
 class Issue(models.Model):
-    title = models.TextField()
-    description = models.TextField()
-    attribute = models.ImageField(blank=True, null=True)
+    title = models.CharField(max_length=100)
     date = models.DateField()
     project = models.ForeignKey(to=Project, null=False)
     reporter = models.ForeignKey(to=User, null=False, related_name='reporter')
@@ -121,6 +119,8 @@ class Issue(models.Model):
     milestone = models.ForeignKey(to=Milestone, null=True, blank=True)
     issueType = models.ForeignKey(to=IssueType, null=False)
     priority = models.ForeignKey(to=Priority, null=True, blank=True)
+    description = models.TextField()
+    attribute = models.ImageField(blank=True, null=True)
 
     class Meta:
         permissions = (

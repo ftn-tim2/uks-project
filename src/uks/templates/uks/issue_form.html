@@ -5,7 +5,7 @@
 {% block breadcrumb-page %} <li><a href="{% url 'uks:issue_list' %}">Issue List </a> <span class="divider">/</span></li> {{form_type}}{% endblock breadcrumb-page %}
 {% block content %}
 <form method="post">{% csrf_token %}
-      {% bootstrap_form form layout='horizontal' %}
+      {% bootstrap_form form  %}
       {% buttons %}
     <button type="submit"  class="btn btn-primary" >
     {% bootstrap_icon "save" %} Save
