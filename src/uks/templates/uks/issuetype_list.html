@@ -20,7 +20,7 @@ IssueType
    <tr>
     <td>{{ issuetype.name }}</td>
     <td>{{ issuetype.key }}</td>
-    <td><span class="label label-{{issuetype.marker}}">{{issuetype.marker}}</span></td>
+    <td><span class="label label-{{issuetype.marker}}">{{issuetype.get_marker_display}}</span></td>
    <td>{% for proj in issuetype.project.all %}
            <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' proj.id %}">{{ proj }}</a><br>
            {% endfor %}</td>

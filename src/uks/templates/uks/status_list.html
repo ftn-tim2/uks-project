@@ -21,7 +21,7 @@ Status
    <tr>
     <td>{{ status.name }}</td>
     <td>{{ status.key }}</td>
-    <td><span class="label label-{{status.marker}}">{{status.marker}}</span></td>
+    <td><span class="label label-{{status.marker}}">{{status.get_marker_display}}</span></td>
    <td>{% for proj in status.project.all %}
            <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' proj.id %}">{{ proj }}</a><br>
            {% endfor %}</td>

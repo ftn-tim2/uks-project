@@ -21,7 +21,7 @@ Milestone
    <tr>
     <td>{{ milestone.name }}</td>
     <td>{{ milestone.key }}</td>
-    <td><span class="label label-{{milestone.marker}}">{{milestone.marker}}</span></td>
+    <td><span class="label label-{{milestone.marker}}">{{milestone.get_marker_display}}</span></td>
     <td>{% for proj in milestone.project.all %}
            <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' proj.id %}">{{ proj }}</a><br>
            {% endfor %}</td>
