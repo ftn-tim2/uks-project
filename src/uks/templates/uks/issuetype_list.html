@@ -5,45 +5,41 @@
 {% block breadcrumb-page %} IssueType List {% endblock breadcrumb-page %}
 
 {% block title %}
-<h1>IssueType</h1>
+IssueType
 {% endblock %} {% block content %}
-<table class="table">
+<table class="table table-striped">
+<tbody>
     <tr>
     <th>Name</th>
     <th>Key</th>
-    <th>Color</th>
+    <th>Marker</th>
     <th>Project</th>
-  {% if 'uks.change_issuetype' in user.get_all_permissions %}
-    <th>Update</th>
-     {% endif %}
-    {% if 'uks.delete_issuetype' in user.get_all_permissions %}
-    <th>Delete</th>
-     {% endif %}
+     <th>Modify</th>
     </tr>
-
     {% for issuetype in object_list %}
    <tr>
     <td>{{ issuetype.name }}</td>
     <td>{{ issuetype.key }}</td>
-    <td>{{ issuetype.color }}</td>
+    <td><span class="label label-{{issuetype.marker}}">{{issuetype.marker}}</span></td>
    <td>{% for proj in issuetype.project.all %}
            <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' proj.id %}">{{ proj }}</a><br>
            {% endfor %}</td>
+  <td>
       {% if 'uks.change_issuetype' in user.get_all_permissions %}
- <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:issuetype_edit' issuetype.id %}">Update</a> </td>
+     <a class="lsf-icon" title="edit" href="{% url 'uks:issuetype_edit' issuetype.id %}"><span class="glyphicon glyphicon-pencil"></span></a> 
     {% endif %}
 
     {% if 'uks.delete_issuetype' in user.get_all_permissions %}
- <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:issuetype_delete' issuetype.id %}">Delete</a> </td>
+ 	     <a class="lsf-icon" title="delete" href="{% url 'uks:issuetype_delete' issuetype.id %}"><span class="glyphicon glyphicon-trash"></span></a> 
     {% endif %}
-
+</td>
     </tr>
- <tr>  
 
     
     {% endfor %}
-
+    </tbody>
+</table>
 {% if 'uks.add_issuetype' in user.get_all_permissions %}
-<td> <a class="lsf-icon" title="add" href="{% url 'uks:issuetype_new' %}">New</a> </td>
-{% endif %} </tr> </table>
+<a class="btn btn-primary pull-right btn" type="button" href="{% url 'uks:issuetype_new' %}">New issue</a> 
+{% endif %} 
 {% endblock %}

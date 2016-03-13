@@ -66,8 +66,8 @@
 				<button class="btn btn-info pull-right btn-sm" type="button"
 					onclick="showIssues();">Show more/less</button>
 
-				{% if 'uks.add_issue' in user.get_all_permissions %} <a
-					class="btn btn-primary pull-right btn-sm" type="button"
+				{% if 'uks.add_issue' in user.get_all_permissions %} 
+				<a class="btn btn-primary pull-right btn-sm" type="button"
 					href="{% url 'uks:issue_new' %}"> New issue </a>{% endif %}
 			</div>
 			<div class="panel-body">

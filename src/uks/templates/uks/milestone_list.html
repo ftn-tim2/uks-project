@@ -5,43 +5,41 @@
 {% block breadcrumb-page %} Milestone List {% endblock breadcrumb-page %}
 
 {% block title %}
-<h1>Milestone</h1>
+Milestone
 {% endblock %} {% block content %}
-<table class="table">
+<table class="table table-striped">
+<tbody>
     <tr>
     <th>Name</th>
     <th>Key</th>
+    <th>Marker</th>
     <th>Project</th>
-  {% if 'uks.change_milestone' in user.get_all_permissions %}
-    <th>Update</th>
-     {% endif %}
-    {% if 'uks.delete_milestone' in user.get_all_permissions %}
-    <th>Delete</th>
-     {% endif %}
+	  <th>Modify</th>
     </tr>
 
     {% for milestone in object_list %}
    <tr>
     <td>{{ milestone.name }}</td>
     <td>{{ milestone.key }}</td>
+    <td><span class="label label-{{milestone.marker}}">{{milestone.marker}}</span></td>
     <td>{% for proj in milestone.project.all %}
            <a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' proj.id %}">{{ proj }}</a><br>
            {% endfor %}</td>
+      <td>
       {% if 'uks.change_milestone' in user.get_all_permissions %}
- <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:milestone_edit' milestone.id %}">Update</a> </td>
+     <a class="lsf-icon" title="edit" href="{% url 'uks:milestone_edit' milestone.id %}"><span class="glyphicon glyphicon-pencil"></span></a> 
     {% endif %}
 
     {% if 'uks.delete_milestone' in user.get_all_permissions %}
- <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:milestone_delete' milestone.id %}">Delete</a> </td>
+       <a class="lsf-icon" title="delete" href="{% url 'uks:milestone_delete' milestone.id %}"><span class="glyphicon glyphicon-trash"></span></a> 
     {% endif %}
-
-    </tr>
- <tr>  
-
-    
+	</td>
+    </tr>    
     {% endfor %}
-
+</tbody>
+</table>
 {% if 'uks.add_milestone' in user.get_all_permissions %}
-<td> <a class="lsf-icon" title="add" href="{% url 'uks:milestone_new' %}">New</a> </td>
-{% endif %} </tr> </table>
+<a class="btn btn-primary pull-right btn" type="button" href="{% url 'uks:milestone_new' %}">New milestone</a> 
+{% endif %} 
+
 {% endblock %}
