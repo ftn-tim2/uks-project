@@ -340,6 +340,20 @@ def issue_list(request, template_name='uks/issue_list.html'):
     data = {'object_list': issue}
     return render(request, template_name, data)
 
+@permission_required('uks.view_issue')
+@login_required
+def issue_view(request, pk, template_name='uks/issue_view.html'):
+    issue = get_object_or_404(Issue, pk=pk)
+    form = IssueForm(request.POST or None, instance=issue)
+    print(issue)
+    commentsDB = Comment.objects.all()
+    comments = []
+
+    for comment in commentsDB:
+        if comment.issue == issue:
+            comments.append(comment)
+
+    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue})
 
 @permission_required('uks.add_issue')
 @login_required

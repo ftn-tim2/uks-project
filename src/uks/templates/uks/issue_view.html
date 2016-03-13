@@ -1,10 +1,168 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base_project.html" %}
+{% load bootstrap3 %}
+{% block content %}
 
-</body>
-</html>
+<script>
+	function showComments() {
+		if (document.getElementById("hidecomments").style.display == 'none') {
+			document.getElementById("hidecomments").style.display = '';
+		} else {
+			document.getElementById("hidecomments").style.display = 'none';
+		}
+	}
+</script>
+
+<div class="page-header">
+	<h1>
+		{{issue.title}}
+	</h1>
+</div>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="panel panel-info">
+            <div class="panel-heading clearfix">
+		        {{issue.title}}
+                {% if 'uks.change_issue' in user.get_all_permissions %}
+                    <a class="btn btn-primary pull-right btn-sm" type="button"
+					href="{% url 'uks:issue_edit' issue.id %}"> Edit issue </a>{% endif %}
+			</div>
+			<div class="panel-body">
+				<ul class="list-group">
+						<li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Title:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.title}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                         <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Project:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.project}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Atribute:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.atribute}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Reporter:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.reporter}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                         <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Assigned to:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.assigned_to}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Status:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.status}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Milestone:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.milestone}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   IssueType:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.issueType}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Priority:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.priority}}</p>
+							</blockquote>
+							</h4>
+						</li>
+                        <li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+                                <p class="list-group-item-text">
+                                   Description:
+                               <p class="list-group-item-text">
+							    <blockquote class="blockquote-reverse">
+								    <p class='text-info'>{{issue.description}}</p>
+							</blockquote>
+							</h4>
+						</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="panel panel-info">
+			<div class="panel-heading clearfix">
+				Comments
+				<button class="btn btn-info pull-right btn-sm" type="button"
+					onclick="showComments();">Show more/less</button>
+                {% if 'uks.add_comment' in user.get_all_permissions %} <a
+					class="btn btn-primary pull-right btn-sm" type="button"
+					href="{% url 'uks:comment_new' %}"> New comment </a>{% endif %}
+			</div>
+			<div class="panel-body">
+				<ul class="list-group">
+					{% for comment in comments %} {% if forloop.counter = 1 %}
+					<div>{% elif forloop.counter = 10 %}</div> <div id='hidecomments' style="display: none;">
+						{% endif %}
+						<li class="list-group-item">
+							<h4 class="list-group-item-heading text-left">
+
+									<small>{{comment.dateTime}}</small>
+
+							</h4>
+							<p class="list-group-item-text">
+							<blockquote class="blockquote-reverse">
+								<p class='text-info'>{{comment.message}}</p>
+								<footer> {{comment.author}} </footer>
+							</blockquote>
+						</li> {% endfor %}
+					</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endblock %}
