@@ -345,10 +345,7 @@ def issue_list(request, template_name='uks/issue_list.html'):
 def issue_view(request, pk, template_name='uks/issue_view.html'):
     issue = get_object_or_404(Issue, pk=pk)
     form = IssueForm(request.POST or None, instance=issue)
-    if form.is_valid():
-        form.save()
-        return redirect('uks:issue_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Update'})
+    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': Comment.objects.filter(issue_id = issue)})
 
 @permission_required('uks.add_issue')
 @login_required

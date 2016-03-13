@@ -1,9 +1,5 @@
 {% extends "base_project.html" %}
 {% load bootstrap3 %}
-{% block breadcrumb-page %}
-<li><a href="{% url 'uks:issue_list' %}">{{issue.tittle}} </a> <span
-	class="divider">/</span></li>
-{% endblock breadcrumb-page %}
 {% block content %}
 <script>
 	function showComments() {
@@ -18,10 +14,13 @@
 <div class="page-header">
 	<h1>
 		{{issue.tittle}}<small>{% if 'uks.change_issue' in user.get_all_permissions %}
-		<a class="lsf-icon-sm" title="edit" href="{% url 'uks:project_issue' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a> {% endif %}
+		<a class="lsf-icon-sm" title="edit" href="{% url 'uks:issue_update' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a> {% endif %}
 		</small>
 	</h1>
 </div>
+<form method="post">{% csrf_token %}
+      {% bootstrap_form form  %}
+</form>
 <div class="row">
 	<div class="col-sm-6">
 		<div class="panel panel-info">
@@ -52,3 +51,4 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
