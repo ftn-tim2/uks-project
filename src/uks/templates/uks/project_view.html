@@ -79,7 +79,7 @@
 					{% endif %} <a href="{% url 'uks:issue_edit' issue.id %}" class="list-group-item">
 						<h4 class="list-group-item-heading text-left text-primary">
 							{{issue.title}}
-							<p class='text-right text-info'>{{issue.reporter}}</p>
+							<p class='text-right text-info'><span class="glyphicon glyphicon-user"></span>{{issue.reporter}}</p>
 						</h4>
 						<p class="list-group-item-text">
 							<span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}

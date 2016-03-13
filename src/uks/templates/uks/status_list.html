@@ -41,6 +41,6 @@ Status
 </tbody>
 </table>
 {% if 'uks.add_status' in user.get_all_permissions %}
-<a class="btn btn-primary pull-right btn" type="button" href="{% url 'uks:status_new' %}">New status</a> 
+<a class="btn btn-primary pull-right btn" type="button" href="{% url 'uks:status_new' %}"><span class="glyphicon glyphicon-plus-sign"></span>	New status</a> 
 {% endif %}  
 {% endblock %}

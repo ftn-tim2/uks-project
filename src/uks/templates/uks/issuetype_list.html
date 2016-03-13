@@ -40,6 +40,6 @@ IssueType
     </tbody>
 </table>
 {% if 'uks.add_issuetype' in user.get_all_permissions %}
-<a class="btn btn-primary pull-right btn" type="button" href="{% url 'uks:issuetype_new' %}">New issue</a> 
+<a class="btn btn-primary pull-right btn" type="button" href="{% url 'uks:issuetype_new' %}"><span class="glyphicon glyphicon-plus-sign"></span>	New issue</a> 
 {% endif %} 
 {% endblock %}
