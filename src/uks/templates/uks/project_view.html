@@ -62,13 +62,13 @@
 	<div class="col-sm-6">
 		<div class="panel panel-warning">
 			<div class="panel-heading clearfix">
+				<div class='btn-toolbar'>
 				Issues
-				<button class="btn btn-info pull-right btn-sm" type="button"
-					onclick="showIssues();">Show more/less</button>
-
 				{% if 'uks.add_issue' in user.get_all_permissions %} 
-				<a class="btn btn-primary pull-right btn-sm" type="button"
-					href="{% url 'uks:issue_new' %}"> New issue </a>{% endif %}
+				<a class="btn btn-primary pull-right btn-sm btn-margin-right" type="button" href="{% url 'uks:issue_new' %}">New issue</a>
+				{% endif %}
+				<button class="btn btn-info pull-right btn-sm btn-margin-right" type="button" onclick="showIssues();">Show more/less</button>
+				</div>
 			</div>
 			<div class="panel-body">
 				{% if issues|length == 0%}
@@ -82,11 +82,10 @@
 							<p class='text-right text-info'><span class="glyphicon glyphicon-user"></span>{{issue.reporter}}</p>
 						</h4>
 						<p class="list-group-item-text">
-							<span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}
-							</span> <span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span>
-							<span class="label label-{{issue.priority.marker}}">{{issue.priority}}
-							</span> <span class="label label-{{issue.status.marker}}">{{issue.status}}
-							</span>
+							<span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span>
+							<span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span>
+							<span class="label label-{{issue.priority.marker}}">{{issue.priority}}</span>
+							<span class="label label-{{issue.status.marker}}">{{issue.status}}</span>
 						</p>
 					</a> {% endfor %}
 
