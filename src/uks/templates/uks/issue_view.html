@@ -156,8 +156,23 @@
 							</h4>
 							<p class="list-group-item-text">
 							<blockquote class="blockquote-reverse">
-								<p class='text-info'>{{comment.message}}</p>
+								<p class='text-info'><a href="{% url 'uks:comment_edit' comment.id %}"> {{comment.message}} </a></p>
 								<footer> {{comment.author}} </footer>
+                            <br>
+                                <div class="pull-right">
+
+                                     <span class="label label-primary">
+                                        <a class="lsf-icon" title="edit" href="{% url 'uks:comment_edit' comment.id %}">
+                                            Edit
+                                        </a>
+                                    </span>
+                                    <label></label>
+                                    <span class="label label-primary">
+                                        <a class="lsf-icon" title="delete" href="{% url 'uks:comment_delete' comment.id %}">
+                                            Delete
+                                        </a>
+                                    </span>
+                                </div>
 							</blockquote>
 						</li> {% endfor %}
 					</div>
