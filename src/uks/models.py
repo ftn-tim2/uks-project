@@ -117,7 +117,7 @@ class Issue(models.Model):
     assigned_to = models.ForeignKey(to=User, null=True, blank=True)
     status = models.ForeignKey(to=Status, null=False)
     milestone = models.ForeignKey(to=Milestone, null=True, blank=True)
-    issueType = models.ForeignKey(to=IssueType, null=False)
+    issueType = models.ForeignKey(to=IssueType, null=False, verbose_name='Issue type')
     priority = models.ForeignKey(to=Priority, null=True, blank=True)
     description = models.TextField()
     attribute = models.ImageField(blank=True, null=True)
