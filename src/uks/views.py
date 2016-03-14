@@ -411,8 +411,15 @@ def comment_create(request, template_name='uks/comment_form.html'):
         comment = form.save(commit=False)
         comment.user = request.user
         comment.save()
-        return redirect('uks:comment_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Create'})
+
+        issueDB = Issue.objects.all()
+        for issue1 in issueDB:
+            if comment.issue == issue1:
+                issue2 = comment.issue.id
+                template_name = 'uks/issue_view.html'
+        return issue_view(request, issue2, template_name)
+    else:
+        return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_comment')
