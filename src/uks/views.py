@@ -96,10 +96,43 @@ def project_view(request, pk, template_name='uks/project_view.html'):
     for issue in issuesDB:
         if issue.project == project:
             issues.append(issue)
+            
+    issueTypesDB = IssueType.objects.all()
+    issueTypes = []
+    
+    for types in issueTypesDB:
+        for proj in types.project.all():
+            if proj == project:
+                issueTypes.append(types)
+    
+    prioritiesDB = Priority.objects.all()
+    priorities = []
+    
+    for priority in prioritiesDB:
+        for proj in priority.project.all():
+            if proj == project:
+                priorities.append(priority)
+                
+    
+    milestonesDB = Milestone.objects.all()
+    milestones = []
+    
+    for milestone in milestonesDB:
+        for proj in milestone.project.all():
+            if proj == project:
+                milestones.append(milestone)
+                
+    statusesDB = Status.objects.all()
+    statuses = []
+    
+    for status in statusesDB:
+        for proj in status.project.all():
+            if proj == project:
+                statuses.append(status)
     
     os.chdir(path)
 
-    return render(request, template_name, {'project': project, 'commits':commits, 'issues':issues})
+    return render(request, template_name, {'project': project, 'commits':commits, 'issues':issues, 'issueTypes':issueTypes , 'priorities':priorities, 'milestones':milestones, 'statuses':statuses})
 
 
 @permission_required('uks.add_project')
