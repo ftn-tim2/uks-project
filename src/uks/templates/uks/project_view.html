@@ -24,14 +24,14 @@
 <div class="page-header">
 	<h1>
 		{{project.name}}<small>{% if 'uks.change_project' in user.get_all_permissions %} 
-		<a class="lsf-icon-sm" title="edit" href="{% url 'uks:project_edit' project.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}
+		<a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:project_edit' project.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}
 		</small>
 	</h1>
 </div>
 <div class="row">
 	<div class="col-sm-6">
-		<div class="panel panel-info">
-			<div class="panel-heading clearfix">
+		<div class="panel panel-info h3">
+			<div class="panel-heading clearfix ">
 				Commits
 				<button class="btn btn-info pull-right btn-sm" type="button"
 					onclick="showCommits();">Show more/less</button>
@@ -60,7 +60,7 @@
 		</div>
 	</div>
 	<div class="col-sm-6">
-		<div class="panel panel-warning">
+		<div class="panel panel-warning h3">
 			<div class="panel-heading clearfix">
 				<div class='btn-toolbar'>
 				Issues
@@ -70,13 +70,13 @@
 				<button class="btn btn-info pull-right btn-sm btn-margin-right" type="button" onclick="showIssues();">Show more/less</button>
 				</div>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body h4">
 				{% if issues|length == 0%}
 				<p class='text-info'>No issues here!</p>
 				{% else %} {% for issue in issues%} {% if forloop.counter = 1 %}
 				<div class="list-group">{% elif forloop.counter = 10 %}</div>
 				<div class='list-group' id='hideissues' style="display: none;">
-					{% endif %} <a href="{% url 'uks:issue_edit' issue.id %}" class="list-group-item">
+					{% endif %} <a href="{% url 'uks:issue_view' issue.id %}" class="list-group-item">
 						<h4 class="list-group-item-heading text-left text-primary">
 							{{issue.title}}
 							<p class='text-right text-info'><span class="glyphicon glyphicon-user"></span>{{issue.reporter}}</p>
