@@ -14,7 +14,9 @@
 
 <div class="page-header">
 	<h1>
-		{{issue.title}}
+		{{issue.title}}<small>{% if 'uks.change_issue' in user.get_all_permissions %}
+		<a class="lsf-icon-sm" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a> {% endif %}
+		</small>
 	</h1>
 </div>
 <div class="row">
@@ -23,9 +25,7 @@
             <div class="panel-heading clearfix">
             {% bootstrap_icon "chevron-right" %}
 		        {{issue.title}}
-                {% if 'uks.change_issue' in user.get_all_permissions %}
-                    <a class="btn btn-primary pull-right btn-sm" type="button"
-					href="{% url 'uks:issue_edit' issue.id %}"> Edit issue </a>{% endif %}
+
 			</div>
 			<div class="panel-body">
 				<ul class="list-group">
@@ -85,7 +85,7 @@
                                    Status:
                                <p class="list-group-item-text">
 							    <blockquote class="blockquote-reverse">
-								    <p class='text-info'>{{issue.status}}</p>
+                                    <span class="label label-{{issue.status.marker}}">{{issue.status}}</span>
 							</blockquote>
 							</h4>
 						</li>
@@ -95,7 +95,7 @@
                                    Milestone:
                                <p class="list-group-item-text">
 							    <blockquote class="blockquote-reverse">
-								    <p class='text-info'>{{issue.milestone}}</p>
+								     <span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span>
 							</blockquote>
 							</h4>
 						</li>
@@ -105,7 +105,7 @@
                                    IssueType:
                                <p class="list-group-item-text">
 							    <blockquote class="blockquote-reverse">
-								    <p class='text-info'>{{issue.issueType}}</p>
+								     <span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span>
 							</blockquote>
 							</h4>
 						</li>
@@ -115,7 +115,7 @@
                                    Priority:
                                <p class="list-group-item-text">
 							    <blockquote class="blockquote-reverse">
-								    <p class='text-info'>{{issue.priority}}</p>
+								    <span class="label label-{{issue.priority.marker}}">{{issue.priority}}</span>
 							</blockquote>
 							</h4>
 						</li>
@@ -137,13 +137,15 @@
 	<div class="col-sm-6">
 		<div class="panel panel-info">
 			<div class="panel-heading clearfix">
-				{% bootstrap_icon "chevron-right" %} Comments
-				<button class="btn btn-info pull-right btn-sm" type="button"
-					onclick="showComments();">Show more/less</button>
-                {% if 'uks.add_comment' in user.get_all_permissions %} <a
-					class="btn btn-primary pull-right btn-sm" type="button"
-					href="{% url 'uks:comment_new' %}"> New comment </a>{% endif %}
-			</div>
+                <div class='btn-toolbar'>
+                 {% bootstrap_icon "chevron-right" %}
+                 Comments
+                 {% if 'uks.add_comment' in user.get_all_permissions %}
+                    <a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:comment_new' %}"> New comment </a>
+                 {% endif %}
+                 <button class="btn btn-info pull-right btn-sm" type="button" onclick="showComments();">Show more/less</button>
+			    </div>
+            </div>
 			<div class="panel-body">
 				<ul class="list-group">
 					{% for comment in comments %} {% if forloop.counter = 1 %}
