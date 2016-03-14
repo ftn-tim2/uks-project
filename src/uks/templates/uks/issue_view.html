@@ -14,7 +14,9 @@
 
 <div class="page-header">
 	<h1>
-		{{issue.title}}
+		{{issue.title}}<small>{% if 'uks.change_issue' in user.get_all_permissions %}
+		<a class="lsf-icon-sm" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a> {% endif %}
+		</small>
 	</h1>
 </div>
 <div class="row">
@@ -23,9 +25,7 @@
             <div class="panel-heading clearfix">
             {% bootstrap_icon "chevron-right" %}
 		        {{issue.title}}
-                {% if 'uks.change_issue' in user.get_all_permissions %}
-                    <a class="btn btn-primary pull-right btn-sm" type="button"
-					href="{% url 'uks:issue_edit' issue.id %}"> Edit issue </a>{% endif %}
+
 			</div>
 			<div class="panel-body">
 				<ul class="list-group">
