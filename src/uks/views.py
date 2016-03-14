@@ -429,8 +429,15 @@ def comment_update(request, pk, template_name='uks/comment_form.html'):
     form = CommentForm(request.POST or None, instance=comment)
     if form.is_valid():
         form.save()
-        return redirect('uks:comment_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Update'})
+
+        issueDB = Issue.objects.all()
+        for issue1 in issueDB:
+            if comment.issue == issue1:
+                issue2 = comment.issue.id
+                template_name = 'uks/issue_view.html'
+        return issue_view(request, issue2, template_name)
+    else:
+        return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
 
 @permission_required('uks.delete_comment')
@@ -439,8 +446,14 @@ def comment_delete(request, pk, template_name='uks/comment_confirm_delete.html')
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == 'POST':
         comment.delete()
-        return redirect('uks:comment_list')
-    return render(request, template_name, {'object': comment, 'form_type': 'Delete'})
+        issueDB = Issue.objects.all()
+        for issue1 in issueDB:
+            if comment.issue == issue1:
+                issue2 = comment.issue.id
+                template_name = 'uks/issue_view.html'
+        return issue_view(request, issue2, template_name)
+    else:
+        return render(request, template_name, {'object': comment, 'form_type': 'Delete'})
 
 
 class CommitForm(ModelForm):
