@@ -138,10 +138,29 @@ def project_view(request, pk, template_name='uks/project_view.html'):
 @permission_required('uks.add_project')
 @login_required
 def project_create(request, template_name='uks/project_form.html'):
+    def addInitialDataToProject(Project):
+        project.milestone_set.add(Milestone.objects.get(id=1))
+        project.milestone_set.add(Milestone.objects.get(id=2))
+        project.milestone_set.add(Milestone.objects.get(id=3))
+        project.issuetype_set.add(IssueType.objects.get(id=1))
+        project.issuetype_set.add(IssueType.objects.get(id=2))
+        project.issuetype_set.add(IssueType.objects.get(id=3))
+        project.issuetype_set.add(IssueType.objects.get(id=4))
+        project.issuetype_set.add(IssueType.objects.get(id=5))
+        project.status_set.add(Status.objects.get(id=1))
+        project.status_set.add(Status.objects.get(id=2))
+        project.status_set.add(Status.objects.get(id=3))
+        project.status_set.add(Status.objects.get(id=4))
+        project.priority_set.add(Priority.objects.get(id=1))
+        project.priority_set.add(Priority.objects.get(id=2))
+        project.priority_set.add(Priority.objects.get(id=3))
+
+
     form = ProjectForm(request.POST or None)
     if form.is_valid():
         project = form.save(commit=False)
         project.save()
+        addInitialDataToProject(project)
         form.save_m2m()
         return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
