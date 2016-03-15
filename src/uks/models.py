@@ -38,7 +38,7 @@ class Project(models.Model):
 
 
 class IssueType(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=20)
     key = models.CharField(unique=True, max_length=10)
     marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
@@ -56,7 +56,7 @@ class IssueType(models.Model):
 
 
 class Priority(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=20)
     key = models.CharField(unique=True, max_length=10)
     marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
@@ -74,7 +74,7 @@ class Priority(models.Model):
 
 
 class Status(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=20)
     key = models.CharField(unique=True, max_length=10)
     marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
@@ -92,7 +92,7 @@ class Status(models.Model):
 
 
 class Milestone(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=20)
     key = models.CharField(unique=True, max_length=10)
     marker = models.CharField(max_length=15, choices=MARKER_CHOICES, default=SILVER)
     project = models.ManyToManyField(to=Project, blank=True)
