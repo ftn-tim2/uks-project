@@ -416,8 +416,15 @@ def issue_create(request, template_name='uks/issue_form.html'):
         issue.user = request.user
         issue.date = datetime.datetime.now()
         issue.save()
-        return redirect('uks:issue_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Create'})
+
+        projectDB = Project.objects.all()
+        for project1 in projectDB:
+            if issue.project == project1:
+                project2 = issue.project.id
+                template_name = 'uks/project_view.html'
+        return project_view(request, project2, template_name)
+    else:
+        return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_issue')
