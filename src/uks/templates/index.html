@@ -3,6 +3,7 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-success">
@@ -124,6 +125,24 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="jumbotron">
+  <div class="container">
+      <h1>Welcome!</h1>
+      <p>
+          The uks-project django application is a simple issue tracking web application.
+          You can create multiple projects, linking them to git based repositories, linking issues to the commits, etc...
+      </p>
+      <p>
+          If you are not registered yet, you can start by clicking on Register button.
+      </p>
+      <p><a class="btn btn-primary btn-lg" href="{% url 'registration_register' %}">{% bootstrap_icon "register" %} Register</a></p>
+  </div>
+</div>
 
+
+
+
+{% endif %}
 {% endblock %}
 
