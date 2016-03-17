@@ -169,7 +169,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <span class="label label-{{p.marker}}">{{p.name}}</span>
-                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:priority_delete' p.id %}"><span
+                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:priority_delete' project.id p.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
                     </li>
                     {% endfor %}
@@ -197,7 +197,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <span class="label label-{{m.marker}}">{{m.name}}</span>
-                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:milestone_delete' m.id %}"><span
+                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:milestone_delete' project.id m.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
                     </li>
                     {% endfor %}
@@ -226,7 +226,7 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <span class="label label-{{s.marker}}">{{s.name}}</span>
-                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:status_delete' s.id %}"><span
+                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:status_delete' project.id s.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
                     </li>
                     {% endfor %}
