@@ -9,7 +9,4 @@ RUN apt-get install zlib1g-dev -y
 RUN apt-get install python-dev -y
 RUN ln -s -T /usr/include/freetype2/ /usr/include/freetype
 RUN pip install -r /opt/apps/djdocker/requirements.txt
-RUN (cd /opt/apps/djdocker && python manage.py makemigrations --noinput)
-RUN (cd /opt/apps/djdocker && python manage.py migrate --noinput)
-RUN (cd /opt/apps/djdocker && python manage.py collectstatic --noinput)
 CMD ["python", "/opt/apps/djdocker/manage.py","runserver", "0.0.0.0:8000"]
