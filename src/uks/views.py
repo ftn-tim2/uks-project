@@ -1,3 +1,6 @@
+from django.db.models.signals import m2m_changed
+from django.template import RequestContext
+
 from uks.models import Project
 from uks.models import IssueType
 from uks.models import Priority
@@ -9,9 +12,9 @@ from uks.models import Commit
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import permission_required
 import os
 import json
@@ -132,7 +135,19 @@ def project_view(request, pk, template_name='uks/project_view.html'):
     
     os.chdir(path)
 
-    return render(request, template_name, {'project': project, 'commits':commits, 'issues':issues, 'issueTypes':issueTypes , 'priorities':priorities, 'milestones':milestones, 'statuses':statuses})
+    success_message = ""
+    alert_message = ""
+    if request.session.has_key('success_message'):
+        success_message = request.session.get('success_message')
+        del request.session['success_message']
+    if request.session.has_key('alert_message'):
+        alert_message = request.session.get('alert_message')
+        del request.session['alert_message']
+
+    return render(request, template_name, {'project': project, 'commits': commits, 'issues': issues,
+                                           'issueTypes': issueTypes, 'priorities': priorities, 'milestones': milestones,
+                                           'statuses': statuses, 'success_message': success_message,
+                                           'alert_message': alert_message})
 
 
 @permission_required('uks.add_project')
@@ -227,12 +242,19 @@ def issuetype_update(request, pk, template_name='uks/issuetype_form.html'):
 
 @permission_required('uks.delete_issuetype')
 @login_required
-def issuetype_delete(request, pk, template_name='uks/issuetype_confirm_delete.html'):
-    issuetype = get_object_or_404(IssueType, pk=pk)
+def issuetype_delete(request, issuetype_id, project_id, template_name='uks/issuetype_confirm_delete.html'):
+    issuetype = get_object_or_404(IssueType, pk=issuetype_id)
+    project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
-        issuetype.delete()
-        return redirect('uks:issuetype_list')
-    return render(request, template_name, {'object': issuetype, 'form_type': 'Delete'})
+        issues = Issue.objects.filter(project_id=project.id, issueType_id=issuetype.id)
+        if not issues:
+            issuetype.project.remove(project)
+            request.session['success_message'] = "The issue type " + issuetype.name + " successfully deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+        else:
+            request.session['alert_message'] = "The issue type " + issuetype.name + " cannot be deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+    return render(request, template_name, {'object': issuetype , 'form_type': 'Delete'})
 
 
 class PriorityForm(ModelForm):
@@ -275,11 +297,18 @@ def priority_update(request, pk, template_name='uks/priority_form.html'):
 
 @permission_required('uks.delete_priority')
 @login_required
-def priority_delete(request, pk, template_name='uks/priority_confirm_delete.html'):
-    priority = get_object_or_404(Priority, pk=pk)
+def priority_delete(request, priority_id, project_id, template_name='uks/priority_confirm_delete.html'):
+    priority = get_object_or_404(Priority, pk=priority_id)
+    project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
-        priority.delete()
-        return redirect('uks:priority_list')
+        issues = Issue.objects.filter(project_id=project.id, priority_id=priority.id)
+        if not issues:
+            priority.project.remove(project)
+            request.session['success_message'] = "The priority '" + priority.name + "' successfully deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+        else:
+            request.session['alert_message'] = "The priority '" + priority.name + "' cannot be deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'object': priority, 'form_type': 'Delete'})
 
 
@@ -323,11 +352,18 @@ def status_update(request, pk, template_name='uks/status_form.html'):
 
 @permission_required('uks.delete_status')
 @login_required
-def status_delete(request, pk, template_name='uks/status_confirm_delete.html'):
-    status = get_object_or_404(Status, pk=pk)
+def status_delete(request, status_id, project_id, template_name='uks/status_confirm_delete.html'):
+    status = get_object_or_404(Status, pk=status_id)
+    project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
-        status.delete()
-        return redirect('uks:status_list')
+        issues = Issue.objects.filter(project_id=project.id, status_id=status.id)
+        if not issues:
+            status.project.remove(project)
+            request.session['success_message'] = "The status '" + status.name + "' successfully deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+        else:
+            request.session['alert_message'] = "The status '" + status.name + "' cannot be deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'object': status, 'form_type': 'Delete'})
 
 
@@ -371,11 +407,18 @@ def milestone_update(request, pk, template_name='uks/milestone_form.html'):
 
 @permission_required('uks.delete_milestone')
 @login_required
-def milestone_delete(request, pk, template_name='uks/milestone_confirm_delete.html'):
-    milestone = get_object_or_404(Milestone, pk=pk)
+def milestone_delete(request, milestone_id, project_id, template_name='uks/milestone_confirm_delete.html'):
+    milestone = get_object_or_404(Milestone, pk=milestone_id)
+    project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
-        milestone.delete()
-        return redirect('uks:milestone_list')
+        issues = Issue.objects.filter(project_id=project.id, milestone_id=milestone.id)
+        if not issues:
+            milestone.project.remove(project)
+            request.session['success_message'] = "The milestone '" + milestone.name + "' successfully deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+        else:
+            request.session['alert_message'] = "The milestone '" + milestone.name + "' cannot be deleted from the project."
+            return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'object': milestone, 'form_type': 'Delete'})
 
 

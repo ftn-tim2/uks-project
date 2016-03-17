@@ -17,177 +17,224 @@
 		}
 	}
 </script>
+
+{% if alert_message %}
+<div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Oh snap!</strong> {{alert_message}} It is already in use!
+</div>
+{% endif %}
+
+{% if success_message %}
+<div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Well done!</strong> {{success_message}}
+</div>
+{% endif %}
+
 <div class="page-header">
-	<h1>
-		{{project.name}}<small>{% if 'uks.change_project' in user.get_all_permissions %}
-		<a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:project_edit' project.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}
-		</small>
-	</h1>
+    <h1>
+        {{project.name}}
+        <small>{% if 'uks.change_project' in user.get_all_permissions %}
+            <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:project_edit' project.id %}"><span
+                    class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}
+        </small>
+    </h1>
 </div>
 <div class="row">
-	<div class="col-sm-4">
-		<div class="panel panel-info h3">
-			<div class="panel-heading clearfix ">
-				Commits
-				<button class="btn btn-info pull-right btn-sm" type="button"
-					onclick="showCommits();">Show more/less</button>
-			</div>
-			<div class="panel-body">
-				<ul class="list-group">
-					{% for commit in commits %} {% if forloop.counter = 1 %}
-					<div>{% elif forloop.counter = 10 %}</div> <div id='hidecommits' style="display: none;">
-						{% endif %}
-						<li class="list-group-item">
-							<h4 class="list-group-item-heading text-left">
+    <div class="col-sm-4">
+        <div class="panel panel-info">
+            <div class="panel-heading clearfix ">
+                <h3 class="panel-title pull-left">Commits</h3>
+                <div class="panel-title pull-right">
+                    <button class="btn btn-info pull-right btn-sm" type="button"
+                            onclick="showCommits();">Show more/less
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    {% for commit in commits %} {% if forloop.counter = 1 %}
+                    <div>{% elif forloop.counter = 10 %}</div>
+                    <div id='hidecommits' style="display: none;">
+                        {% endif %}
+                        <li class="list-group-item">
+                            <div class="list-group-item-heading text-left">
+                                <code>{{commit.hashcode}}</code>
+                                <small>{{commit.dateTime}}</small>
+                            </div>
+                            <blockquote class="blockquote-reverse">
+                                <p class='text-info'>{{commit.message}}</p>
+                                <footer> {{commit.user}}</footer>
+                            </blockquote>
+                        </li>
+                        {% endfor %}
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="panel panel-warning">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar clearfix'>
+                    <h3 class="panel-title pull-left">Issues</h3>
+                    <!--Issues-->
+                    <div class="btn-group pull-right" role="group" aria-label="issue-buttons">
+                        {% if 'uks.add_issue' in user.get_all_permissions %}
+                        <button class="btn btn-primary btn-sm" type="button">
+                            <a href="{% url 'uks:issue_new' %}">New issue</a>
+                        </button>
+                        {% endif %}
+                        <button class="btn btn-info btn-sm" type="button" onclick="showIssues();">
+                            Show more/less
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% if issues|length == 0%}
+                <p class='text-info'>No issues here!</p>
+                {% else %} {% for issue in issues%} {% if forloop.counter = 1 %}
+                <div class="list-group">{% elif forloop.counter = 10 %}</div>
+                <div class='list-group' id='hideissues' style="display: none;">
+                    {% endif %} <a href="{% url 'uks:issue_view' issue.id %}" class="list-group-item">
+                    <h4 class="list-group-item-heading text-left text-primary">
+                        {{issue.title}}
+                        <p class='text-right text-info'><span class="glyphicon glyphicon-user"></span>{{issue.reporter}}
+                        </p>
+                    </h4>
+                    <p class="list-group-item-text">
+                        <span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span>
+                        <span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span>
+                        <span class="label label-{{issue.priority.marker}}">{{issue.priority}}</span>
+                        <span class="label label-{{issue.status.marker}}">{{issue.status}}</span>
+                    </p>
+                </a> {% endfor %}
 
-									<code>{{commit.hashcode}}</code>
-									<small>{{commit.dateTime}}</small>
+                </div>
+                {% endif %}
 
-							</h4>
-							<p class="list-group-item-text">
-							<blockquote class="blockquote-reverse">
-								<p class='text-info'>{{commit.message}}</p>
-								<footer> {{commit.user}} </footer>
-							</blockquote>
-						</li> {% endfor %}
-					</div>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-5">
-		<div class="panel panel-warning h3">
-			<div class="panel-heading clearfix">
-				<div class='btn-toolbar'>
-				Issues
-				{% if 'uks.add_issue' in user.get_all_permissions %}
-				<a class="btn btn-primary pull-right btn-sm btn-margin-right" type="button" href="{% url 'uks:issue_new' %}">New issue</a>
-				{% endif %}
-				<button class="btn btn-info pull-right btn-sm btn-margin-right" type="button" onclick="showIssues();">Show more/less</button>
-				</div>
-			</div>
-			<div class="panel-body h4">
-				{% if issues|length == 0%}
-				<p class='text-info'>No issues here!</p>
-				{% else %} {% for issue in issues%} {% if forloop.counter = 1 %}
-				<div class="list-group">{% elif forloop.counter = 10 %}</div>
-				<div class='list-group' id='hideissues' style="display: none;">
-					{% endif %} <a href="{% url 'uks:issue_view' issue.id %}" class="list-group-item">
-						<h4 class="list-group-item-heading text-left text-primary">
-							{{issue.title}}
-							<p class='text-right text-info'><span class="glyphicon glyphicon-user"></span>{{issue.reporter}}</p>
-						</h4>
-						<p class="list-group-item-text">
-							<span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span>
-							<span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span>
-							<span class="label label-{{issue.priority.marker}}">{{issue.priority}}</span>
-							<span class="label label-{{issue.status.marker}}">{{issue.status}}</span>
-						</p>
-					</a> {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar clearfix'>
+                    <h3 class="panel-title pull-left">Available issue types</h3>
+                    <div class="panel-title pull-right">
+                        {% if 'uks.add_issuetype' in user.get_all_permissions %}
+                        <a class="btn btn-primary pull-right btn-sm" type="button"
+                           href="{% url 'uks:issuetype_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% if issueTypes|length == 0%}
+                <p class='text-info'>No issue types here!</p>
+                {% else %} {% for type in issueTypes%}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="label label-{{type.marker}}">{{type.name}}</span>
+                        <a class="lsf-icon pull-right" title="delete"
+                           href="{% url 'uks:issuetype_delete' project.id type.id %}"><span
+                                class="glyphicon glyphicon-trash"></span></a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar'>
+                    <h3 class="panel-title pull-left">Available priorities</h3>
+                    <div class="panel-title pull-right">
+                        {% if 'uks.add_priority' in user.get_all_permissions %}
+                        <a class="btn btn-primary pull-right btn-sm" type="button"
+                           href="{% url 'uks:priority_new' %}"><span
+                                class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% if priorities|length == 0%}
+                <p class='text-info'>No priorities here!</p>
+                {% else %} {% for p in priorities%}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="label label-{{p.marker}}">{{p.name}}</span>
+                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:priority_delete' project.id p.id %}"><span
+                                class="glyphicon glyphicon-trash"></span></a>
+                    </li>
+                    {% endfor %}
 
-				</div>
-				{% endif %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar'>
+                    <h3 class="panel-title pull-left">Available milestones</h3>
+                    <div class="panel-title pull-right">
+                        {% if 'uks.add_milestone' in user.get_all_permissions %}
+                        <a class="btn btn-primary pull-right btn-sm" type="button"
+                           href="{% url 'uks:milestone_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% if milestones|length == 0%}
+                <p class='text-info'>No milestones here!</p>
+                {% else %} {% for m in milestones%}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="label label-{{m.marker}}">{{m.name}}</span>
+                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:milestone_delete' project.id m.id %}"><span
+                                class="glyphicon glyphicon-trash"></span></a>
+                    </li>
+                    {% endfor %}
 
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-3">
-	<div class="panel panel-primary h4">
-			<div class="panel-heading clearfix">
-				<div class='btn-toolbar'>
-				Available issue types
-				{% if 'uks.add_issuetype' in user.get_all_permissions %}
-				<a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:issuetype_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
-				{% endif %}
-				</div>
-			</div>
-			<div class="panel-body">
-				{% if issueTypes|length == 0%}
-				<p class='text-info'>No issue types here!</p>
-				{% else %} {% for type in issueTypes%}
-				<ul class="list-group">
-					<li class="list-group-item">
-						<span class="label label-{{type.marker}}">{{type.name}}</span>
-						<a class="lsf-icon pull-right" title="delete" href="{% url 'uks:issuetype_delete' type.id %}"><span class="glyphicon glyphicon-trash"></span></a>
-					</li>
-					{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar'>
+                    <h3 class="panel-title pull-left">Available statuses</h3>
+                    <div class="panel-title pull-right">
+                        {% if 'uks.add_status' in user.get_all_permissions %}
+                        <a class="btn btn-primary pull-right btn-sm" type="button"
+                           href="{% url 'uks:status_new' %}"><span
+                                class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% if statuses|length == 0%}
+                <p class='text-info'>No statuses here!</p>
+                {% else %} {% for s in statuses%}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="label label-{{s.marker}}">{{s.name}}</span>
+                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:status_delete' project.id s.id %}"><span
+                                class="glyphicon glyphicon-trash"></span></a>
+                    </li>
+                    {% endfor %}
 
-				</ul>
-				{% endif %}
-			</div>
-		</div>
-		<div class="panel panel-primary h4">
-			<div class="panel-heading clearfix">
-				<div class='btn-toolbar'>
-				Available priorities
-				{% if 'uks.add_priority' in user.get_all_permissions %}
-				<a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:priority_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
-				{% endif %}
-				</div>
-			</div>
-			<div class="panel-body">
-				{% if priorities|length == 0%}
-				<p class='text-info'>No priorities here!</p>
-				{% else %} {% for p in priorities%}
-				<ul class="list-group">
-					<li class="list-group-item">
-						<span class="label label-{{p.marker}}">{{p.name}}</span>
-						<a class="lsf-icon pull-right" title="delete" href="{% url 'uks:priority_delete' p.id %}"><span class="glyphicon glyphicon-trash"></span></a>
-					</li>
-					{% endfor %}
-
-				</ul>
-				{% endif %}
-			</div>
-		</div>
-		<div class="panel panel-primary h4">
-			<div class="panel-heading clearfix">
-				<div class='btn-toolbar'>
-				Available milestones
-				{% if 'uks.add_milestone' in user.get_all_permissions %}
-				<a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:milestone_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
-				{% endif %}
-				</div>
-			</div>
-			<div class="panel-body">
-				{% if milestones|length == 0%}
-				<p class='text-info'>No milestones here!</p>
-				{% else %} {% for m in milestones%}
-				<ul class="list-group">
-					<li class="list-group-item">
-						<span class="label label-{{m.marker}}">{{m.name}}</span>
-						<a class="lsf-icon pull-right" title="delete" href="{% url 'uks:milestone_delete' m.id %}"><span class="glyphicon glyphicon-trash"></span></a>
-					</li>
-					{% endfor %}
-
-				</ul>
-				{% endif %}
-			</div>
-		</div>
-		<div class="panel panel-primary h4">
-			<div class="panel-heading clearfix">
-				<div class='btn-toolbar'>
-				Available statuses
-				{% if 'uks.add_status' in user.get_all_permissions %}
-				<a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:status_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
-				{% endif %}
-				</div>
-			</div>
-			<div class="panel-body">
-				{% if statuses|length == 0%}
-				<p class='text-info'>No statuses here!</p>
-				{% else %} {% for s in statuses%}
-				<ul class="list-group">
-					<li class="list-group-item">
-						<span class="label label-{{s.marker}}">{{s.name}}</span>
-						<a class="lsf-icon pull-right" title="delete" href="{% url 'uks:status_delete' s.id %}"><span class="glyphicon glyphicon-trash"></span></a>
-					</li>
-					{% endfor %}
-
-				</ul>
-				{% endif %}
-			</div>
-		</div>
-	</div>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
