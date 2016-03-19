@@ -519,9 +519,10 @@ def comment_create(request, template_name='uks/comment_form.html'):
             if comment.issue == issue1:
                 issue2 = comment.issue.id
                 template_name = 'uks/issue_view.html'
-        return issue_view(request, issue2, template_name)
+        return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
     else:
         return render(request, template_name, {'form': form, 'form_type': 'Create'})
+
 
 
 @permission_required('uks.change_comment')
@@ -553,7 +554,7 @@ def comment_delete(request, pk, template_name='uks/comment_confirm_delete.html')
             if comment.issue == issue1:
                 issue2 = comment.issue.id
                 template_name = 'uks/issue_view.html'
-        return issue_view(request, issue2, template_name)
+        return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
     else:
         return render(request, template_name, {'object': comment, 'form_type': 'Delete'})
 
