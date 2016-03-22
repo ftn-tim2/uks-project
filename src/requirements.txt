@@ -4,4 +4,4 @@ django-registration
 django-bootstrap3
 django-finalware
 Pillow
-
+selenium
