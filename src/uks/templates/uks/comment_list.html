@@ -2,46 +2,55 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
-{% block breadcrumb-page %} Comment List {% endblock breadcrumb-page %}
+{% block content %}
+<div class="row">
+<div class="panel panel-info">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar'>
+                    <h3 class="panel-title pull-left">Comments</h3>
+                    <div class="panel-title pull-right">
+                        {% if 'uks.add_comment' in user.get_all_permissions %}
+                        <a class="btn btn-primary pull-right btn-sm" type="button"
+                           href="{% url 'uks:comment_new' %}"><span
+                                class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                     <tr>
+                        <th>Message</th>
+                        <th>Datetime</th>
+                        <th>Author</th>
+                        <th>Issue</th>
+                        {% if 'uks.change_comment' in user.get_all_permissions %}
+                        <th>Update</th>
+                        {% endif %}
+                        {% if 'uks.delete_comment' in user.get_all_permissions %}
+                        <th>Delete</th>
+                        {% endif %}
+                     </tr>
 
-{% block title %}
-<h1>Comment</h1>
-{% endblock %} {% block content %}
-<table class="table">
-    <tr>
-    <th>Message</th>
-    <th>Datetime</th>
-    <th>Author</th>
-    <th>Issue</th>
-  {% if 'uks.change_comment' in user.get_all_permissions %}
-    <th>Update</th>
-     {% endif %}
-    {% if 'uks.delete_comment' in user.get_all_permissions %}
-    <th>Delete</th>
-     {% endif %}
-    </tr>
+                    {% for comment in object_list %}
+                    <tr>
+                         <td>{{ comment.message }}</td>
+                         <td>{{ comment.dateTime }}</td>
+                         <td>{{ comment.author }}</td>
+                         <td>{{ comment.issue }}</td>
+                         {% if 'uks.change_comment' in user.get_all_permissions %}
+                         <td><a class="lsf-icon" title="edit" href="{% url 'uks:comment_edit' comment.id %}">Update</a> </td>
+                         {% endif %}
 
-    {% for comment in object_list %}
-   <tr>
-    <td>{{ comment.message }}</td>
-    <td>{{ comment.dateTime }}</td>
-    <td>{{ comment.author }}</td>
-    <td>{{ comment.issue }}</td>
-      {% if 'uks.change_comment' in user.get_all_permissions %}
- <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:comment_edit' comment.id %}">Update</a> </td>
-    {% endif %}
+                         {% if 'uks.delete_comment' in user.get_all_permissions %}
+                         <td><a class="lsf-icon" title="delete" href="{% url 'uks:comment_delete' comment.id %}">Delete</a> </td>
+                         {% endif %}
 
-    {% if 'uks.delete_comment' in user.get_all_permissions %}
- <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:comment_delete' comment.id %}">Delete</a> </td>
-    {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+        </div>
+</div>
+</div>
 
-    </tr>
- <tr>  
-
-    
-    {% endfor %}
-
-{% if 'uks.add_comment' in user.get_all_permissions %}
-<td> <a class="lsf-icon" title="add" href="{% url 'uks:comment_new' %}">New</a> </td>
-{% endif %} </tr> </table>
 {% endblock %}
