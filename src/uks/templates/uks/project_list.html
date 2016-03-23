@@ -1,46 +1,34 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
-{% block breadcrumb-page %} Project List {% endblock breadcrumb-page %}
-
 {% block title %}
-<h1>Project</h1>
-{% endblock %} {% block content %}
-<table class="table">
-    <tr>
-        <th>Name</th>
-        <th>Key</th>
-        <th>Git</th>
-        {% if 'uks.change_project' in user.get_all_permissions %}
-        <th>Update</th>
-        {% endif %}
-        {% if 'uks.delete_project' in user.get_all_permissions %}
-        <th>Delete</th>
-        {% endif %}
-    </tr>
-
-    {% for project in object_list %}
-    <tr>
-        <td><a href="{% url 'uks:project_view' project.id %}">{{ project.name }}</a></td>
-        <td>{{ project.key }}</td>
-        <td>{{ project.git }}</td>
-        {% if 'uks.change_project' in user.get_all_permissions %}
-        <td><a class="lsf-icon" title="edit" href="{% url 'uks:project_edit' project.id %}">Update</a></td>
-        {% endif %}
-
-        {% if 'uks.delete_project' in user.get_all_permissions %}
-        <td><a class="lsf-icon" title="delete" href="{% url 'uks:project_delete' project.id %}">Delete</a></td>
-        {% endif %}
-
-    </tr>
-    <tr>
-
-
-        {% endfor %}
-
-        {% if 'uks.add_project' in user.get_all_permissions %}
-        <td><a class="lsf-icon" title="add" href="{% url 'uks:project_new' %}">New</a></td>
-        {% endif %}
-    </tr>
-</table>
+<h1>All projects</h1>
+{% endblock %}
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="list-group">
+            {% for proj in object_list %}
+            <a href="/uks/project_view/{{proj.id}}" class="list-group-item active row"
+               style=" text-decoration:none !important;">
+                <div class="col-md-8">
+                    <h4 class="list-group-item-heading">{% bootstrap_icon "cloud" %} {{ proj.name }}</h4>
+                    <div>{{ proj.git }}</div>
+                </div>
+                <div class="col-md-4">
+                    <blockquote class="btn-sm">
+                        <div>
+                            {% if proj.description|length < 125 %}
+                            <div>{{ proj.description }}</div>
+                            {% else %}
+                            <div>{{ proj.description|slice:":125"|add:"..."}}</div>
+                            {% endif %}
+                        </div>
+                    </blockquote>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
