@@ -20,6 +20,7 @@ import os
 import json
 from collections import namedtuple
 import datetime
+import time
 import subprocess
 from django.utils import timezone
 
@@ -457,7 +458,6 @@ def issue_create(request, template_name='uks/issue_form.html'):
     if form.is_valid():
         issue = form.save(commit=False)
         issue.user = request.user
-        issue.date = datetime.datetime.now()
         issue.save()
 
         projectDB = Project.objects.all()
@@ -512,8 +512,9 @@ def comment_create(request, template_name='uks/comment_form.html'):
     if form.is_valid():
         comment = form.save(commit=False)
         comment.user = request.user
+        now = datetime.datetime.now()
+        comment.dateTime = now
         comment.save()
-
         issueDB = Issue.objects.all()
         for issue1 in issueDB:
             if comment.issue == issue1:
