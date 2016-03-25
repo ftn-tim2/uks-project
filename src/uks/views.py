@@ -209,14 +209,6 @@ class IssueTypeForm(ModelForm):
         fields = ['name', 'key', 'marker']
 
 
-@permission_required('uks.view_issuetype')
-@login_required
-def issuetype_list(request, template_name='uks/issuetype_list.html'):
-    issuetype = IssueType.objects.all()
-    data = {'object_list': issuetype}
-    return render(request, template_name, data)
-
-
 @permission_required('uks.add_issuetype')
 @login_required
 def issuetype_create(request, project_id, template_name='uks/issuetype_form.html'):
@@ -267,14 +259,6 @@ class PriorityForm(ModelForm):
     class Meta:
         model = Priority
         fields = ['name', 'key', 'marker']
-
-
-@permission_required('uks.view_priority')
-@login_required
-def priority_list(request, template_name='uks/priority_list.html'):
-    priority = Priority.objects.all()
-    data = {'object_list': priority}
-    return render(request, template_name, data)
 
 
 @permission_required('uks.add_priority')
@@ -328,15 +312,6 @@ class StatusForm(ModelForm):
         model = Status
         fields = ['name', 'key', 'marker']
 
-
-@permission_required('uks.view_status')
-@login_required
-def status_list(request, template_name='uks/status_list.html'):
-    status = Status.objects.all()
-    data = {'object_list': status}
-    return render(request, template_name, data)
-
-
 @permission_required('uks.add_status')
 @login_required
 def status_create(request, project_id, template_name='uks/status_form.html'):
@@ -387,14 +362,6 @@ class MilestoneForm(ModelForm):
     class Meta:
         model = Milestone
         fields = ['name', 'key', 'marker']
-
-
-@permission_required('uks.view_milestone')
-@login_required
-def milestone_list(request, template_name='uks/milestone_list.html'):
-    milestone = Milestone.objects.all()
-    data = {'object_list': milestone}
-    return render(request, template_name, data)
 
 
 @permission_required('uks.add_milestone')
