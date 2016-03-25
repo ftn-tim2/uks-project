@@ -36,12 +36,19 @@
 
 <div class="page-header">
     <h1>
-        {{project.name}}
-        <small>{% if 'uks.change_project' in user.get_all_permissions %}
+        {{project.name}} <small> {{project.git}}
+        {% if 'uks.change_project' in user.get_all_permissions %}
             <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:project_edit' project.id %}"><span
                     class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}
-        </small>
-    </h1>
+        </small> </h1> <h4>
+        {% for user in project.user.all %}
+        Contributors : {{user.username}}
+        {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+   	</h4>
+   		<h5>
+   		{{project.description}}
+   		</h5>
 </div>
 <div class="row">
     <div class="col-sm-4">
