@@ -135,7 +135,7 @@
                     <div class="panel-title pull-right">
                         {% if 'uks.add_issuetype' in user.get_all_permissions %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
-                           href="{% url 'uks:issuetype_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                           href="{% url 'uks:issuetype_new' project.id %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
                         {% endif %}
                     </div>
                 </div>
@@ -146,7 +146,8 @@
                 {% else %} {% for type in issueTypes%}
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <span class="label label-{{type.marker}}">{{type.name}}</span>
+                      <a class="lsf-icon" title="Update"
+                           href="{% url 'uks:issuetype_edit' project.id type.id %}"> <span class="label label-{{type.marker}}">{{type.name}}</span></a>
                         <a class="lsf-icon pull-right" title="delete"
                            href="{% url 'uks:issuetype_delete' project.id type.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
@@ -163,7 +164,7 @@
                     <div class="panel-title pull-right">
                         {% if 'uks.add_priority' in user.get_all_permissions %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
-                           href="{% url 'uks:priority_new' %}"><span
+                           href="{% url 'uks:priority_new' project.id %}"><span
                                 class="glyphicon glyphicon-plus-sign"></span></a>
                         {% endif %}
                     </div>
@@ -175,8 +176,10 @@
                 {% else %} {% for p in priorities%}
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <span class="label label-{{p.marker}}">{{p.name}}</span>
-                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:priority_delete' project.id p.id %}"><span
+                        <a class="lsf-icon" title="Update"
+                           href="{% url 'uks:priority_edit' project.id p.id %}"> <span class="label label-{{p.marker}}">{{p.name}}</span></a>
+                        <a class="lsf-icon pull-right" title="delete"
+                           href="{% url 'uks:priority_delete' project.id p.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
                     </li>
                     {% endfor %}
@@ -192,7 +195,7 @@
                     <div class="panel-title pull-right">
                         {% if 'uks.add_milestone' in user.get_all_permissions %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
-                           href="{% url 'uks:milestone_new' %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                           href="{% url 'uks:milestone_new' project.id %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
                         {% endif %}
                     </div>
                 </div>
@@ -203,8 +206,10 @@
                 {% else %} {% for m in milestones%}
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <span class="label label-{{m.marker}}">{{m.name}}</span>
-                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:milestone_delete' project.id m.id %}"><span
+                         <a class="lsf-icon" title="Update"
+                           href="{% url 'uks:milestone_edit' project.id m.id %}"> <span class="label label-{{m.marker}}">{{m.name}}</span></a>
+                        <a class="lsf-icon pull-right" title="delete"
+                           href="{% url 'uks:milestone_delete' project.id m.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
                     </li>
                     {% endfor %}
@@ -220,7 +225,7 @@
                     <div class="panel-title pull-right">
                         {% if 'uks.add_status' in user.get_all_permissions %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
-                           href="{% url 'uks:status_new' %}"><span
+                           href="{% url 'uks:status_new' project.id %}"><span
                                 class="glyphicon glyphicon-plus-sign"></span></a>
                         {% endif %}
                     </div>
@@ -232,8 +237,10 @@
                 {% else %} {% for s in statuses%}
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <span class="label label-{{s.marker}}">{{s.name}}</span>
-                        <a class="lsf-icon pull-right" title="delete" href="{% url 'uks:status_delete' project.id s.id %}"><span
+                        <a class="lsf-icon" title="Update"
+                           href="{% url 'uks:status_edit' project.id s.id %}"> <span class="label label-{{s.marker}}">{{s.name}}</span></a>
+                        <a class="lsf-icon pull-right" title="delete"
+                           href="{% url 'uks:status_delete' project.id s.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
                     </li>
                     {% endfor %}

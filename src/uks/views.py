@@ -219,25 +219,29 @@ def issuetype_list(request, template_name='uks/issuetype_list.html'):
 
 @permission_required('uks.add_issuetype')
 @login_required
-def issuetype_create(request, template_name='uks/issuetype_form.html'):
+def issuetype_create(request, project_id, template_name='uks/issuetype_form.html'):
     form = IssueTypeForm(request.POST or None)
+    project = get_object_or_404(Project, pk=project_id)
     if form.is_valid():
         issuetype = form.save(commit=False)
         issuetype.user = request.user
         issuetype.save()
         form.save_m2m()
-        return redirect('uks:issuetype_list')
+        request.session['success_message'] = "Issue type successfully added to project."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_issuetype')
 @login_required
-def issuetype_update(request, pk, template_name='uks/issuetype_form.html'):
-    issuetype = get_object_or_404(IssueType, pk=pk)
+def issuetype_update(request, project_id, issuetype_id, template_name='uks/issuetype_form.html'):
+    issuetype = get_object_or_404(IssueType, pk=issuetype_id)
+    project = get_object_or_404(Project, pk=project_id)
     form = IssueTypeForm(request.POST or None, instance=issuetype)
     if form.is_valid():
         form.save()
-        return redirect('uks:issuetype_list')
+        request.session['success_message'] = "Issue type successfully updated."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
 
@@ -274,25 +278,29 @@ def priority_list(request, template_name='uks/priority_list.html'):
 
 @permission_required('uks.add_priority')
 @login_required
-def priority_create(request, template_name='uks/priority_form.html'):
+def priority_create(request, project_id, template_name='uks/priority_form.html'):
     form = PriorityForm(request.POST or None)
+    project = get_object_or_404(Project, pk=project_id)
     if form.is_valid():
         priority = form.save(commit=False)
         priority.user = request.user
         priority.save()
         form.save_m2m()
-        return redirect('uks:priority_list')
+        request.session['success_message'] = "Priority successfully added to project."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_priority')
 @login_required
-def priority_update(request, pk, template_name='uks/priority_form.html'):
-    priority = get_object_or_404(Priority, pk=pk)
+def priority_update(request, priority_id, project_id, template_name='uks/priority_form.html'):
+    priority = get_object_or_404(Priority, pk=priority_id)
+    project = get_object_or_404(Project, pk=project_id)
     form = PriorityForm(request.POST or None, instance=priority)
     if form.is_valid():
         form.save()
-        return redirect('uks:priority_list')
+        request.session['success_message'] = "Priority successfully updated."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
 
@@ -329,25 +337,29 @@ def status_list(request, template_name='uks/status_list.html'):
 
 @permission_required('uks.add_status')
 @login_required
-def status_create(request, template_name='uks/status_form.html'):
+def status_create(request, project_id, template_name='uks/status_form.html'):
     form = StatusForm(request.POST or None)
+    project = get_object_or_404(Project, pk=project_id)
     if form.is_valid():
         status = form.save(commit=False)
         status.user = request.user
         status.save()
         form.save_m2m()
-        return redirect('uks:status_list')
+        request.session['success_message'] = "Status successfully added to project."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_status')
 @login_required
-def status_update(request, pk, template_name='uks/status_form.html'):
-    status = get_object_or_404(Status, pk=pk)
+def status_update(request, status_id, project_id, template_name='uks/status_form.html'):
+    status = get_object_or_404(Status, pk=status_id)
+    project = get_object_or_404(Project, pk=project_id)
     form = StatusForm(request.POST or None, instance=status)
     if form.is_valid():
         form.save()
-        return redirect('uks:status_list')
+        request.session['success_message'] = "Status successfully updated."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
 
@@ -384,25 +396,29 @@ def milestone_list(request, template_name='uks/milestone_list.html'):
 
 @permission_required('uks.add_milestone')
 @login_required
-def milestone_create(request, template_name='uks/milestone_form.html'):
+def milestone_create(request, project_id, template_name='uks/milestone_form.html'):
     form = MilestoneForm(request.POST or None)
+    project = get_object_or_404(Project, pk=project_id)
     if form.is_valid():
         milestone = form.save(commit=False)
         milestone.user = request.user
         milestone.save()
         form.save_m2m()
-        return redirect('uks:milestone_list')
+        request.session['success_message'] = "Milestone successfully added to project."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_milestone')
 @login_required
-def milestone_update(request, pk, template_name='uks/milestone_form.html'):
-    milestone = get_object_or_404(Milestone, pk=pk)
+def milestone_update(request, milestone_id, project_id, template_name='uks/milestone_form.html'):
+    milestone = get_object_or_404(Milestone, pk=milestone_id)
+    project = get_object_or_404(Project, pk=project_id)
     form = MilestoneForm(request.POST or None, instance=milestone)
     if form.is_valid():
         form.save()
-        return redirect('uks:milestone_list')
+        request.session['success_message'] = "Milestone successfully updated."
+        return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
 
