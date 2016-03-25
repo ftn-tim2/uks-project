@@ -206,7 +206,7 @@ def project_delete(request, pk, template_name='uks/project_confirm_delete.html')
 class IssueTypeForm(ModelForm):
     class Meta:
         model = IssueType
-        fields = ['name', 'key', 'marker', 'project']
+        fields = ['name', 'key', 'marker']
 
 
 @permission_required('uks.view_issuetype')
@@ -226,6 +226,7 @@ def issuetype_create(request, project_id, template_name='uks/issuetype_form.html
         issuetype = form.save(commit=False)
         issuetype.user = request.user
         issuetype.save()
+        issuetype.project.add(project)
         form.save_m2m()
         request.session['success_message'] = "Issue type successfully added to project."
         return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
@@ -265,7 +266,7 @@ def issuetype_delete(request, issuetype_id, project_id, template_name='uks/issue
 class PriorityForm(ModelForm):
     class Meta:
         model = Priority
-        fields = ['name', 'key', 'marker', 'project']
+        fields = ['name', 'key', 'marker']
 
 
 @permission_required('uks.view_priority')
@@ -285,6 +286,7 @@ def priority_create(request, project_id, template_name='uks/priority_form.html')
         priority = form.save(commit=False)
         priority.user = request.user
         priority.save()
+        priority.project.add(project)
         form.save_m2m()
         request.session['success_message'] = "Priority successfully added to project."
         return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
@@ -324,7 +326,7 @@ def priority_delete(request, priority_id, project_id, template_name='uks/priorit
 class StatusForm(ModelForm):
     class Meta:
         model = Status
-        fields = ['name', 'key', 'marker', 'project']
+        fields = ['name', 'key', 'marker']
 
 
 @permission_required('uks.view_status')
@@ -344,6 +346,7 @@ def status_create(request, project_id, template_name='uks/status_form.html'):
         status = form.save(commit=False)
         status.user = request.user
         status.save()
+        status.project.add(project)
         form.save_m2m()
         request.session['success_message'] = "Status successfully added to project."
         return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
@@ -383,7 +386,7 @@ def status_delete(request, status_id, project_id, template_name='uks/status_conf
 class MilestoneForm(ModelForm):
     class Meta:
         model = Milestone
-        fields = ['name', 'key', 'marker', 'project']
+        fields = ['name', 'key', 'marker']
 
 
 @permission_required('uks.view_milestone')
@@ -403,6 +406,7 @@ def milestone_create(request, project_id, template_name='uks/milestone_form.html
         milestone = form.save(commit=False)
         milestone.user = request.user
         milestone.save()
+        milestone.project.add(project)
         form.save_m2m()
         request.session['success_message'] = "Milestone successfully added to project."
         return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
