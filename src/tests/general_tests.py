@@ -9,7 +9,7 @@ class GeneralTest(unittest.TestCase):
     def setUp(self):
         # chromedriver = "/usr/local/bin/chromedriver"
         # os.environ["webdriver.chrome.driver"] = chromedriver
-        self.driver = webdriver.Firefox
+        self.driver = webdriver.Firefox()
 
     def test1(self):
         driver = self.driver;
