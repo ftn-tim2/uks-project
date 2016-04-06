@@ -1,12 +1,8 @@
 import unittest
-import os
 from selenium import webdriver
-from selenium.webdriver.remote.webelement import WebElement
 
 
 class GeneralTest(unittest.TestCase):
-
-
 
     def setUp(self):
         # chromedriver = "/usr/local/bin/chromedriver"
@@ -83,7 +79,7 @@ class GeneralTest(unittest.TestCase):
                         "The warning message is not the expected one.")
 
     def tearDown(self):
-        self.driver.close();
+        self.driver.close()
 
     if __name__ == "__main__":
         unittest.main()
