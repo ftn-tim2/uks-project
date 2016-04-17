@@ -8,7 +8,7 @@ urlpatterns = patterns('',
                        url(r'^project_update/(?P<pk>\d+)$', views.project_update, name='project_edit'),
                        url(r'^project_delete/(?P<pk>\d+)$', views.project_delete, name='project_delete'),
                        url(r'^project_view/(?P<pk>\d+)$', views.project_view, name='project_view'),
-						
+					
                        url(r'^issuetype_create/(?P<project_id>\d+)$', views.issuetype_create, name='issuetype_new'),
                        url(r'^issuetype_update/(?P<project_id>\d+)/(?P<issuetype_id>\d+)/$', views.issuetype_update, name='issuetype_edit'),
                        url(r'^issuetype_delete/(?P<project_id>\d+)/(?P<issuetype_id>\d+)/$', views.issuetype_delete, name='issuetype_delete'),
