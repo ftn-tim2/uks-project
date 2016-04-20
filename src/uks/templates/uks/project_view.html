@@ -43,8 +43,9 @@
             <a class="lsf-icon-sm pull-right" title="Edit project" href="{% url 'uks:project_edit' project.id %}"><span
                     class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}  
         </small> </h1> <h4>
-        {% for user in project.user.all %}
-        Contributors : {{user.username}}
+        Owner : {{project.owner}}
+        {% for user in project.contributors.all %}
+        Contributors : {{user.username}} 
         {% if not forloop.last %}, {% endif %}
         {% endfor %}
    	</h4>

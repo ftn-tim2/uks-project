@@ -30,7 +30,7 @@ import shutil
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'key', 'git', 'user', 'description']
+        fields = ['name', 'key', 'git', 'contributors', 'description']
 
 
 @permission_required('uks.view_project')

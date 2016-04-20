@@ -22,7 +22,8 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     key = models.CharField(unique=True, max_length=10)
     git = models.CharField(max_length=100)
-    user = models.ManyToManyField(to=User,null=False)
+    owner = models.ForeignKey(to=User,null=False, related_name="owner")
+    contributors = models.ManyToManyField(to=User,blank=True,related_name="contributors")
     description = models.TextField()
 
     class Meta:
