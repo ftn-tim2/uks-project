@@ -594,3 +594,15 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
         commit.delete()
         return redirect('uks:commit_list')
     return render(request, template_name, {'object': commit, 'form_type': 'Delete'})
+
+def subscribe(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+    project.contributors.add(user)
+    return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+
+def unsubscribe(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+    project.contributors.remove(user)
+    return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))

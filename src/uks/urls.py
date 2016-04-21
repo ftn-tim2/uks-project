@@ -40,5 +40,8 @@ urlpatterns = patterns('',
                        url(r'^commit_create$', views.commit_create, name='commit_new'),
                        url(r'^commit_update/(?P<pk>\d+)$', views.commit_update, name='commit_edit'),
                        url(r'^commit_delete/(?P<pk>\d+)$', views.commit_delete, name='commit_delete'),
+                       
+                       url(r'^subscribe/(?P<pk>\d+)$', views.subscribe, name= 'subscribe'),
+                       url(r'^unsubscribe/(?P<pk>\d+)$', views.unsubscribe, name= 'unsubscribe'),
 						
 )

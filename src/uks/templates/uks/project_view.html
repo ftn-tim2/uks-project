@@ -44,11 +44,22 @@
                     class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}  
         </small> </h1> <h4>
         Owner : {{project.owner}}
-        {% for user in project.contributors.all %}
-        Contributors : {{user.username}} 
+        </h4>
+        {% for contr in project.contributors.all %}
+        <h4>Contributors : {{contr.username}} 
         {% if not forloop.last %}, {% endif %}
         {% endfor %}
-   	</h4>
+      
+       
+        {% if user.username = project.owner.username %} 
+        {% elif user in project.contributors.all %} 
+         <small><a class="lsf-icon-sm pull-center" title="Unsubscribe" href="{% url 'uks:unsubscribe' project.id %}"><span
+                    class="glyphicon glyphicon-remove"></span>Unsubscribe</a></small>
+        {% else %}
+        <small> <a class="lsf-icon-sm pull-center" title="Subscribe" href="{% url 'uks:subscribe' project.id %}"><span
+                    class="glyphicon glyphicon-ok"></span>Contribute</a></small>
+        {% endif %} 
+   		</h4>
    		<h5>
    		{{project.description}}
    		</h5>
