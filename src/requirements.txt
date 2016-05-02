@@ -1,5 +1,8 @@
 unipath
-Django==1.8.7
+mysqlclient
+uwsgi
+Django==1.8
+gunicorn==19.3.0
 django-registration
 django-bootstrap3
 django-finalware

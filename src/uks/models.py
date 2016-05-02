@@ -18,12 +18,13 @@ MARKER_CHOICES = (
     (RED, 'red')
 )
 
+
 class Project(models.Model):
     name = models.CharField(max_length=100)
     key = models.CharField(unique=True, max_length=10)
     git = models.CharField(max_length=100)
-    owner = models.ForeignKey(to=User,null=False, related_name="owner")
-    contributors = models.ManyToManyField(to=User,blank=True,related_name="contributors")
+    owner = models.ForeignKey(to=User, null=False, related_name="owner")
+    contributors = models.ManyToManyField(to=User, blank=True, related_name="contributors")
     description = models.TextField()
 
     class Meta:
@@ -154,13 +155,13 @@ class Comment(models.Model):
 
 
 class Commit(models.Model):
-    hashcode = models.CharField(max_length=64,primary_key=True)
+    hashcode = models.CharField(max_length=64, primary_key=True)
     message = models.TextField()
     dateTime = models.DateTimeField()
     project = models.ForeignKey(to=Project, null=False)
     issue = models.ManyToManyField(to=Issue, blank=True)
     user = models.TextField(null=False)
-    
+
     class Meta:
         permissions = (
             ("view_commit", "Can view the Commit"),
@@ -171,5 +172,3 @@ class Commit(models.Model):
 
     def get_absolute_url(self):
         return reverse('uks:commit_edit', kwargs={'pk': self.pk})
-
-    
