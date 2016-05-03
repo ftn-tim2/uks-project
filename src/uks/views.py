@@ -1,30 +1,18 @@
-from django.db.models.signals import m2m_changed
-from django.template import RequestContext
-
-from uks.models import Project
-from uks.models import IssueType
-from uks.models import Priority
-from uks.models import Status
-from uks.models import Milestone
-from uks.models import Issue
-from uks.models import Comment
-from uks.models import Commit
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.forms import ModelForm
-from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import permission_required
-import os
-import json
-from collections import namedtuple
 import datetime
-import time
-import subprocess
-from django.utils import timezone
-import shutil
+import json
+import os
+import codecs
+from collections import namedtuple
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
+from django.core.urlresolvers import reverse
+from django.forms import ModelForm
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
+from uks.models import Project, IssueType, Priority, Status, Milestone, Issue, Comment, Commit
 
 
 class ProjectForm(ModelForm):
@@ -40,6 +28,7 @@ def project_list(request, template_name='uks/project_list.html'):
     data = {'object_list': project}
     return render(request, template_name, data)
 
+
 @permission_required('uks.view_project')
 @login_required
 def project_view(request, pk, template_name='uks/project_view.html'):
@@ -49,91 +38,88 @@ def project_view(request, pk, template_name='uks/project_view.html'):
     spath = os.path.abspath(os.path.join(path, os.pardir))
     dpath = os.path.abspath(os.path.join(spath, os.pardir))
 
-#    os.mkdir(base+"\\"+project.key)
-#    os.chdir(base+"\\"+project.key)
-        
+    #    os.mkdir(base+"\\"+project.key)
+    #    os.chdir(base+"\\"+project.key)
 
     os.chdir(dpath)
     git = project.git
     reversed = git[::-1]
     index = reversed.find('/')
     r1 = reversed[4:index]
-    src_path = os.path.join(dpath,r1[::-1])
+    src_path = os.path.join(dpath, r1[::-1])
 
     if not os.path.exists(src_path):
-        os.system('git clone '+project.git)
+        os.system('git clone ' + project.git)
         os.chdir(src_path)
     else:
         os.chdir(src_path)
         os.system('git pull')
 
-  
-    os.system(os.path.join(src,'git-log2json.sh'))
+    os.system(os.path.join(src, 'git-log2json.sh'))
 
-    def _json_object_hook(d): 
-       return namedtuple('X', d.keys())(*d.values())
-    def json2obj(data): 
-       return json.loads(data, object_hook=_json_object_hook)
+    def _json_object_hook(d):
+        return namedtuple('X', d.keys())(*d.values())
 
-    
-    commits= []
-    
-    with open('log.json') as data_file:
-        for line in data_file:    
+    def json2obj(data):
+        return json.loads(data, object_hook=_json_object_hook)
+
+    commits = []
+
+    with open('log.json', mode='r', encoding='utf-8') as data_file:
+        for line in data_file:
             data = x = json2obj(line)
-            commit = Commit()                
+            commit = Commit()
             commit.hashcode = data.commit
-            commit.user = data.author.replace("<"," ")
-            commit.user = commit.user.replace(">"," ")
+            commit.user = data.author.replace("<", " ")
+            commit.user = commit.user.replace(">", " ")
             date = datetime.datetime.strptime(data.date, '%Y-%m-%d %H:%M:%S')
             commit.dateTime = timezone.make_aware(date, timezone.get_current_timezone())
             commit.project = project
-            commit.message = data.message.replace("-"," ")
+            commit.message = data.message.replace("-", " ")
             if not Commit.objects.filter(hashcode=data.commit).exists():
                 commit.save()
-            commit.hashcode = commit.hashcode[:10]    
+            commit.hashcode = commit.hashcode[:10]
             commits.append(commit)
-    
+
     issuesDB = Issue.objects.all()
     issues = []
-    
+
     for issue in issuesDB:
         if issue.project == project:
             issues.append(issue)
-            
+
     issueTypesDB = IssueType.objects.all()
     issueTypes = []
-    
+
     for types in issueTypesDB:
         for proj in types.project.all():
             if proj == project:
                 issueTypes.append(types)
-    
+
     prioritiesDB = Priority.objects.all()
     priorities = []
-    
+
     for priority in prioritiesDB:
         for proj in priority.project.all():
             if proj == project:
                 priorities.append(priority)
-                
-    
+
     milestonesDB = Milestone.objects.all()
     milestones = []
-    
+
     for milestone in milestonesDB:
         for proj in milestone.project.all():
             if proj == project:
                 milestones.append(milestone)
-                
+
     statusesDB = Status.objects.all()
     statuses = []
-    
+
     for status in statusesDB:
         for proj in status.project.all():
             if proj == project:
                 statuses.append(status)
-    
+
     os.chdir(path)
 
     success_message = ""
@@ -154,7 +140,7 @@ def project_view(request, pk, template_name='uks/project_view.html'):
 @permission_required('uks.add_project')
 @login_required
 def project_create(request, template_name='uks/project_form.html'):
-    def addInitialDataToProject(Project):
+    def addInitialDataToProject(project):
         project.milestone_set.add(Milestone.objects.get(id=1))
         project.milestone_set.add(Milestone.objects.get(id=2))
         project.milestone_set.add(Milestone.objects.get(id=3))
@@ -171,10 +157,10 @@ def project_create(request, template_name='uks/project_form.html'):
         project.priority_set.add(Priority.objects.get(id=2))
         project.priority_set.add(Priority.objects.get(id=3))
 
-
     form = ProjectForm(request.POST or None)
     if form.is_valid():
         project = form.save(commit=False)
+        project.owner = request.user
         project.save()
         addInitialDataToProject(project)
         form.save_m2m()
@@ -199,9 +185,9 @@ def project_delete(request, pk, template_name='uks/project_confirm_delete.html')
     project = get_object_or_404(Project, pk=pk)
     if request.method == 'POST':
         project.delete()
-        
+
         return redirect('uks:project_list')
-    
+
     return render(request, template_name, {'object': project, 'form_type': 'Delete'})
 
 
@@ -249,12 +235,14 @@ def issuetype_delete(request, issuetype_id, project_id, template_name='uks/issue
         issues = Issue.objects.filter(project_id=project.id, issueType_id=issuetype.id)
         if not issues:
             issuetype.project.remove(project)
-            request.session['success_message'] = "The issue type " + issuetype.name + " successfully deleted from the project."
+            request.session[
+                'success_message'] = "The issue type " + issuetype.name + " successfully deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
         else:
-            request.session['alert_message'] = "The issue type " + issuetype.name + " cannot be deleted from the project."
+            request.session[
+                'alert_message'] = "The issue type " + issuetype.name + " cannot be deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
-    return render(request, template_name, {'object': issuetype , 'form_type': 'Delete'})
+    return render(request, template_name, {'object': issuetype, 'form_type': 'Delete'})
 
 
 class PriorityForm(ModelForm):
@@ -301,10 +289,12 @@ def priority_delete(request, priority_id, project_id, template_name='uks/priorit
         issues = Issue.objects.filter(project_id=project.id, priority_id=priority.id)
         if not issues:
             priority.project.remove(project)
-            request.session['success_message'] = "The priority '" + priority.name + "' successfully deleted from the project."
+            request.session[
+                'success_message'] = "The priority '" + priority.name + "' successfully deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
         else:
-            request.session['alert_message'] = "The priority '" + priority.name + "' cannot be deleted from the project."
+            request.session[
+                'alert_message'] = "The priority '" + priority.name + "' cannot be deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'object': priority, 'form_type': 'Delete'})
 
@@ -313,6 +303,7 @@ class StatusForm(ModelForm):
     class Meta:
         model = Status
         fields = ['name', 'key', 'marker']
+
 
 @permission_required('uks.add_status')
 @login_required
@@ -352,7 +343,8 @@ def status_delete(request, status_id, project_id, template_name='uks/status_conf
         issues = Issue.objects.filter(project_id=project.id, status_id=status.id)
         if not issues:
             status.project.remove(project)
-            request.session['success_message'] = "The status '" + status.name + "' successfully deleted from the project."
+            request.session[
+                'success_message'] = "The status '" + status.name + "' successfully deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
         else:
             request.session['alert_message'] = "The status '" + status.name + "' cannot be deleted from the project."
@@ -404,10 +396,12 @@ def milestone_delete(request, milestone_id, project_id, template_name='uks/miles
         issues = Issue.objects.filter(project_id=project.id, milestone_id=milestone.id)
         if not issues:
             milestone.project.remove(project)
-            request.session['success_message'] = "The milestone '" + milestone.name + "' successfully deleted from the project."
+            request.session[
+                'success_message'] = "The milestone '" + milestone.name + "' successfully deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
         else:
-            request.session['alert_message'] = "The milestone '" + milestone.name + "' cannot be deleted from the project."
+            request.session[
+                'alert_message'] = "The milestone '" + milestone.name + "' cannot be deleted from the project."
             return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
     return render(request, template_name, {'object': milestone, 'form_type': 'Delete'})
 
@@ -415,7 +409,8 @@ def milestone_delete(request, milestone_id, project_id, template_name='uks/miles
 class IssueForm(ModelForm):
     class Meta:
         model = Issue
-        fields = ['title', 'description', 'attribute', 'project', 'reporter', 'assigned_to', 'status', 'milestone', 'issueType', 'priority']
+        fields = ['title', 'description', 'attribute', 'project', 'reporter', 'assigned_to', 'status', 'milestone',
+                  'issueType', 'priority']
 
 
 @permission_required('uks.view_issue')
@@ -424,6 +419,7 @@ def issue_list(request, template_name='uks/issue_list.html'):
     issue = Issue.objects.all()
     data = {'object_list': issue}
     return render(request, template_name, data)
+
 
 @permission_required('uks.view_issue')
 @login_required
@@ -439,6 +435,7 @@ def issue_view(request, pk, template_name='uks/issue_view.html'):
             comments.append(comment)
 
     return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue})
+
 
 @permission_required('uks.add_issue')
 @login_required
@@ -512,7 +509,6 @@ def comment_create(request, template_name='uks/comment_form.html'):
         return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
     else:
         return render(request, template_name, {'form': form, 'form_type': 'Create'})
-
 
 
 @permission_required('uks.change_comment')
@@ -595,11 +591,13 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
         return redirect('uks:commit_list')
     return render(request, template_name, {'object': commit, 'form_type': 'Delete'})
 
+
 def subscribe(request, pk):
     project = get_object_or_404(Project, pk=pk)
     user = request.user
     project.contributors.add(user)
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
+
 
 def unsubscribe(request, pk):
     project = get_object_or_404(Project, pk=pk)
