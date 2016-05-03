@@ -228,7 +228,7 @@ def issuetype_update(request, project_id, issuetype_id, template_name='uks/issue
 
 @permission_required('uks.delete_issuetype')
 @login_required
-def issuetype_delete(request, issuetype_id, project_id, template_name='uks/issuetype_confirm_delete.html'):
+def issuetype_delete(request, project_id, issuetype_id, template_name='uks/issuetype_confirm_delete.html'):
     issuetype = get_object_or_404(IssueType, pk=issuetype_id)
     project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
@@ -282,7 +282,7 @@ def priority_update(request, priority_id, project_id, template_name='uks/priorit
 
 @permission_required('uks.delete_priority')
 @login_required
-def priority_delete(request, priority_id, project_id, template_name='uks/priority_confirm_delete.html'):
+def priority_delete(request, project_id, priority_id, template_name='uks/priority_confirm_delete.html'):
     priority = get_object_or_404(Priority, pk=priority_id)
     project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
@@ -336,7 +336,7 @@ def status_update(request, status_id, project_id, template_name='uks/status_form
 
 @permission_required('uks.delete_status')
 @login_required
-def status_delete(request, status_id, project_id, template_name='uks/status_confirm_delete.html'):
+def status_delete(request, project_id, status_id, template_name='uks/status_confirm_delete.html'):
     status = get_object_or_404(Status, pk=status_id)
     project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
@@ -389,7 +389,7 @@ def milestone_update(request, milestone_id, project_id, template_name='uks/miles
 
 @permission_required('uks.delete_milestone')
 @login_required
-def milestone_delete(request, milestone_id, project_id, template_name='uks/milestone_confirm_delete.html'):
+def milestone_delete(request, project_id, milestone_id, template_name='uks/milestone_confirm_delete.html'):
     milestone = get_object_or_404(Milestone, pk=milestone_id)
     project = get_object_or_404(Project, pk=project_id)
     if request.method == 'POST':
@@ -444,6 +444,7 @@ def issue_create(request, template_name='uks/issue_form.html'):
     if form.is_valid():
         issue = form.save(commit=False)
         issue.user = request.user
+        issue.date = datetime.datetime.now()
         issue.save()
 
         projectDB = Project.objects.all()

@@ -45,8 +45,8 @@
         </small> </h1> <h4>
         Owner : {{project.owner}}
         </h4>
-        {% for contr in project.contributors.all %}
-        <h4>Contributors : {{contr.username}} 
+
+        <h4>Contributors : {% for contr in project.contributors.all %} {{contr.username}}
         {% if not forloop.last %}, {% endif %}
         {% endfor %}
       
