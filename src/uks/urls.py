@@ -38,6 +38,7 @@ urlpatterns = patterns('',
                        url(r'^issue_update/(?P<pk>\d+)$', views.issue_update, name='issue_edit'),
                        url(r'^issue_delete/(?P<pk>\d+)$', views.issue_delete, name='issue_delete'),
                        url(r'^issue_view/(?P<pk>\d+)$', views.issue_view, name='issue_view'),
+                       url(r'^issue_status/(?P<pk>\d+)$', views.issue_status, name='issue_status'),
 
                        url(r'^comment_list$', views.comment_list, name='comment_list'),
                        url(r'^comment_create$', views.comment_create, name='comment_new'),

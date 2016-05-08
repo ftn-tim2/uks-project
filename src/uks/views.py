@@ -467,6 +467,19 @@ def issue_update(request, pk, template_name='uks/issue_form.html'):
         return redirect('uks:issue_list')
     return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
+@permission_required('uks.issue_status')
+@login_required
+def issue_status(request, pk, template_name='uks/issue_form.html'):
+    issue = get_object_or_404(Issue, pk=pk)
+    statusDB = Status.objects.all()
+    for status1 in statusDB:
+        if status1.name == 'done':
+                issue.status = status1
+                issue.save()
+                return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue}))
+
+
+
 
 @permission_required('uks.delete_issue')
 @login_required
