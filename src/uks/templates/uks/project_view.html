@@ -90,6 +90,13 @@
                                 <p class='text-info'>{{commit.message}}</p>
                                 <footer> {{commit.user}}</footer>
                             </blockquote>
+
+                            {% if 'uks.add_issue' in user.get_all_permissions %}
+                                <button class="btn btn-info btn-sm" type="button">
+                                    <a href="{% url 'uks:issue_new' %}">New issue</a>
+                                </button>
+                            {% endif %}
+
                         </li>
                         {% endfor %}
                     </div>
