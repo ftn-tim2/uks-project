@@ -464,8 +464,14 @@ def issue_update(request, pk, template_name='uks/issue_form.html'):
     form = IssueForm(request.POST or None, instance=issue)
     if form.is_valid():
         form.save()
-        return redirect('uks:issue_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Update'})
+        projectDB = Project.objects.all()
+        for project1 in projectDB:
+            if issue.project == project1:
+                project2 = issue.project.id
+                template_name = 'uks/project_view.html'
+        return project_view(request, project2, template_name)
+    else:
+        return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
 @permission_required('uks.issue_status')
 @login_required
