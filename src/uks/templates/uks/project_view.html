@@ -45,8 +45,8 @@
         </small> </h1> <h4>
         Owner : {{project.owner}}
         </h4>
-        {% for contr in project.contributors.all %}
-        <h4>Contributors : {{contr.username}} 
+
+        <h4>Contributors : {% for contr in project.contributors.all %} {{contr.username}}
         {% if not forloop.last %}, {% endif %}
         {% endfor %}
       
@@ -90,6 +90,13 @@
                                 <p class='text-info'>{{commit.message}}</p>
                                 <footer> {{commit.user}}</footer>
                             </blockquote>
+
+                            {% if 'uks.add_issue' in user.get_all_permissions %}
+                                <button class="btn btn-info btn-sm" type="button">
+                                    <a href="{% url 'uks:issue_new' %}">New issue</a>
+                                </button>
+                            {% endif %}
+
                         </li>
                         {% endfor %}
                     </div>

@@ -15,7 +15,12 @@
 <div class="page-header">
 	<h1>
 		{{issue.title}}<small>{% if 'uks.change_issue' in user.get_all_permissions %}
-		<a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a> {% endif %}
+		<a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a>
+        <br>
+        <small>
+        <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_status' issue.id %}"><i>Close issue</i></a>
+        </small>
+        <br>{% endif %}
 		</small>
 	</h1>
 </div>
