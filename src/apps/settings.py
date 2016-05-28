@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'registration',
     'finalware',
 
+    'fileupload',
     'uks',
 )
 
@@ -55,9 +56,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-SITE_SUPERUSER_USERNAME = ''
-SITE_SUPERUSER_EMAIL = ''
-SITE_SUPERUSER_PASSWORD  = ''
+SITE_SUPERUSER_USERNAME = 'admin'
+SITE_SUPERUSER_EMAIL = 'admin@admin.com'
+SITE_SUPERUSER_PASSWORD = 'admin'
 
 ROOT_URLCONF = 'apps.urls'
 
@@ -89,11 +90,11 @@ DATABASES = {
         'USER': 'admin',
         'PASSWORD': 'admin',
         'HOST': '192.168.203.130',  # jkovacs docker ip
-        # 'HOST': '192.168.0.249',  # FTN docker machine ip - TODO verify
+        # 'HOST': '147.91.177.194',  # FTN docker machine ip - using mysql container
         # 'HOST': '192.168.99.100', # szberko docker machine ip
         'PORT': '3306',
         'OPTIONS': {
-          'autocommit': True,
+            'autocommit': True,
         }
     }
 }
@@ -126,6 +127,8 @@ STATICFILES_DIRS = (
     PROJECT_ROOT.child('assets'),
 )
 
+MEDIA_ROOT = PROJECT_ROOT.child('media')
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -136,8 +139,8 @@ STATICFILES_FINDERS = (
 LOGIN_URL = 'django.contrib.auth.views.login'
 LOGIN_REDIRECT_URL = '/'
 
-ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window
-REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window
+REGISTRATION_AUTO_LOGIN = True  # Automatically log the user in.
 
 BOOTSTRAP3 = {
 
@@ -187,7 +190,7 @@ BOOTSTRAP3 = {
     'success_css_class': 'has-success',
 
     # Renderers (only set these if you have studied the source and understand the inner workings)
-    'formset_renderers':{
+    'formset_renderers': {
         'default': 'bootstrap3.renderers.FormsetRenderer',
     },
     'form_renderers': {

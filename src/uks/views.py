@@ -1,7 +1,6 @@
 import datetime
 import json
 import os
-import codecs
 from collections import namedtuple
 
 from django.contrib.auth.decorators import login_required
