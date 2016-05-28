@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'registration',
     'finalware',
 
-    'fileupload',
     'uks',
 )
 
@@ -56,6 +55,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+# currently not in use
 SITE_SUPERUSER_USERNAME = 'admin'
 SITE_SUPERUSER_EMAIL = 'admin@admin.com'
 SITE_SUPERUSER_PASSWORD = 'admin'

@@ -17,11 +17,19 @@ def user_registered_handler(sender, **kwargs):
     """signal intercept for user_registered"""
     request = kwargs['request']
     new_user = authenticate(username=request.POST['username'], password=request.POST['password1'])
-    view_permissions = ['view_project', 'view_issuetype', 'view_priority', 'view_status', 'view_milestone', 'view_issue', 'view_comment', 'view_commit', ]
-    for v_perm in view_permissions:
+    view_permissions = ['view_project', 'view_issuetype', 'view_priority', 'view_status', 'view_milestone',
+                        'view_issue', 'view_comment', 'view_commit', ]
+    add_permissions = ['add_project', 'add_issuetype', 'add_priority', 'add_status', 'add_milestone', 'add_issue',
+                       'add_comment', 'add_commit', ]
+    change_permissions = ['change_project', 'change_issuetype', 'change_priority', 'change_status', 'change_milestone',
+                          'change_issue', 'change_comment', 'change_commit', ]
+    delete_permissions = ['delete_project', 'delete_issuetype', 'delete_priority', 'delete_status', 'delete_milestone',
+                          'delete_issue', 'delete_comment', 'delete_commit', ]
+    for v_perm in list(set().union(view_permissions, add_permissions, change_permissions, delete_permissions)):
         permission = Permission.objects.get(codename=v_perm)
         if permission:
             new_user.user_permissions.add(permission)
+
 
 user_registered.connect(user_registered_handler)
 admin.site.register(Project)
