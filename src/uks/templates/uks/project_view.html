@@ -36,12 +36,13 @@
 
 <div class="page-header">
     <h1>
-        {{project.name}} <small> {% if 'uks.delete_project' in user.get_all_permissions %}
-            <a class="lsf-icon-sm title="Delete project" href="{% url 'uks:project_delete' project.id %}"><span
+        {{project.name}} <small> {% if 'uks.delete_project' in user.get_all_permissions and is_owner%}
+            <a class="lsf-icon-sm" title="Delete project" href="{% url 'uks:project_delete' project.id %}"><span
                     class="glyphicon glyphicon-trash"></span></a> {% endif %} {{project.git}}
         {% if 'uks.change_project' in user.get_all_permissions %}
+        {% if is_owner or is_contributor %}
             <a class="lsf-icon-sm pull-right" title="Edit project" href="{% url 'uks:project_edit' project.id %}"><span
-                    class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}  
+                    class="glyphicon glyphicon-pencil"></span>Edit project</a> {% endif %}  {% endif %}
         </small> </h1> <h4>
         Owner : {{project.owner}}
         </h4>
@@ -105,9 +106,11 @@
                     <!--Issues-->
                     <div class="btn-group pull-right" role="group" aria-label="issue-buttons">
                         {% if 'uks.add_issue' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <button class="btn btn-primary btn-sm" type="button">
                             <a href="{% url 'uks:issue_new' %}">New issue</a>
                         </button>
+                        {% endif %}
                         {% endif %}
                         <button class="btn btn-info btn-sm" type="button" onclick="showIssues();">
                             Show more/less
@@ -148,8 +151,10 @@
                     <h3 class="panel-title pull-left">Available issue types</h3>
                     <div class="panel-title pull-right">
                         {% if 'uks.add_issuetype' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
                            href="{% url 'uks:issuetype_new' project.id %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -160,11 +165,19 @@
                 {% else %} {% for type in issueTypes%}
                 <ul class="list-group">
                     <li class="list-group-item">
-                      <a class="lsf-icon" title="Update"
-                           href="{% url 'uks:issuetype_edit' project.id type.id %}"> <span class="label label-{{type.marker}}">{{type.name}}</span></a>
+                        <a class="lsf-icon" title="Update"
+                           {% if 'uks.delete_status' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
+                        href="{% url 'uks:issuetype_edit' project.id type.id %}"
+                        {% endif %}
+                        {% endif %}> <span class="label label-{{type.marker}}">{{type.name}}</span></a>
+                        {% if 'uks.delete_issuetype' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="lsf-icon pull-right" title="delete"
                            href="{% url 'uks:issuetype_delete' project.id type.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
+                        {% endif %}
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
@@ -177,9 +190,11 @@
                     <h3 class="panel-title pull-left">Available priorities</h3>
                     <div class="panel-title pull-right">
                         {% if 'uks.add_priority' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
                            href="{% url 'uks:priority_new' project.id %}"><span
                                 class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -191,10 +206,18 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <a class="lsf-icon" title="Update"
-                           href="{% url 'uks:priority_edit' project.id p.id %}"> <span class="label label-{{p.marker}}">{{p.name}}</span></a>
+                           {% if 'uks.delete_status' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
+                        href="{% url 'uks:priority_edit' project.id p.id %}"
+                        {% endif %}
+                        {% endif %}> <span class="label label-{{p.marker}}">{{p.name}}</span></a>
+                        {% if 'uks.delete_priority' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="lsf-icon pull-right" title="delete"
                            href="{% url 'uks:priority_delete' project.id p.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
+                        {% endif %}
+                        {% endif %}
                     </li>
                     {% endfor %}
 
@@ -208,8 +231,10 @@
                     <h3 class="panel-title pull-left">Available milestones</h3>
                     <div class="panel-title pull-right">
                         {% if 'uks.add_milestone' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
                            href="{% url 'uks:milestone_new' project.id %}"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -221,10 +246,18 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                          <a class="lsf-icon" title="Update"
-                           href="{% url 'uks:milestone_edit' project.id m.id %}"> <span class="label label-{{m.marker}}">{{m.name}}</span></a>
+                        {% if 'uks.delete_status' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
+                        href="{% url 'uks:milestone_edit' project.id m.id %}"
+                        {% endif %}
+                        {% endif %}> <span class="label label-{{m.marker}}">{{m.name}}</span></a>
+                        {% if 'uks.delete_milestone' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="lsf-icon pull-right" title="delete"
                            href="{% url 'uks:milestone_delete' project.id m.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
+                        {% endif %}
+                        {% endif %}
                     </li>
                     {% endfor %}
 
@@ -238,9 +271,11 @@
                     <h3 class="panel-title pull-left">Available statuses</h3>
                     <div class="panel-title pull-right">
                         {% if 'uks.add_status' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="btn btn-primary pull-right btn-sm" type="button"
                            href="{% url 'uks:status_new' project.id %}"><span
                                 class="glyphicon glyphicon-plus-sign"></span></a>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -252,10 +287,19 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <a class="lsf-icon" title="Update"
-                           href="{% url 'uks:status_edit' project.id s.id %}"> <span class="label label-{{s.marker}}">{{s.name}}</span></a>
+                        {% if 'uks.delete_status' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
+                           href="{% url 'uks:status_edit' project.id s.id %}"
+                        {% endif %}
+                        {% endif %}
+                        > <span class="label label-{{s.marker}}">{{s.name}}</span></a>
+                        {% if 'uks.delete_status' in user.get_all_permissions %}
+                        {% if is_owner or is_contributor %}
                         <a class="lsf-icon pull-right" title="delete"
                            href="{% url 'uks:status_delete' project.id s.id %}"><span
                                 class="glyphicon glyphicon-trash"></span></a>
+                        {% endif %}
+                        {% endif %}
                     </li>
                     {% endfor %}
 

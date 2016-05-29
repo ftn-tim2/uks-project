@@ -3,6 +3,7 @@ import json
 import os
 from collections import namedtuple
 
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
@@ -80,44 +81,20 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             commit.hashcode = commit.hashcode[:10]
             commits.append(commit)
 
-    issuesDB = Issue.objects.all()
-    issues = []
+    issues = Issue.objects.filter(Q(project=project))
 
-    for issue in issuesDB:
-        if issue.project == project:
-            issues.append(issue)
+    issueTypes = IssueType.objects.filter(Q(project=project))
 
-    issueTypesDB = IssueType.objects.all()
-    issueTypes = []
+    priorities = Priority.objects.filter(Q(project=project))
 
-    for types in issueTypesDB:
-        for proj in types.project.all():
-            if proj == project:
-                issueTypes.append(types)
+    milestones = Milestone.objects.filter(Q(project=project))
 
-    prioritiesDB = Priority.objects.all()
-    priorities = []
+    statuses = Status.objects.filter(Q(project=project))
 
-    for priority in prioritiesDB:
-        for proj in priority.project.all():
-            if proj == project:
-                priorities.append(priority)
+    is_owner = project.owner == request.user
 
-    milestonesDB = Milestone.objects.all()
-    milestones = []
-
-    for milestone in milestonesDB:
-        for proj in milestone.project.all():
-            if proj == project:
-                milestones.append(milestone)
-
-    statusesDB = Status.objects.all()
-    statuses = []
-
-    for status in statusesDB:
-        for proj in status.project.all():
-            if proj == project:
-                statuses.append(status)
+    is_contributor = len(project.contributors.filter(pk=request.user.id)) > 0
+    print("is_contributor: {0}, is_owner: {1}, project.owner: {2}", is_contributor, is_owner, project.owner)
 
     os.chdir(path)
 
@@ -133,7 +110,8 @@ def project_view(request, pk, template_name='uks/project_view.html'):
     return render(request, template_name, {'project': project, 'commits': commits, 'issues': issues,
                                            'issueTypes': issueTypes, 'priorities': priorities, 'milestones': milestones,
                                            'statuses': statuses, 'success_message': success_message,
-                                           'alert_message': alert_message})
+                                           'alert_message': alert_message, 'is_contributor': is_contributor,
+                                           'is_owner': is_owner})
 
 
 @permission_required('uks.add_project')
