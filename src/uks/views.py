@@ -441,8 +441,33 @@ def issue_update(request, pk, template_name='uks/issue_form.html'):
     form = IssueForm(request.POST or None, instance=issue)
     if form.is_valid():
         form.save()
-        return redirect('uks:issue_list')
-    return render(request, template_name, {'form': form, 'form_type': 'Update'})
+        projectDB = Project.objects.all()
+        for project1 in projectDB:
+            if issue.project == project1:
+                project2 = issue.project.id
+                template_name = 'uks/project_view.html'
+        return project_view(request, project2, template_name)
+    else:
+        return render(request, template_name, {'form': form, 'form_type': 'Update'})
+
+@permission_required('uks.issue_status')
+@login_required
+def issue_status(request, pk, template_name='uks/issue_form.html'):
+    issue = get_object_or_404(Issue, pk=pk)
+    statusDB = Status.objects.all()
+    for status1 in statusDB:
+        if status1.key == 'don':
+                issue.status = status1
+                issue.save()
+                projectDB = Project.objects.all()
+                for project1 in projectDB:
+                    if issue.project == project1:
+                         project2 = issue.project.id
+                         template_name = 'uks/project_view.html'
+                    return project_view(request, project2, template_name)
+    return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue}))
+
+
 
 
 @permission_required('uks.delete_issue')
@@ -458,7 +483,7 @@ def issue_delete(request, pk, template_name='uks/issue_confirm_delete.html'):
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ['message', 'dateTime', 'author', 'issue']
+        fields = ['message', 'issue']
 
 
 @permission_required('uks.view_comment')
@@ -473,20 +498,18 @@ def comment_list(request, template_name='uks/comment_list.html'):
 @login_required
 def comment_create(request, template_name='uks/comment_form.html'):
     form = CommentForm(request.POST or None)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.user = request.user
-        now = datetime.datetime.now()
-        comment.dateTime = now
-        comment.save()
-        issueDB = Issue.objects.all()
-        for issue1 in issueDB:
-            if comment.issue == issue1:
-                issue2 = comment.issue.id
-                template_name = 'uks/issue_view.html'
-        return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
-    else:
-        return render(request, template_name, {'form': form, 'form_type': 'Create'})
+    comment = form.save(commit=False)
+    comment.user = request.user
+    now = datetime.datetime.now()
+    comment.dateTime = now
+    comment.save()
+    issueDB = Issue.objects.all()
+    for issue1 in issueDB:
+        if comment.issue == issue1:
+            issue2 = comment.issue.id
+            template_name = 'uks/issue_view.html'
+    return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
+
 
 
 @permission_required('uks.change_comment')
