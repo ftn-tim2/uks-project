@@ -386,7 +386,7 @@ def milestone_delete(request, project_id, milestone_id, template_name='uks/miles
 class IssueForm(ModelForm):
     class Meta:
         model = Issue
-        fields = ['title', 'description', 'attribute', 'project', 'reporter', 'assigned_to', 'status', 'milestone',
+        fields = ['title', 'description', 'attribute', 'project', 'assigned_to', 'status', 'milestone',
                   'issueType', 'priority']
 
 
@@ -420,7 +420,7 @@ def issue_create(request, template_name='uks/issue_form.html'):
     form = IssueForm(request.POST or None)
     if form.is_valid():
         issue = form.save(commit=False)
-        issue.user = request.user
+        issue.reporter = request.user
         issue.date = datetime.datetime.now()
         issue.save()
 
