@@ -82,7 +82,16 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             commits.append(commit)
 
     issues = Issue.objects.filter(Q(project=project))
-
+    
+    openIssues = []
+    closedIssues = []
+    
+    for issue in issues:
+        if((issue.status.name == 'done') or (issue.status.name == 'closed')):
+            closedIssues.append(issue)
+        else:
+            openIssues.append(issue)
+   
     issueTypes = IssueType.objects.filter(Q(project=project))
 
     priorities = Priority.objects.filter(Q(project=project))
@@ -107,7 +116,7 @@ def project_view(request, pk, template_name='uks/project_view.html'):
         alert_message = request.session.get('alert_message')
         del request.session['alert_message']
 
-    return render(request, template_name, {'project': project, 'commits': commits, 'issues': issues,
+    return render(request, template_name, {'project': project, 'commits': commits, 'issues': openIssues, 'closedIssues':closedIssues,
                                            'issueTypes': issueTypes, 'priorities': priorities, 'milestones': milestones,
                                            'statuses': statuses, 'success_message': success_message,
                                            'alert_message': alert_message, 'is_contributor': is_contributor,
