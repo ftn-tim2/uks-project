@@ -450,7 +450,7 @@ def issue_update(request, pk, template_name='uks/issue_form.html'):
     else:
         return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
-@permission_required('uks.issue_status')
+@permission_required('uks.change_issue')
 @login_required
 def issue_status(request, pk, template_name='uks/issue_form.html'):
     issue = get_object_or_404(Issue, pk=pk)
