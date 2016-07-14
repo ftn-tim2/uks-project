@@ -54,11 +54,11 @@
        
         {% if user.username = project.owner.username %} 
         {% elif user in project.contributors.all %} 
-         <small><a class="lsf-icon-sm pull-center" title="Unsubscribe" href="{% url 'uks:unsubscribe' project.id %}"><span
-                    class="glyphicon glyphicon-remove"></span>Unsubscribe</a></small>
+         <a class="lsf-icon-lg pull-right" title="Unsubscribe" href="{% url 'uks:unsubscribe' project.id %}"><span
+                    class="glyphicon glyphicon-remove"></span>Unsubscribe</a>
         {% else %}
-        <small> <a class="lsf-icon-sm pull-center" title="Subscribe" href="{% url 'uks:subscribe' project.id %}"><span
-                    class="glyphicon glyphicon-ok"></span>Contribute</a></small>
+        <a class="lsf-icon-lg pull-right" title="Subscribe" href="{% url 'uks:subscribe' project.id %}"><span
+                    class="glyphicon glyphicon-ok"></span>Contribute</a>
         {% endif %} 
    		</h4>
    		<h5>
