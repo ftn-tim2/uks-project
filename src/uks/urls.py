@@ -34,7 +34,6 @@ urlpatterns = patterns('',
                            name='milestone_delete'),
 
                        url(r'^issue_list$', views.issue_list, name='issue_list'),
-                       #url(r'^issue_create/(?P<project_id>\d+)/(?P<commit_id>\d+)/$', views.issue_create,                          name='issue_new'),
                        url(r'^issue_create/(?P<project_id>\d+)$', views.issue_create,
                            name='issue_new'),
                        url(r'^issue_update/(?P<pk>\d+)$', views.issue_update, name='issue_edit'),
