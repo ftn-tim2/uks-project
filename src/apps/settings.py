@@ -89,8 +89,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': '192.168.203.130',  # jkovacs docker ip
-        # 'HOST': '147.91.177.194',  # FTN docker machine ip - using mysql container
+        # 'HOST': '192.168.203.130',  # jkovacs docker ip
+         'HOST': '147.91.177.194',  # FTN docker machine ip - using mysql container
         # 'HOST': '192.168.99.100', # szberko docker machine ip
         'PORT': '3306',
         'OPTIONS': {
