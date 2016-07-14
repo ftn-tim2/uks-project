@@ -16,6 +16,21 @@
 			document.getElementById("hideissues").style.display = 'none';
 		}
 	}
+	function showClosed() {
+		if (document.getElementById("openissues").style.display == 'none') {
+			document.getElementById("openissues").style.display = '';
+			document.getElementById("closedissues").style.display = 'none';
+			document.getElementById("closeButton").style.display = '';
+			document.getElementById("openButton").style.display = 'none';
+		} else {
+			document.getElementById("openissues").style.display = 'none';
+			document.getElementById("closedissues").style.display = '';
+			document.getElementById("closeButton").style.display = 'none';
+			document.getElementById("openButton").style.display = '';
+		}
+		
+		
+	}
 </script>
 
 {% if alert_message %}
@@ -117,12 +132,19 @@
                         <button class="btn btn-info btn-sm" type="button" onclick="showIssues();">
                             Show more/less
                         </button>
+                        <button id="closeButton" class="btn btn-info btn-sm" type="button" onclick="showClosed()">
+                        	Show closed
+                        </button>
+                          <button id="openButton" style="display: none;" class="btn btn-info btn-sm" type="button" onclick="showClosed()">
+                        	Show open
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
+            <div id="openissues">
                 {% if issues|length == 0%}
-                <p class='text-info'>No issues here!</p>
+                <p class='text-info'>No open issues here!</p>
                 {% else %} {% for issue in issues%} {% if forloop.counter = 1 %}
                 <div class="list-group">{% elif forloop.counter = 10 %}</div>
                 <div class='list-group' id='hideissues' style="display: none;">
@@ -142,6 +164,30 @@
 
                 </div>
                 {% endif %}
+                </div>
+                <div id="closedissues" style="display: none;">
+                    {% if closedIssues|length == 0%}
+                <p class='text-info'>No closed issues here!</p>
+                {% else %} {% for issue in closedIssues%} {% if forloop.counter = 1 %}
+                <div class="list-group">{% elif forloop.counter = 10 %}</div>
+                <div class='list-group' id='hideissues' style="display: none;">
+                    {% endif %} <a href="{% url 'uks:issue_view' issue.id %}" class="list-group-item">
+                    <h4 class="list-group-item-heading text-left text-primary">
+                        {{issue.title}}
+                        <p class='text-right text-info'><span class="glyphicon glyphicon-user"></span>{{issue.reporter}}
+                        </p>
+                    </h4>
+                    <p class="list-group-item-text">
+                        <span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span>
+                        <span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span>
+                        <span class="label label-{{issue.priority.marker}}">{{issue.priority}}</span>
+                        <span class="label label-{{issue.status.marker}}">{{issue.status}}</span>
+                    </p>
+                </a> {% endfor %}
+
+                </div>
+                {% endif %}
+                </div>
 
             </div>
         </div>
