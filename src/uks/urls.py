@@ -42,7 +42,7 @@ urlpatterns = patterns('',
                        url(r'^issue_status/(?P<pk>\d+)$', views.issue_status, name='issue_status'),
 
                        url(r'^comment_list$', views.comment_list, name='comment_list'),
-                       url(r'^comment_create$', views.comment_create, name='comment_new'),
+                       url(r'^comment_create/(?P<issue_id>\d+)$', views.comment_create, name='comment_new'),
                        url(r'^comment_update/(?P<pk>\d+)$', views.comment_update, name='comment_edit'),
                        url(r'^comment_delete/(?P<pk>\d+)$', views.comment_delete, name='comment_delete'),
 

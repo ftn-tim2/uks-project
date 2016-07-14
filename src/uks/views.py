@@ -478,7 +478,7 @@ def issue_delete(request, pk, template_name='uks/issue_confirm_delete.html'):
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ['message', 'issue']
+        fields = ['message']
 
 
 @permission_required('uks.view_comment')
@@ -491,19 +491,19 @@ def comment_list(request, template_name='uks/comment_list.html'):
 
 @permission_required('uks.add_comment')
 @login_required
-def comment_create(request, template_name='uks/comment_form.html'):
+def comment_create(request, issue_id, template_name='uks/comment_form.html'):
     form = CommentForm(request.POST or None)
-    comment = form.save(commit=False)
-    comment.user = request.user
-    now = datetime.datetime.now()
-    comment.dateTime = now
-    comment.save()
-    issueDB = Issue.objects.all()
-    for issue1 in issueDB:
-        if comment.issue == issue1:
-            issue2 = comment.issue.id
-            template_name = 'uks/issue_view.html'
-    return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.author = request.user
+        now = datetime.datetime.now()
+        comment.dateTime = now
+        comment.issue = get_object_or_404(Issue, pk=issue_id)
+        comment.save()
+        return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': comment.issue.id}))
+    else:
+        return render(request, template_name, {'form': form, 'form_type': 'Create'})
 
 
 @permission_required('uks.change_comment')
@@ -513,13 +513,8 @@ def comment_update(request, pk, template_name='uks/comment_form.html'):
     form = CommentForm(request.POST or None, instance=comment)
     if form.is_valid():
         form.save()
-
-        issueDB = Issue.objects.all()
-        for issue1 in issueDB:
-            if comment.issue == issue1:
-                issue2 = comment.issue.id
-                template_name = 'uks/issue_view.html'
-        return issue_view(request, issue2, template_name)
+        template_name = 'uks/issue_view.html'
+        return issue_view(request, comment.issue.id, template_name)
     else:
         return render(request, template_name, {'form': form, 'form_type': 'Update'})
 
@@ -530,12 +525,7 @@ def comment_delete(request, pk, template_name='uks/comment_confirm_delete.html')
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == 'POST':
         comment.delete()
-        issueDB = Issue.objects.all()
-        for issue1 in issueDB:
-            if comment.issue == issue1:
-                issue2 = comment.issue.id
-                template_name = 'uks/issue_view.html'
-        return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': issue2}))
+        return HttpResponseRedirect(reverse('uks:issue_view', kwargs={'pk': comment.issue.id}))
     else:
         return render(request, template_name, {'object': comment, 'form_type': 'Delete'})
 

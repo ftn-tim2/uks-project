@@ -121,7 +121,7 @@
                  {% bootstrap_icon "chevron-right" %}
                  Comments
                  {% if 'uks.add_comment' in user.get_all_permissions %}
-                    <a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:comment_new' %}"> New comment </a>
+                    <a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:comment_new' issue.id %}"> New comment </a>
                  {% endif %}
                  <button class="btn btn-info pull-right btn-sm" type="button" onclick="showComments();">Show more/less</button>
 			    </div>
