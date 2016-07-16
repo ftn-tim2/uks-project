@@ -11,6 +11,7 @@ from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from uks.models import Project, IssueType, Priority, Status, Milestone, Issue, Comment, Commit
 
@@ -143,7 +144,10 @@ def project_create(request, template_name='uks/project_form.html'):
         project.priority_set.add(Priority.objects.get(id=2))
         project.priority_set.add(Priority.objects.get(id=3))
 
+
     form = ProjectForm(request.POST or None)
+    form.fields['contributors'].queryset = User.objects.exclude(username = request.user)
+
     if form.is_valid():
         project = form.save(commit=False)
         project.owner = request.user
