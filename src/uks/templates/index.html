@@ -90,12 +90,7 @@
                 <div class="panel-body">
                     <div class="list-group">
                         {% if issues_create_by_me|length == 0 %}
-                        There is no issue created by you. Click on the following button to create one:
-                        <a href="/uks/issue_create" style="text-decoration:none !important;">
-                            <button type="button" class="btn btn-info center-block">
-                                New Issue
-                            </button>
-                        </a>
+                        There is no issue created by you. Enjoy your day! :)
                         {% else %}
                         {% for issue in issues_create_by_me %}
                         <a href="/uks/issue_view/{{issue.id}}" class="list-group-item active">
