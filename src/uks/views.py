@@ -124,6 +124,7 @@ def project_view(request, pk, template_name='uks/project_view.html'):
                                            'is_owner': is_owner})
 
 
+
 @permission_required('uks.add_project')
 @login_required
 def project_create(request, template_name='uks/project_form.html'):
@@ -410,7 +411,6 @@ def issue_list(request, template_name='uks/issue_list.html'):
     data = {'object_list': issue}
     return render(request, template_name, data)
 
-
 @permission_required('uks.view_issue')
 @login_required
 def issue_view(request, pk, template_name='uks/issue_view.html'):
@@ -579,6 +579,23 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
         commit.delete()
         return redirect('uks:commit_list')
     return render(request, template_name, {'object': commit, 'form_type': 'Delete'})
+
+
+def link(request, pk):
+    commit1 = get_object_or_404(Commit, pk=pk)
+    issues1 = Issue.objects.filter(Q(assigned_to=commit1.user))
+    return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1}))
+
+def link_ci(request, issue_id, pk):
+    issue = get_object_or_404(Issue, pk=issue_id)
+    commit = get_object_or_404(Commit, pk=pk)
+    status = Status.objects.get(key='don')
+    if status:
+        issue.status = status
+        commit.issue = issue
+        commit.save
+        issue.save()
+    return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
 
 def subscribe(request, pk):

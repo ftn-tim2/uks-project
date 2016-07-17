@@ -106,7 +106,6 @@
                                 <p class='text-info'>{{commit.message}}</p>
                                 <footer> {{commit.user}}</footer>
                             </blockquote>
-
                             {% if 'uks.add_issue' in user.get_all_permissions %}
                                 <a href="{% url 'uks:issue_new' project.id %}" class="btn btn-primary btn-sm" type="button">
                                     New issue

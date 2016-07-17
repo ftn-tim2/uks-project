@@ -51,6 +51,8 @@ urlpatterns = patterns('',
                        url(r'^commit_update/(?P<pk>\d+)$', views.commit_update, name='commit_edit'),
                        url(r'^commit_delete/(?P<pk>\d+)$', views.commit_delete, name='commit_delete'),
 
+                       url(r'^link/(?P<pk>\d+)$', views.link, name='link'),
+                       url(r'^link_ci/(?P<pk>\d+)/(?P<issue_id>\d+)$', views.link_ci, name='link_ci'),
                        url(r'^subscribe/(?P<pk>\d+)$', views.subscribe, name='subscribe'),
                        url(r'^unsubscribe/(?P<pk>\d+)$', views.unsubscribe, name='unsubscribe'),
 
