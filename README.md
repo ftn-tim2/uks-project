@@ -44,6 +44,8 @@ After a commit on the master we have the latest code deployed on the accptance s
   * generate basic Django application
   * UI implementations
   * UI bugfixes
+  * connecting application with project's github repository
+  * model changes
 * [Ana Lukić](https://github.com/ra28)
   * UI implementations
   * UI bugfixes
