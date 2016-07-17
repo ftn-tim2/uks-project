@@ -47,12 +47,14 @@ After a commit on the master we have the latest code deployed on the accptance s
 * [Ana Lukić](https://github.com/ra28)
   * UI implementations
   * UI bugfixes
+  * model changes
 * [Kovács József](https://github.com/thekrushka)
   * develop Django generator
   * setting up Docker image
   * implement WebHook in Shipyard project
   * setup continous delivery
   * UI bugfixes
+  * model changes
 
 notes: docker-entrypoint.sh will try to migrate to the database every time the web app is started.
 If the MySQL database was emtpy it will fail when it comes to createing some unnamed tables. - no idea why
