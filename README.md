@@ -10,7 +10,7 @@ Other project that were used during the development of this application:
 
 1. [Simple MySQL image](https://hub.docker.com/r/tim2/mysqldb/)
 2. [Forked Shipyard image](https://hub.docker.com/r/tim2/shipyard/) 
-3. [Forked Shipyard Repository](https://github.com/ftn-tim2/shipyar)
+3. [Forked Shipyard Repository](https://github.com/ftn-tim2/shipyard)
 4. [Link to Shipyard master Repository](https://github.com/shipyard/shipyard)
 5. [Link to the django generator](https://github.com/ftn-tim2/jsd-project)
 
