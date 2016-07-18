@@ -581,10 +581,12 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
     return render(request, template_name, {'object': commit, 'form_type': 'Delete'})
 
 
-def link(request, pk):
-    commit1 = get_object_or_404(Commit, pk=pk)
+def link_commit(request, commit_id):
+    commit1 = get_object_or_404(Commit, pk=commit_id)
     issues1 = Issue.objects.filter(Q(assigned_to=commit1.user))
-    return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1}))
+    template_name = "uks/issue_list.html"
+    return render(request, template_name, {'object_list': issues1, 'commit': commit1.id})
+    # return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1.id}))
 
 def link_ci(request, commit_id, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
@@ -597,10 +599,10 @@ def link_ci(request, commit_id, issue_id):
         issue.save()
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
-def link1(request, pk):
-    issue = get_object_or_404(Issue, pk=pk)
+def link_issue(request, issue_id):
+    issue = get_object_or_404(Issue, pk=issue_id)
     commits = Commit.objects.filter(Q(assigned_to=issue.user))
-    return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue}))
+    return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue.id}))
 
 def link_ic(request, commit_id, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
