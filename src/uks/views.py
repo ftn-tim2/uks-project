@@ -635,7 +635,7 @@ def link_ic(request, commit_id, issue_id):
     status = Status.objects.get(key='don')
     if status:
         issue.status = status
-        issue.commit_set.add(commit)
+        issue.commits.add(commit)
         issue.save()
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
