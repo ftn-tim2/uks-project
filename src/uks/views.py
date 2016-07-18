@@ -426,7 +426,7 @@ def issue_view(request, pk, template_name='uks/issue_view.html'):
 @permission_required('uks.add_issue')
 @login_required
 def issue_create(request, project_id, template_name='uks/issue_form.html'):
-    form = IssueForm(request.POST or None)
+    form = IssueForm(request.POST, request.FILES or None)
     project = get_object_or_404(Project, pk=project_id)
     form.fields['assigned_to'].queryset = User.objects.filter(contributors=project)
     if form.is_valid():
