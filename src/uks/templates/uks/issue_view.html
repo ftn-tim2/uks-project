@@ -52,7 +52,7 @@
                             <h4 class="list-group-item-heading text-left">
                                 <p class="list-group-item-text">
                                    Atribute:  <label class="lsf-icon-sm pull-right">   </label> </p></h4>
-                                   {% if issue.attribute == null %}
+                                   {% if issue.attribute != null %}
                                    <img src="{{issue.attribute.url}}"/>
                                  	{% endif %}
 							
