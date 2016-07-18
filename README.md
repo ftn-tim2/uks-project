@@ -50,6 +50,7 @@ After a commit on the master we have the latest code deployed on the accptance s
   * UI implementations
   * UI bugfixes
   * model changes
+  * UI testing
 * [Kovács József](https://github.com/thekrushka)
   * develop Django generator
   * setting up Docker image
