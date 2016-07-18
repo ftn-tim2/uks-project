@@ -415,11 +415,17 @@ def issue_list(request, template_name='uks/issue_list.html'):
 def issue_view(request, pk, template_name='uks/issue_view.html'):
     issue = get_object_or_404(Issue, pk=pk)
     form = IssueForm(request.POST or None, instance=issue)
+    show_close_btn = None
+    if issue.status.key == "don":
+        show_close_btn = False
+    else:
+        show_close_btn = True
+
     print(issue)
 
     comments = Comment.objects.filter(Q(issue=issue))
 
-    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue, 'commits': issue.commits.all()})
+    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue, 'commits': issue.commits.all(), 'show_close_btn':show_close_btn})
 
 
 @permission_required('uks.add_issue')

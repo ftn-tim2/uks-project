@@ -16,15 +16,17 @@
 
 <div class="page-header">
     <h1>
-        {{issue.title}}
+         {{issue.title}}
         <small>{% if 'uks.change_issue' in user.get_all_permissions %}
             <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span
                     class="glyphicon glyphicon-pencil"></span>Edit issue</a>
             <br>
+            {% if show_close_btn %}
             <small>
                 <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:link_issue' issue.id %}"><i>Close
                     issue</i></a>
             </small>
+            {% endif %}
             <br>{% endif %}
         </small>
     </h1>
