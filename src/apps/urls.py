@@ -1,5 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+import os
+
 
 urlpatterns = [
     # Examples:
@@ -14,4 +16,5 @@ urlpatterns = [
 
     url(r'^uks/', include('uks.urls', namespace='uks')),
     url(r'^$', 'apps.views.home'),
+    url(r'^attributes/(.*)$', 'django.views.static.serve', {'document_root' : os.path.join(os.path.dirname(__file__), 'attributes')}),
 ]

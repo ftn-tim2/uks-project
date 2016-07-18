@@ -122,7 +122,7 @@ class Issue(models.Model):
     issueType = models.ForeignKey(to=IssueType, null=False, verbose_name='Issue type')
     priority = models.ForeignKey(to=Priority, null=True, blank=True)
     description = models.TextField()
-    attribute = models.ImageField(blank=True, null=True)
+    attribute = models.ImageField(blank=True, null=True, upload_to='attributes/');
 
 
     class Meta:

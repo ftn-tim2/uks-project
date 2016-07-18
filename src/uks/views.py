@@ -426,7 +426,7 @@ def issue_view(request, pk, template_name='uks/issue_view.html'):
 @permission_required('uks.add_issue')
 @login_required
 def issue_create(request, project_id, template_name='uks/issue_form.html'):
-    form = IssueForm(request.POST or None)
+    form = IssueForm(request.POST, request.FILES or None)
     project = get_object_or_404(Project, pk=project_id)
 
     form.fields['assigned_to'].queryset = User.objects.filter(contributors=project)
@@ -435,6 +435,7 @@ def issue_create(request, project_id, template_name='uks/issue_form.html'):
         issue.reporter = request.user
         issue.date = datetime.datetime.now()
         issue.project = project
+        issue.atribute = request.FILES['attribute']
         issue.save()
 
         template_name = 'uks/project_view.html'
@@ -450,8 +451,8 @@ def issue_update(request, pk, template_name='uks/issue_form.html'):
     issue = get_object_or_404(Issue, pk=pk)
     form = IssueForm(request.POST or None, instance=issue)
     if form.is_valid():
+        issue.atribute = request.FILES['attribute']
         form.save()
-
         template_name = 'uks/project_view.html'
         return project_view(request, issue.project.id, template_name)
     else:

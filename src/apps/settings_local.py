@@ -16,6 +16,8 @@ from unipath import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = Path(__file__).ancestor(2)
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'attributes')
+MEDIA_URL = '/attributes/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
