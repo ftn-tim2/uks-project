@@ -456,7 +456,7 @@ def issue_create_with_commit_hash(request, project_id, commit_id, template_name=
         issue.date = datetime.datetime.now()
         issue.project = project
         issue.save()
-        issue.commit_set.add(commit)
+        issue.commits.add(commit)
         issue.save()
 
         template_name = 'uks/project_view.html'
@@ -606,8 +606,7 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
 
 def link_commit(request, commit_id):
     commit1 = get_object_or_404(Commit, pk=commit_id)
-    issues1 = Issue.objects.all()
-    issues2 = Issue.objects.filter(Q(project=commit1.project))
+    issues2 = Issue.objects.filter(Q(project=commit1.project)).exclude(commits=commit1)
     template_name = "uks/issue_list.html"
     return render(request, template_name, {'object_list': issues2, 'commit': commit1.hashcode, "project":commit1.project})
     # return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1.id}))
