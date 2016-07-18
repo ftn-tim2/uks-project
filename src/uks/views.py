@@ -419,7 +419,7 @@ def issue_view(request, pk, template_name='uks/issue_view.html'):
 
     comments = Comment.objects.filter(Q(issue=issue))
 
-    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue})
+    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue, 'commits': issue.commits.all()})
 
 
 @permission_required('uks.add_issue')
