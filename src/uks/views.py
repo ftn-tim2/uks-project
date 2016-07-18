@@ -597,10 +597,16 @@ def link_ci(request, commit_id, issue_id):
     commit.save
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
+
+
 def link_issue(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    commits = Commit.objects.filter(Q(assigned_to=issue.user))
-    return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue.id}))
+    commits = Commit.objects.filter(Q(project=issue.project))
+    template_name = "uks/commit_list.html"
+    return render(request, template_name, {'object_list': commits, 'issue': issue.id})
+   # return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue.id}))
+
+
 
 def link_ic(request, commit_id, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
@@ -608,8 +614,7 @@ def link_ic(request, commit_id, issue_id):
     status = Status.objects.get(key='don')
     if status:
         issue.status = status
-        issue.commit = commit
-        commit.save
+        issue.commit_set.add(commit)
         issue.save()
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 

@@ -5,8 +5,10 @@
 {% block breadcrumb-page %} Commit List {% endblock breadcrumb-page %}
 
 {% block title %}
-<h1>Commit</h1>
+<h1>Commits</h1>
 {% endblock %} {% block content %}
+    <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_status' issue %}"><span class="glyphicon glyphicon-pencil"></span>Skip connect and close</a>
+    <br><br>
 <table class="table">
     <tr>
     <th>Hashcode</th>
@@ -23,7 +25,8 @@
     <td>{{ commit.description }}</td>
     <td>{{ commit.project }}</td>
     <td>{{ commit.issue }}</td>
-    <td><a class="lsf-icon" title="delete" href="{% url 'uks:link_ic' issue.id commit.id %}">Connect and close</a></td>
+    <td><a href="{% url 'uks:link_ic' commit.hashcode issue  %}">Connect and close</a></td>
     </tr>
+    {% endfor %}
 </table>
 {% endblock %}
