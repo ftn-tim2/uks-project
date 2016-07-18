@@ -53,6 +53,8 @@ urlpatterns = patterns('',
 
                        url(r'^link/(?P<pk>\d+)$', views.link, name='link'),
                        url(r'^link_ci/(?P<commit_id>\d+)/(?P<issue_id>\d+)$', views.link_ci, name='link_ci'),
+                       url(r'^link1/(?P<pk>\d+)$', views.link1, name='link1'),
+                       url(r'^link_ic/(?P<commit_id>\d+)/(?P<issue_id>\d+)$', views.link_ic, name='link_ic'),
                        url(r'^subscribe/(?P<pk>\d+)$', views.subscribe, name='subscribe'),
                        url(r'^unsubscribe/(?P<pk>\d+)$', views.unsubscribe, name='unsubscribe'),
 

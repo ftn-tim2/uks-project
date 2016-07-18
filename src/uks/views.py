@@ -597,6 +597,21 @@ def link_ci(request, commit_id, issue_id):
         issue.save()
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
+def link1(request, pk):
+    issue = get_object_or_404(Issue, pk=pk)
+    commits = Commit.objects.filter(Q(assigned_to=issue.user))
+    return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue}))
+
+def link_ic(request, commit_id, issue_id):
+    issue = get_object_or_404(Issue, pk=issue_id)
+    commit = get_object_or_404(Commit, pk=commit_id)
+    status = Status.objects.get(key='don')
+    if status:
+        issue.status = status
+        issue.commit = commit
+        commit.save
+        issue.save()
+    return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
 def subscribe(request, pk):
     project = get_object_or_404(Project, pk=pk)
