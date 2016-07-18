@@ -110,6 +110,7 @@
                                 <a href="{% url 'uks:issue_new' project.id %}" class="btn btn-primary btn-sm" type="button">
                                     New issue
                                 </a>
+                                <a href="{% url 'uks:link_commit' commit.hashcode %}">Link</a>
                             {% endif %}
                         </li>
                         {% endfor %}

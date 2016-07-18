@@ -34,7 +34,7 @@
     <td>{{ issue.milestone }}</td>
     <td>{{ issue.issueType }}</td>
     <td>{{ issue.priority }}</td>
-    <td> <a class="lsf-icon" title="link" href="{% url 'uks:link_ci' issue.id commit.id %}">Connect and close</a> </td>
+    <td> <a class="lsf-icon" title="link" href="{% url 'uks:link_ci' commit issue.id%}">Connect and close</a> </td>
     </tr>
     {% endfor %}
 </table>

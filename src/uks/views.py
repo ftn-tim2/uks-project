@@ -79,7 +79,6 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             commit.message = data.message.replace("-", " ")
             if not Commit.objects.filter(hashcode=data.commit).exists():
                 commit.save()
-            commit.hashcode = commit.hashcode[:10]
             commits.append(commit)
 
     issues = Issue.objects.filter(Q(project=project))
@@ -585,9 +584,9 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
 
 def link_commit(request, commit_id):
     commit1 = get_object_or_404(Commit, pk=commit_id)
-    issues1 = Issue.objects.filter(Q(assigned_to=commit1.user))
+    issues1 = Issue.objects.all()
     template_name = "uks/issue_list.html"
-    return render(request, template_name, {'object_list': issues1, 'commit': commit1.id})
+    return render(request, template_name, {'object_list': issues1, 'commit': commit1.hashcode})
     # return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1.id}))
 
 def link_ci(request, commit_id, issue_id):
@@ -596,7 +595,7 @@ def link_ci(request, commit_id, issue_id):
     status = Status.objects.get(key='don')
     if status:
         issue.status = status
-        commit.issue = issue
+        commit.issue.add(issue)
         commit.save
         issue.save()
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
