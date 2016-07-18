@@ -585,19 +585,16 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
 def link_commit(request, commit_id):
     commit1 = get_object_or_404(Commit, pk=commit_id)
     issues1 = Issue.objects.all()
+    issues2 = Issue.objects.filter(Q(project=commit1.project))
     template_name = "uks/issue_list.html"
-    return render(request, template_name, {'object_list': issues1, 'commit': commit1.hashcode})
+    return render(request, template_name, {'object_list': issues2, 'commit': commit1.hashcode})
     # return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1.id}))
 
 def link_ci(request, commit_id, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
     commit = get_object_or_404(Commit, pk=commit_id)
-    status = Status.objects.get(key='don')
-    if status:
-        issue.status = status
-        commit.issue.add(issue)
-        commit.save
-        issue.save()
+    commit.issue.add(issue)
+    commit.save
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
 def link_issue(request, issue_id):
