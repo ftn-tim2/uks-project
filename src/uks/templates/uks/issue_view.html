@@ -10,158 +10,213 @@
 			document.getElementById("hidecomments").style.display = 'none';
 		}
 	}
+
+
 </script>
 
 <div class="page-header">
-	<h1>
-		{{issue.title}}<small>{% if 'uks.change_issue' in user.get_all_permissions %}
-		<a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit issue</a>
-        <br>
-        <small>
-        <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_status' issue.id %}"><i>Close issue</i></a>
+    <h1>
+         {{issue.title}}
+        <small>{% if 'uks.change_issue' in user.get_all_permissions %}
+            <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:issue_edit' issue.id %}"><span
+                    class="glyphicon glyphicon-pencil"></span>Edit issue</a>
+            <br>
+            {% if show_close_btn %}
+            <small>
+                <a class="lsf-icon-sm pull-right" title="edit" href="{% url 'uks:link_issue' issue.id %}"><i>Close
+                    issue</i></a>
+            </small>
+            {% endif %}
+            <br>{% endif %}
         </small>
-        <br>{% endif %}
-		</small>
-	</h1>
+    </h1>
 </div>
 <div class="row">
-
-		<div class="panel panel-info h3" >
+    <div class="col-md-6">
+        <div class="panel panel-info">
             <div class="panel-heading clearfix">
-            {% bootstrap_icon "chevron-right" %}
-		        {{issue.title}}
-			</div>
-			<div class="panel-body">
-				<ul class="list-group">
-						<li class="list-group-item">
-                            <p></p>
-							<h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Title:  <label class="lsf-icon-sm pull-right">{{issue.title}}</label>
-							</h4>
-						</li>
-                         <li class="list-group-item">
-                             <p></p>
-							<h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Project:  <label class="lsf-icon-sm pull-right">{{issue.project}}</label>
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <p></p>
-                            <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Atribute:  <label class="lsf-icon-sm pull-right">{{issue.atribute}}</label>
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <p></p>
-                            <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Reporter:  <label class="lsf-icon-sm pull-right">{{issue.reporter}}</label>
-							</h4>
-						</li>
-                         <li class="list-group-item">
-                             <p></p>
-                             <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Assigned to:  <label class="lsf-icon-sm pull-right">{{issue.assigned_to}}</label>
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <p></p>
-                             <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Status:  <label class="lsf-icon-sm pull-right"><span class="label label-{{issue.status.marker}}">{{issue.status}}</span></label>
-
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <p></p>
-                            <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Milestone:  <label class="lsf-icon-sm pull-right"><span class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span></label>
-
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <p></p>
-                            <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   IssueType:  <label class="lsf-icon-sm pull-right"><span class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span></label>
-
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <p></p>
-                             <h4 class="list-group-item-heading text-left">
-                                <p class="list-group-item-text">
-                                   Priority:  <label class="lsf-icon-sm pull-right"><span class="label label-{{issue.priority.marker}}">{{issue.priority}}</span></label>
-
-							</h4>
-						</li>
-                        <li class="list-group-item">
-                            <h4 class="list-group-item-heading text-left">
-                                   Description:
-                                <br>
-                                <br><br>
-                                {{issue.description}}
-							</h4>
-						</li>
-				</ul>
-			</div>
-		</div>
-
-
-
-
-		<div class="panel panel-info h3">
-			<div class="panel-heading clearfix">
-                <div class='btn-toolbar'>
-                 {% bootstrap_icon "chevron-right" %}
-                 Comments
-                 {% if 'uks.add_comment' in user.get_all_permissions %}
-                    <a class="btn btn-primary pull-right btn-sm" type="button" href="{% url 'uks:comment_new' issue.id %}"> New comment </a>
-                 {% endif %}
-                 <button class="btn btn-info pull-right btn-sm" type="button" onclick="showComments();">Show more/less</button>
-			    </div>
+                <h3 class="panel-title pull-left">{% bootstrap_icon "chevron-right" %}
+                    {{issue.title}}</h3>
             </div>
-			<div class="panel-body">
-				<ul class="list-group">
-					{% for comment in comments %} {% if forloop.counter = 1 %}
-					<div>{% elif forloop.counter = 10 %}</div> <div id='hidecomments' style="display: none;">
-						{% endif %}
-						<li class="list-group-item">
-							<h4 class="list-group-item-heading text-left">
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Title: <label class="lsf-icon-sm pull-right">{{issue.title}}</label>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Project: <label class="lsf-icon-sm pull-right">{{issue.project}}</label>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Atribute: <label class="lsf-icon-sm pull-right">{{issue.atribute}}</label>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Reporter: <label class="lsf-icon-sm pull-right">{{issue.reporter}}</label>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Assigned to: <label class="lsf-icon-sm pull-right">{{issue.assigned_to}}</label>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Status: <label class="lsf-icon-sm pull-right"><span
+                                    class="label label-{{issue.status.marker}}">{{issue.status}}</span></label>
 
-									<small>{{comment.dateTime}}</small>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Milestone: <label class="lsf-icon-sm pull-right"><span
+                                    class="label label-{{issue.milestone.marker}}">{{issue.milestone}}</span></label>
 
-							</h4>
-							<p class="list-group-item-text">
-							<blockquote class="blockquote-reverse">
-								<p class='text-info'>{{comment.message}} </a></p>
-								<footer> {{comment.author}} </footer>
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                IssueType: <label class="lsf-icon-sm pull-right"><span
+                                    class="label label-{{issue.issueType.marker}}">{{issue.issueType}}</span></label>
+
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <p></p>
+                        <h4 class="list-group-item-heading text-left">
+                            <p class="list-group-item-text">
+                                Priority: <label class="lsf-icon-sm pull-right"><span
+                                    class="label label-{{issue.priority.marker}}">{{issue.priority}}</span></label>
+
+                        </h4>
+                    </li>
+                    <li class="list-group-item">
+                        <h4 class="list-group-item-heading text-left">
+                            Description:
                             <br>
-                                <div class="pull-right">
+                            <br><br>
+                            {{issue.description}}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading clearfix ">
+                <h3 class="panel-title pull-left">Commits</h3>
+                <div class="panel-title pull-right">
+                    <button class="btn btn-info pull-right btn-sm" type="button"
+                            onclick="showCommits();">Show more/less
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    {% for commit in commits %} {% if forloop.counter = 1 %}
+                    <div>{% elif forloop.counter = 10 %}</div>
+                    <div id='hidecommits' style="display: none;">
+                        {% endif %}
+                        <li class="list-group-item">
+                            <div class="list-group-item-heading text-left">
+                                <code>{{commit.hashcode|slice:":10"}}</code>
+                                <small>{{commit.dateTime}}</small>
+                            </div>
+                            <blockquote class="blockquote-reverse">
+                                <p class='text-info'>{{commit.message}}</p>
+                                <footer> {{commit.user}}</footer>
+                            </blockquote>
+                        </li>
+                        {% endfor %}
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading clearfix">
+                <div class='btn-toolbar'>
+                    <h3 class="panel-title pull-left">
+                        {% bootstrap_icon "chevron-right" %}
+                        Comments
+                    </h3>
+                    {% if 'uks.add_comment' in user.get_all_permissions %}
+                    <a class="btn btn-primary pull-right btn-sm" type="button"
+                       href="{% url 'uks:comment_new' issue.id %}">
+                        New comment </a>
+                    {% endif %}
+                    <button class="btn btn-info pull-right btn-sm" type="button" onclick="showComments();">Show
+                        more/less
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    {% for comment in comments %} {% if forloop.counter = 1 %}
+                    <div>{% elif forloop.counter = 10 %}</div>
+                    <div id='hidecomments' style="display: none;">
+                        {% endif %}
+                        <li class="list-group-item">
+                            <h4 class="list-group-item-heading text-left">
+
+                                <small>{{comment.dateTime}}</small>
+
+                            </h4>
+                            <p class="list-group-item-text">
+                                <blockquote class="blockquote-reverse">
+                            <p class='text-info'>{{comment.message}} </a></p>
+                            <footer> {{comment.author}}</footer>
+                            <br>
+                            <div class="pull-right">
 
                                      <span class="label label-primary">
                                         <a class="lsf-icon" title="edit" href="{% url 'uks:comment_edit' comment.id %}">
                                             Edit
                                         </a>
                                     </span>
-                                    <label></label>
+                                <label></label>
                                     <span class="label label-primary">
-                                        <a class="lsf-icon" title="delete" href="{% url 'uks:comment_delete' comment.id %}">
+                                        <a class="lsf-icon" title="delete"
+                                           href="{% url 'uks:comment_delete' comment.id %}">
                                             Delete
                                         </a>
                                     </span>
-                                </div>
-							</blockquote>
-						</li> {% endfor %}
-					</div>
-				</ul>
-			</div>
-		</div>
-
+                            </div>
+                            </blockquote>
+                        </li>
+                        {% endfor %}
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 {% endblock %}

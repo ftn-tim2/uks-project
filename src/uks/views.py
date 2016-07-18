@@ -79,20 +79,19 @@ def project_view(request, pk, template_name='uks/project_view.html'):
             commit.message = data.message.replace("-", " ")
             if not Commit.objects.filter(hashcode=data.commit).exists():
                 commit.save()
-            commit.hashcode = commit.hashcode[:10]
             commits.append(commit)
 
     issues = Issue.objects.filter(Q(project=project))
-    
+
     openIssues = []
     closedIssues = []
-    
+
     for issue in issues:
-        if((issue.status.name == 'done') or (issue.status.name == 'closed')):
+        if ((issue.status.name == 'done') or (issue.status.name == 'closed')):
             closedIssues.append(issue)
         else:
             openIssues.append(issue)
-   
+
     issueTypes = IssueType.objects.filter(Q(project=project))
 
     priorities = Priority.objects.filter(Q(project=project))
@@ -117,12 +116,12 @@ def project_view(request, pk, template_name='uks/project_view.html'):
         alert_message = request.session.get('alert_message')
         del request.session['alert_message']
 
-    return render(request, template_name, {'project': project, 'commits': commits, 'issues': openIssues, 'closedIssues':closedIssues,
-                                           'issueTypes': issueTypes, 'priorities': priorities, 'milestones': milestones,
-                                           'statuses': statuses, 'success_message': success_message,
-                                           'alert_message': alert_message, 'is_contributor': is_contributor,
-                                           'is_owner': is_owner})
-
+    return render(request, template_name,
+                  {'project': project, 'commits': commits, 'issues': openIssues, 'closedIssues': closedIssues,
+                   'issueTypes': issueTypes, 'priorities': priorities, 'milestones': milestones,
+                   'statuses': statuses, 'success_message': success_message,
+                   'alert_message': alert_message, 'is_contributor': is_contributor,
+                   'is_owner': is_owner})
 
 
 @permission_required('uks.add_project')
@@ -144,7 +143,6 @@ def project_create(request, template_name='uks/project_form.html'):
         project.priority_set.add(Priority.objects.get(id=1))
         project.priority_set.add(Priority.objects.get(id=2))
         project.priority_set.add(Priority.objects.get(id=3))
-
 
     form = ProjectForm(request.POST or None)
     form.fields['contributors'].queryset = User.objects.exclude(username=request.user)
@@ -411,16 +409,23 @@ def issue_list(request, template_name='uks/issue_list.html'):
     data = {'object_list': issue}
     return render(request, template_name, data)
 
+
 @permission_required('uks.view_issue')
 @login_required
 def issue_view(request, pk, template_name='uks/issue_view.html'):
     issue = get_object_or_404(Issue, pk=pk)
     form = IssueForm(request.POST or None, instance=issue)
+    show_close_btn = None
+    if issue.status.key == "don":
+        show_close_btn = False
+    else:
+        show_close_btn = True
+
     print(issue)
 
     comments = Comment.objects.filter(Q(issue=issue))
 
-    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue})
+    return render(request, template_name, {'form': form, 'form_type': 'Update', 'comments': comments, 'issue': issue, 'commits': issue.commits.all(), 'show_close_btn':show_close_btn})
 
 
 @permission_required('uks.add_issue')
@@ -435,6 +440,30 @@ def issue_create(request, project_id, template_name='uks/issue_form.html'):
         issue.reporter = request.user
         issue.date = datetime.datetime.now()
         issue.project = project
+        issue.save()
+
+        template_name = 'uks/project_view.html'
+        return project_view(request, issue.project.id, template_name)
+    else:
+        return render(request, template_name,
+                      {'form': form, 'form_type': 'Create'})
+
+
+@permission_required('uks.add_issue')
+@login_required
+def issue_create_with_commit_hash(request, project_id, commit_id, template_name='uks/issue_form.html'):
+    form = IssueForm(request.POST or None)
+    project = get_object_or_404(Project, pk=project_id)
+    commit = get_object_or_404(Commit, pk=commit_id)
+
+    form.fields['assigned_to'].queryset = User.objects.filter(contributors=project)
+    if form.is_valid():
+        issue = form.save(commit=False)
+        issue.reporter = request.user
+        issue.date = datetime.datetime.now()
+        issue.project = project
+        issue.save()
+        issue.commits.add(commit)
         issue.save()
 
         template_name = 'uks/project_view.html'
@@ -583,40 +612,51 @@ def commit_delete(request, pk, template_name='uks/commit_confirm_delete.html'):
     return render(request, template_name, {'object': commit, 'form_type': 'Delete'})
 
 
+@permission_required('uks.change_commit')
+@login_required
 def link_commit(request, commit_id):
     commit1 = get_object_or_404(Commit, pk=commit_id)
-    issues1 = Issue.objects.filter(Q(assigned_to=commit1.user))
+    issues2 = Issue.objects.filter(Q(project=commit1.project)).exclude(commits=commit1)
     template_name = "uks/issue_list.html"
-    return render(request, template_name, {'object_list': issues1, 'commit': commit1.id})
+    return render(request, template_name,
+                  {'object_list': issues2, 'commit': commit1.hashcode, "project": commit1.project})
     # return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1.id}))
 
+
+@permission_required('uks.change_commit')
+@login_required
 def link_ci(request, commit_id, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
     commit = get_object_or_404(Commit, pk=commit_id)
-    status = Status.objects.get(key='don')
-    if status:
-        issue.status = status
-        commit.issue = issue
-        commit.save
-        issue.save()
+    commit.issue.add(issue)
+    commit.save
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
+
+@permission_required('uks.change_issue')
+@login_required
 def link_issue(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    commits = Commit.objects.filter(Q(assigned_to=issue.user))
-    return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue.id}))
+    commits = Commit.objects.filter(Q(project=issue.project))
+    template_name = "uks/commit_list.html"
+    return render(request, template_name, {'object_list': commits, 'issue': issue.id})
+    # return HttpResponseRedirect(reverse('uks:commit_list', kwargs={'object_list': commits, 'issue': issue.id}))
 
+
+@permission_required('uks.change_issue')
+@login_required
 def link_ic(request, commit_id, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
     commit = get_object_or_404(Commit, pk=commit_id)
     status = Status.objects.get(key='don')
     if status:
         issue.status = status
-        issue.commit = commit
-        commit.save
+        issue.commit_set.add(commit)
         issue.save()
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': issue.project.id}))
 
+
+@login_required
 def subscribe(request, pk):
     project = get_object_or_404(Project, pk=pk)
     user = request.user
@@ -624,6 +664,7 @@ def subscribe(request, pk):
     return HttpResponseRedirect(reverse('uks:project_view', kwargs={'pk': project.id}))
 
 
+@login_required
 def unsubscribe(request, pk):
     project = get_object_or_404(Project, pk=pk)
     user = request.user

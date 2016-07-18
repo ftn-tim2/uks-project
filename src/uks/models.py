@@ -160,7 +160,7 @@ class Commit(models.Model):
     message = models.TextField()
     dateTime = models.DateTimeField()
     project = models.ForeignKey(to=Project, null=False)
-    issue = models.ManyToManyField(to=Issue, blank=True)
+    issue = models.ManyToManyField(to=Issue, blank=True, related_name='commits')
     user = models.TextField(null=False)
 
     class Meta:

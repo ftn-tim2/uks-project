@@ -1,29 +1,49 @@
-
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
 {% block breadcrumb-page %} Commit List {% endblock breadcrumb-page %}
 
 {% block title %}
-<h1>Commit</h1>
+
 {% endblock %} {% block content %}
-<table class="table">
-    <tr>
-    <th>Hashcode</th>
-    <th>Message</th>
-    <th>Description</th>
-    <th>Project</th>
-    <th>Issue</th>
-    <th>Link</th>
-    </tr>
-    {% for commit in object_list %}
-   <tr>
-    <td>{{ commit.hashcode }}</td>
-    <td>{{ commit.message }}</td>
-    <td>{{ commit.description }}</td>
-    <td>{{ commit.project }}</td>
-    <td>{{ commit.issue }}</td>
-    <td><a class="lsf-icon" title="delete" href="{% url 'uks:link_ic' issue.id commit.id %}">Connect and close</a></td>
-    </tr>
-</table>
+<div class="pull-right">
+    <a class="btn btn-primary btn-sm" type="button" href="{% url 'uks:issue_status' issue %}"><span
+            class="glyphicon glyphicon-pencil"></span>Skip and close</a>
+</div>
+<h1>Link issue to resolving commit</h1>
+<div class="panel panel-info">
+    <div class="panel-body">
+        {% for commit in object_list %}
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="pull-right">
+                    <a class="btn btn-primary btn-sm" type="button"
+                       href="{% url 'uks:link_ic' commit.hashcode issue  %}">Connect and close</a>
+                </div>
+                <div class="list-group-item-heading text-left">
+                    <code>{{commit.hashcode|slice:":10"}}</code>
+                    <small>{{commit.dateTime}}</small>
+                </div>
+                <br>
+                <blockquote class="blockquote-reverse">
+                    <p class='text-info'>{{commit.message}}</p>
+                    <footer> {{commit.user}}</footer>
+                </blockquote>
+
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+
+
 {% endblock %}
+
+<!--<tr>-->
+<!--<td>{{ commit.hashcode }}</td>-->
+<!--<td>{{ commit.message }}</td>-->
+<!--<td>{{ commit.description }}</td>-->
+<!--<td>{{ commit.project }}</td>-->
+<!--<td>{{ commit.issue }}</td>-->
+<!--<td><a href="{% url 'uks:link_ic' commit.hashcode issue  %}">Connect and close</a></td>-->
+<!--</tr>-->

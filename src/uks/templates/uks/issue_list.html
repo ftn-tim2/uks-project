@@ -1,41 +1,47 @@
-
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
 {% block breadcrumb-page %} Issue List {% endblock breadcrumb-page %}
 
 {% block title %}
-<h1>Issue</h1>
-{% endblock %} {% block content %}
-<table class="table">
-    <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Attribute</th>
-    <th>Project</th>
-    <th>Reporter</th>
-    <th>Assigned_To</th>
-    <th>Status</th>
-    <th>Milestone</th>
-    <th>Issuetype</th>
-    <th>Priority</th>
-    <th>Link</th>
-    </tr>
+<div class="pull-right">
+    <a href="{% url 'uks:issue_new' project.id commit%}" class="btn btn-primary btn-sm" type="button">
+        New issue
+    </a>
 
-    {% for issue in object_list %}
-   <tr>
-    <td>{{ issue.title }}</td>
-    <td>{{ issue.description }}</td>
-    <td>{{ issue.attribute }}</td>
-    <td>{{ issue.project }}</td>
-    <td>{{ issue.reporter }}</td>
-    <td>{{ issue.assigned_to }}</td>
-    <td>{{ issue.status }}</td>
-    <td>{{ issue.milestone }}</td>
-    <td>{{ issue.issueType }}</td>
-    <td>{{ issue.priority }}</td>
-    <td> <a class="lsf-icon" title="link" href="{% url 'uks:link_ci' issue.id commit.id %}">Connect and close</a> </td>
-    </tr>
-    {% endfor %}
-</table>
+<h1>Link commit to already existing issue or create new one:</h1>
+
+{% endblock %}
+{% block content %}
+<div class="panel panel-warning">
+    <div class="panel-body">
+        {% for issue in object_list %}
+
+        <div class="list-group">
+            <div class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    {% bootstrap_icon "tag" %} {{ issue.title }}
+                </h4>
+                <div class="pull-right">
+                    <span class="label label-primary">{% bootstrap_icon "cloud" %} {{ issue.project }}</span>
+                    <a class="btn btn-primary btn-sm" title="link"
+                       href="{% url 'uks:link_ci' commit issue.id%}">Connect</a>
+                </div>
+                {% if issue.description|length < 125 %}
+                <p class="list-group-item-text">{{ issue.description }}</p>
+                {% else %}
+                <p class="list-group-item-text">{{ issue.description|slice:":125"|add:"..." }}</p>
+                {% endif %}
+                <p class="list-group-item-text">
+                    <span class="label label-{{issue.status.marker}}">{{ issue.status }}</span>
+                    <span class="label label-{{issue.milestone.marker}}">{{ issue.milestone }}</span>
+                    <span class="label label-{{issue.issueType.marker}}">{{ issue.issueType }}</span>
+                    <span class="label label-{{issue.priority.marker}}">{{ issue.priority }}</span>
+                </p>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
