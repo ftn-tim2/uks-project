@@ -116,7 +116,7 @@ class Issue(models.Model):
     date = models.DateField()
     project = models.ForeignKey(to=Project, null=False)
     reporter = models.ForeignKey(to=User, null=False, related_name='reporter')
-    assigned_to = models.ForeignKey(to=User, null=True, blank=True)
+    assigned_to = models.ForeignKey(to=User, null=True, blank=True, related_name='assigned_to')
     status = models.ForeignKey(to=Status, null=False)
     milestone = models.ForeignKey(to=Milestone, null=True, blank=True)
     issueType = models.ForeignKey(to=IssueType, null=False, verbose_name='Issue type')

@@ -146,7 +146,7 @@ def project_create(request, template_name='uks/project_form.html'):
 
 
     form = ProjectForm(request.POST or None)
-    form.fields['contributors'].queryset = User.objects.exclude(username = request.user)
+    form.fields['contributors'].queryset = User.objects.exclude(username=request.user)
 
     if form.is_valid():
         project = form.save(commit=False)
@@ -428,6 +428,8 @@ def issue_view(request, pk, template_name='uks/issue_view.html'):
 def issue_create(request, project_id, template_name='uks/issue_form.html'):
     form = IssueForm(request.POST or None)
     project = get_object_or_404(Project, pk=project_id)
+
+    form.fields['assigned_to'].queryset = User.objects.filter(contributors=project)
     if form.is_valid():
         issue = form.save(commit=False)
         issue.reporter = request.user
