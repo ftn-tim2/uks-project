@@ -21,27 +21,27 @@ class IssueTests(unittest.TestCase):
         # Click on Sign in button
         driver.find_element_by_css_selector(".btn-primary").click()
 
-		driver.find_element_by_css_selector("a[href='/uks/project_view/1']").click()
-		driver.find_element_by_xpath("//a[text()='New issue']").click()
+	driver.find_element_by_css_selector("a[href='/uks/project_view/1']").click()
+	driver.find_element_by_xpath("//a[text()='New issue']").click()
 
-		driver.find_element_by_id("id_tittle").send_keys("issue" + str(rand))
-		driver.find_element_by_id("id_date").send_keys("2011-01-01")
-		driver.find_element_by_id("id_project").send_keys("pr" + str(rand))
-		driver.find_element_by_id("id_reporter").send_keys("admin")
+	driver.find_element_by_id("id_tittle").send_keys("issue" + str(rand))
+	driver.find_element_by_id("id_date").send_keys("2011-01-01")
+	driver.find_element_by_id("id_project").send_keys("pr" + str(rand))
+	driver.find_element_by_id("id_reporter").send_keys("admin")
 
-		driver.find_element_by_css_selector(".dropdown-toggle").click()
+	driver.find_element_by_css_selector(".dropdown-toggle").click()
         driver.find_element_by_xpath("//option[text()='admin']").click()
 
-		driver.find_element_by_css_selector(".dropdown-toggle").click()
+	driver.find_element_by_css_selector(".dropdown-toggle").click()
         driver.find_element_by_xpath("//option[text()='done']").click()
 
-		driver.find_element_by_css_selector(".dropdown-toggle").click()
+	driver.find_element_by_css_selector(".dropdown-toggle").click()
         driver.find_element_by_xpath("//option[text()='deploy']").click()
 
-		driver.find_element_by_css_selector(".dropdown-toggle").click()
+	driver.find_element_by_css_selector(".dropdown-toggle").click()
         driver.find_element_by_xpath("//option[text()='bug']").click()
 
-		driver.find_element_by_css_selector(".dropdown-toggle").click()
+	driver.find_element_by_css_selector(".dropdown-toggle").click()
         driver.find_element_by_xpath("//option[text()='minor']").click()
 
         driver.find_element_by_css_selector("button[type='submit']").click()
