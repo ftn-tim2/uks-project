@@ -99,7 +99,7 @@
                         {% endif %}
                         <li class="list-group-item">
                             <div class="list-group-item-heading text-left">
-                                <code>{{commit.hashcode}}</code>
+                                <code>{{commit.hashcode|slice:":10"}}</code>
                                 <small>{{commit.dateTime}}</small>
                             </div>
                             <blockquote class="blockquote-reverse">
@@ -107,10 +107,9 @@
                                 <footer> {{commit.user}}</footer>
                             </blockquote>
                             {% if 'uks.add_issue' in user.get_all_permissions %}
-                                <a href="{% url 'uks:issue_new' project.id %}" class="btn btn-primary btn-sm" type="button">
-                                    New issue
+                                <a href="{% url 'uks:link_commit' commit.hashcode %}" class="btn btn-primary btn-sm" type="button">
+                                    Link commit to existing issue or create a new one
                                 </a>
-                                <a href="{% url 'uks:link_commit' commit.hashcode %}">Link</a>
                             {% endif %}
                         </li>
                         {% endfor %}

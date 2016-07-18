@@ -442,6 +442,28 @@ def issue_create(request, project_id, template_name='uks/issue_form.html'):
         return render(request, template_name,
                       {'form': form, 'form_type': 'Create'})
 
+@permission_required('uks.add_issue')
+@login_required
+def issue_create_with_commit_hash(request, project_id, commit_id, template_name='uks/issue_form.html'):
+    form = IssueForm(request.POST or None)
+    project = get_object_or_404(Project, pk=project_id)
+    commit = get_object_or_404(Commit, pk=commit_id)
+
+    form.fields['assigned_to'].queryset = User.objects.filter(contributors=project)
+    if form.is_valid():
+        issue = form.save(commit=False)
+        issue.reporter = request.user
+        issue.date = datetime.datetime.now()
+        issue.project = project
+        issue.save()
+        issue.commit_set.add(commit)
+        issue.save()
+
+        template_name = 'uks/project_view.html'
+        return project_view(request, issue.project.id, template_name)
+    else:
+        return render(request, template_name,
+                      {'form': form, 'form_type': 'Create'})
 
 @permission_required('uks.change_issue')
 @login_required
@@ -587,7 +609,7 @@ def link_commit(request, commit_id):
     issues1 = Issue.objects.all()
     issues2 = Issue.objects.filter(Q(project=commit1.project))
     template_name = "uks/issue_list.html"
-    return render(request, template_name, {'object_list': issues2, 'commit': commit1.hashcode})
+    return render(request, template_name, {'object_list': issues2, 'commit': commit1.hashcode, "project":commit1.project})
     # return HttpResponseRedirect(reverse('uks:issue_list', kwargs={'object_list': issues1, 'commit': commit1.id}))
 
 def link_ci(request, commit_id, issue_id):
