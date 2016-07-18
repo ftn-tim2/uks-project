@@ -19,12 +19,7 @@
     <th>Milestone</th>
     <th>Issuetype</th>
     <th>Priority</th>
-  {% if 'uks.change_issue' in user.get_all_permissions %}
-    <th>Update</th>
-     {% endif %}
-    {% if 'uks.delete_issue' in user.get_all_permissions %}
-    <th>Delete</th>
-     {% endif %}
+    <th>Link</th>
     </tr>
 
     {% for issue in object_list %}
@@ -39,21 +34,8 @@
     <td>{{ issue.milestone }}</td>
     <td>{{ issue.issueType }}</td>
     <td>{{ issue.priority }}</td>
-      {% if 'uks.change_issue' in user.get_all_permissions %}
- <td>     <a class="lsf-icon" title="edit" href="{% url 'uks:issue_edit' issue.id %}">Update</a> </td>
-    {% endif %}
-
-    {% if 'uks.delete_issue' in user.get_all_permissions %}
- <td>       <a class="lsf-icon" title="delete" href="{% url 'uks:issue_delete' issue.id %}">Delete</a> </td>
-    {% endif %}
-
+    <td> <a class="lsf-icon" title="link" href="{% url 'uks:link_ci' issue.id commit.id %}">Connect and close</a> </td>
     </tr>
- <tr>  
-
-    
     {% endfor %}
-
-{% if 'uks.add_issue' in user.get_all_permissions %}
-<td> <a class="lsf-icon" title="add" href="{% url 'uks:issue_new' %}">New</a> </td>
-{% endif %} </tr> </table>
+</table>
 {% endblock %}

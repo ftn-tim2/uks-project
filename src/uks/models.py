@@ -124,6 +124,7 @@ class Issue(models.Model):
     description = models.TextField()
     attribute = models.ImageField(blank=True, null=True)
 
+
     class Meta:
         permissions = (
             ("view_issue", "Can view the Issue"),
